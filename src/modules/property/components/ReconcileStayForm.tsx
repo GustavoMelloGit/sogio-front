@@ -1,62 +1,14 @@
 import type { FC } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { withMask } from 'use-mask-input';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import TenantCombobox from './TenantCombobox';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import { Alert } from '@/components/Alert';
 import type { ExternalStay } from '@/modules/stay/types/Stay';
-import z from 'zod';
 import { queryClient } from '@/lib/query-client';
-import { WandSparkles } from 'lucide-react';
 import { useBookStay } from '../service/PropertyService.hooks';
-import { ENTRANCE_CODE_LENGTH } from '@/config/constants';
 import { Page } from '@/components/layout/Page';
 import { ROUTES } from '@/routes/routes';
 import { CHECK_IN_HOUR, CHECK_OUT_HOUR } from '../types/Property';
 import { Currency } from '@/lib/currency';
-import { Phone } from '@/lib/phone';
-import { NumberInput } from '@/components/ui/number-input';
 import { DateUtils } from '@/lib/date';
-
-export const reconcileStayFormSchema = z.object({
-  check_in: z.string().min(1, 'Data e hora de check-in é obrigatória'),
-  check_out: z.string().min(1, 'Data e hora de check-out é obrigatória'),
-  entrance_code: z
-    .string()
-    .min(
-      ENTRANCE_CODE_LENGTH,
-      `O código de entrada deve ter pelo menos ${ENTRANCE_CODE_LENGTH} dígitos`
-    ),
-  tenant_name: z.string().min(1, 'Nome do hóspede é obrigatório'),
-  tenant_phone: z.string().refine(value => Phone.isValid(value), {
-    message: 'Telefone do hóspede é inválido',
-  }),
-  tenant_sex: z.enum(['MALE', 'FEMALE', 'OTHER'], {
-    message: 'Sexo do hóspede é obrigatório',
-  }),
-  guests: z.int().positive().min(1, 'Número de hóspedes deve ser pelo menos 1'),
-  price: z.number().positive().min(0, 'Preço da estadia é obrigatório'),
-});
-
-export type ReconcileStayFormData = z.infer<typeof reconcileStayFormSchema>;
+import { BookStayForm, type BookStayFormData } from './BookStayForm';
 
 type Props = {
   externalStay: ExternalStay;
@@ -76,70 +28,40 @@ const ReconcileStayForm: FC<Props> = ({ externalStay, goBack }) => {
     },
   });
 
-  const getDefaultCheckIn = (): string => {
-    const checkIn = new Date(externalStay.start);
-    checkIn.setHours(CHECK_IN_HOUR, 0, 0, 0);
-    return DateUtils.isoToInputDateTimeLocal(checkIn);
+  const defaultValues: BookStayFormData = {
+    check_in: (() => {
+      const d = new Date(externalStay.start);
+      d.setHours(CHECK_IN_HOUR, 0, 0, 0);
+      return DateUtils.isoToInputDateTimeLocal(d);
+    })(),
+    check_out: (() => {
+      const d = new Date(externalStay.end);
+      d.setHours(CHECK_OUT_HOUR, 0, 0, 0);
+      return DateUtils.isoToInputDateTimeLocal(d);
+    })(),
+    entrance_code: '',
+    tenant_name: '',
+    tenant_phone: '',
+    tenant_sex: undefined as unknown as 'MALE' | 'FEMALE' | 'OTHER',
+    guests: 1,
+    price: 0,
   };
 
-  const getDefaultCheckOut = (): string => {
-    const checkOut = new Date(externalStay.end);
-    checkOut.setHours(CHECK_OUT_HOUR, 0, 0, 0);
-    return DateUtils.isoToInputDateTimeLocal(checkOut);
-  };
-
-  const form = useForm<ReconcileStayFormData>({
-    resolver: zodResolver(reconcileStayFormSchema),
-    defaultValues: {
-      check_in: getDefaultCheckIn(),
-      check_out: getDefaultCheckOut(),
-      entrance_code: '',
-      tenant_name: '',
-      tenant_phone: '',
-      tenant_sex: undefined,
-      guests: 1,
-      price: 0,
-    },
-  });
-
-  const formatPhone = (phone: string): string => {
-    return phone.replace(/\D/g, '');
-  };
-
-  const handleSubmit = (data: ReconcileStayFormData): void => {
-    const formattedPhone = formatPhone(data.tenant_phone);
-    const checkIn = new Date(data.check_in);
-    const checkOut = new Date(data.check_out);
-
-    const payload = {
-      check_in: checkIn.toISOString(),
-      check_out: checkOut.toISOString(),
+  const handleSubmit = (data: BookStayFormData): void => {
+    mutate({
+      check_in: new Date(data.check_in).toISOString(),
+      check_out: new Date(data.check_out).toISOString(),
       entrance_code: data.entrance_code,
       tenant: {
         name: data.tenant_name,
-        phone: formattedPhone,
+        phone: data.tenant_phone.replace(/\D/g, ''),
         sex: data.tenant_sex,
       },
       guests: Number(data.guests),
       property: externalStay.property.id,
       price: Currency.toCents(Number(data.price)),
       source: externalStay.sourcePlatform,
-    };
-
-    mutate(payload);
-  };
-
-  const generateRandomEntranceCode = (): string => {
-    const size = ENTRANCE_CODE_LENGTH;
-    if (size < 1) {
-      throw new Error('O tamanho deve ser 1 ou maior.');
-    }
-
-    const min = Math.pow(10, size - 1);
-
-    const max = Math.pow(10, size) - 1;
-
-    return String(Math.floor(Math.random() * (max - min + 1)) + min);
+    });
   };
 
   return (
@@ -172,210 +94,13 @@ const ReconcileStayForm: FC<Props> = ({ externalStay, goBack }) => {
             </div>
           </CardHeader>
           <CardContent>
-            {error && (
-              <Alert
-                variant='destructive'
-                title='Erro'
-                message={error.message}
-                className='mb-4'
-              />
-            )}
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(handleSubmit)}
-                className='space-y-4'
-              >
-                <FormField
-                  control={form.control}
-                  name='check_in'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Check-in</FormLabel>
-                      <FormControl>
-                        <Input type='datetime-local' {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name='check_out'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Check-out</FormLabel>
-                      <FormControl>
-                        <Input type='datetime-local' {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name='tenant_name'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Nome do Hóspede</FormLabel>
-                      <FormControl>
-                        <TenantCombobox
-                          value={field.value}
-                          onInputChange={field.onChange}
-                          onTenantSelect={tenant => {
-                            form.setValue('tenant_name', tenant.name);
-                            form.setValue(
-                              'tenant_phone',
-                              Phone.toHumanReadable(tenant.phone)
-                            );
-                            form.setValue('tenant_sex', tenant.sex);
-                          }}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name='tenant_phone'
-                  render={({ field: { onBlur, ...field } }) => (
-                    <FormItem>
-                      <FormLabel>Telefone do Hóspede</FormLabel>
-                      <FormControl ref={withMask(Phone.MASK)}>
-                        <Input
-                          placeholder='Digite o telefone do hóspede'
-                          inputMode='numeric'
-                          {...field}
-                          onBlur={() => {
-                            onBlur();
-                            const formattedPhone = formatPhone(field.value);
-                            if (Phone.isValid(formattedPhone)) {
-                              const entranceCode =
-                                formattedPhone.slice(-ENTRANCE_CODE_LENGTH);
-                              form.setValue('entrance_code', entranceCode);
-                            }
-                          }}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name='entrance_code'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Código de Entrada</FormLabel>
-                      <FormControl>
-                        <div className='flex items-center gap-2'>
-                          <Input
-                            placeholder='Digite o código de entrada'
-                            inputMode='numeric'
-                            maxLength={ENTRANCE_CODE_LENGTH}
-                            minLength={ENTRANCE_CODE_LENGTH}
-                            {...field}
-                          />
-                          <Button
-                            variant='outline'
-                            size='icon'
-                            aria-label='Gerar código de entrada aleatório'
-                            onClick={() => {
-                              // generate random number with ENTRANCE_CODE_LENGTH digits
-                              field.onChange(generateRandomEntranceCode());
-                            }}
-                          >
-                            <WandSparkles />
-                          </Button>
-                        </div>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name='tenant_sex'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Sexo do Hóspede</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger className='w-full'>
-                            <SelectValue placeholder='Selecione o sexo' />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value='MALE'>Masculino</SelectItem>
-                          <SelectItem value='FEMALE'>Feminino</SelectItem>
-                          <SelectItem value='OTHER'>Outro</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name='guests'
-                  render={({ field: { onChange, value, ...field } }) => (
-                    <FormItem>
-                      <FormLabel>Número de Hóspedes</FormLabel>
-                      <FormControl>
-                        <NumberInput
-                          decimalPlaces={0}
-                          placeholder='Digite o número de hóspedes'
-                          {...field}
-                          onValueChange={onChange}
-                          value={value}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name='price'
-                  render={({ field: { onChange, value, ...field } }) => (
-                    <FormItem>
-                      <FormLabel>Preço da Estadia</FormLabel>
-                      <FormControl>
-                        <NumberInput
-                          min={0}
-                          step={0.01}
-                          decimalPlaces={2}
-                          placeholder='Digite o preço da estadia'
-                          inputMode='decimal'
-                          {...field}
-                          onValueChange={onChange}
-                          value={value}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <Button
-                  type='submit'
-                  className='w-full'
-                  isLoading={isSubmitting}
-                >
-                  Cadastrar Estadia
-                </Button>
-              </form>
-            </Form>
+            <BookStayForm
+              defaultValues={defaultValues}
+              onSubmit={handleSubmit}
+              isSubmitting={isSubmitting}
+              errorMessage={error?.message}
+              submitButtonText='Cadastrar Estadia'
+            />
           </CardContent>
         </Card>
       </Page.Content>

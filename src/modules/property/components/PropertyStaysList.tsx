@@ -3,6 +3,7 @@ import { format, addDays } from 'date-fns';
 import { usePropertyStays } from '../service/PropertyService.hooks';
 import {
   Card,
+  CardAction,
   CardContent,
   CardDescription,
   CardHeader,
@@ -17,7 +18,10 @@ import {
   X,
   EyeIcon,
   CalendarIcon,
+  PlusIcon,
 } from 'lucide-react';
+import { useDisclosure } from '@/hooks/useDisclosure';
+import { AddStay } from './AddStay';
 import { toast } from 'sonner';
 import type { Stay, WithTenant } from '@/modules/stay/types/Stay';
 import { Currency } from '@/lib/currency';
@@ -87,6 +91,7 @@ export const PropertyStaysList: FC<Props> = ({ propertyId }) => {
 
   const [selectedStay, setSelectedStay] = useState<Stay | null>(null);
   const [selectedStayIds, setSelectedStayIds] = useState<string[]>([]);
+  const addStayDisclosure = useDisclosure();
 
   const { stays, isLoading, error } = usePropertyStays(propertyId, {
     from: debouncedFrom,
@@ -129,6 +134,12 @@ export const PropertyStaysList: FC<Props> = ({ propertyId }) => {
         <CardDescription>
           Filtre pelo período de check-in para encontrar estadias
         </CardDescription>
+        <CardAction>
+          <Button size='sm' onClick={addStayDisclosure.open}>
+            <PlusIcon className='size-4' />
+            Nova Estadia
+          </Button>
+        </CardAction>
       </CardHeader>
       <CardContent>
         <div className='mb-4 flex flex-col gap-3 sm:flex-row sm:items-end'>
@@ -293,6 +304,11 @@ export const PropertyStaysList: FC<Props> = ({ propertyId }) => {
             onClose={() => setSelectedStay(null)}
           />
         )}
+        <AddStay
+          propertyId={propertyId}
+          isOpen={addStayDisclosure.isOpen}
+          onClose={addStayDisclosure.close}
+        />
       </CardContent>
     </Card>
   );
