@@ -38,6 +38,7 @@ export const bookStayRequestSchema = z.object({
   }),
   guests: z.number(),
   property: z.uuidv4(),
+  price: z.int().positive(),
   source: z.string().max(100),
 });
 
