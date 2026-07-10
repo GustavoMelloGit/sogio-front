@@ -18,13 +18,16 @@ import {
 } from '@/components/ui/sidebar';
 import { useAuth } from '@/hooks/useAuth';
 import { useLogout } from '@/modules/auth/service/AuthService.hooks';
-import { EllipsisVertical, LogOut, UserCircle } from 'lucide-react';
+import { EllipsisVertical, LogOut, Moon, Sun, UserCircle } from 'lucide-react';
+import { useTheme } from 'next-themes';
 import type { FC } from 'react';
 
 export const SidebarUser: FC = () => {
   const { logout } = useLogout();
   const { isMobile } = useSidebar();
   const user = useAuth();
+  const { resolvedTheme, setTheme } = useTheme();
+  const isDark = resolvedTheme === 'dark';
 
   return (
     <SidebarMenu>
@@ -74,6 +77,15 @@ export const SidebarUser: FC = () => {
               <DropdownMenuItem>
                 <UserCircle />
                 Perfil
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onSelect={event => {
+                  event.preventDefault();
+                  setTheme(isDark ? 'light' : 'dark');
+                }}
+              >
+                {isDark ? <Sun /> : <Moon />}
+                {isDark ? 'Tema claro' : 'Tema escuro'}
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
