@@ -15,7 +15,6 @@ import {
 } from '../ui/sidebar';
 import { ROUTES } from '@/routes/routes';
 import { SidebarUser } from './SidebarUser';
-import { ThemeToggle } from './ThemeToggle';
 
 type NavItem = {
   title: string;
@@ -92,9 +91,6 @@ export const AppSidebar: FC = () => {
       </SidebarContent>
 
       <SidebarFooter>
-        <div className='flex items-center justify-end px-2 py-1'>
-          <ThemeToggle />
-        </div>
         <SidebarUser />
       </SidebarFooter>
     </Sidebar>
