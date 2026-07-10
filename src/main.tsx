@@ -8,6 +8,7 @@ import './index.css';
 import { router } from './routes/index.tsx';
 import { queryClient } from './lib/query-client';
 import { Toaster } from '@/components/ui/sonner';
+import { ThemeColorMeta } from '@/components/ThemeColorMeta';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -17,6 +18,7 @@ createRoot(document.getElementById('root')!).render(
       enableSystem
       disableTransitionOnChange
     >
+      <ThemeColorMeta />
       <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />
         <Toaster />
