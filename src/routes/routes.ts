@@ -9,4 +9,6 @@ export const ROUTES = {
   property: (property_id: string) => `/property/${property_id}`,
   reconcileStays: '/reconcile-stays',
   createProperty: '/property/new',
+  connectAuthorize: '/connect/authorize',
+  connectedApps: '/settings/connected-apps',
 } as const;

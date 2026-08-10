@@ -14,6 +14,8 @@ import {
   LazyPropertyDetailView,
   LazyReconcileStaysView,
   LazyCreatePropertyView,
+  LazyConnectAuthorizeView,
+  LazyConnectedAppsView,
 } from './lazyComponents';
 
 export const router = createBrowserRouter([
@@ -51,11 +53,23 @@ export const router = createBrowserRouter([
         path: ROUTES.stayDetail(':property_id', ':stay_id'),
         element: <LazyStayDetailView />,
       },
+      {
+        path: ROUTES.connectedApps,
+        element: <LazyConnectedAppsView />,
+      },
     ],
   },
   {
     path: ROUTES.stayInstructions(':stay_id'),
     element: <LazyStayInstructionsView />,
+  },
+  {
+    // Sem ProtectedRoute de propósito: esta rota trata autenticação
+    // embutida na própria tela para nunca perder `?request_id=` da URL (o
+    // par ProtectedRoute/LoginView hoje só restaura `.pathname`, não
+    // `.search`, no retorno do login).
+    path: ROUTES.connectAuthorize,
+    element: <LazyConnectAuthorizeView />,
   },
   {
     path: ROUTES.login,
