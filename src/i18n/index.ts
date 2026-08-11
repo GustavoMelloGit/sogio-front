@@ -5,6 +5,7 @@ import commonEn from './locales/en/common.json';
 import commonPt from './locales/pt/common.json';
 import dashboardEn from './locales/en/dashboard.json';
 import dashboardPt from './locales/pt/dashboard.json';
+import { DEFAULT_LANGUAGE, SUPPORTED_LANGUAGES } from './language';
 
 export const defaultNS = 'common';
 
@@ -18,8 +19,8 @@ i18n
   .use(initReactI18next)
   .init({
     resources,
-    fallbackLng: 'pt',
-    supportedLngs: ['en', 'pt'],
+    fallbackLng: DEFAULT_LANGUAGE,
+    supportedLngs: SUPPORTED_LANGUAGES,
     defaultNS,
     detection: {
       order: ['localStorage', 'navigator'],

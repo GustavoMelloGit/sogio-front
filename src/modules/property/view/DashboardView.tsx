@@ -1,7 +1,7 @@
 import { type FC, type ElementType, useState } from 'react';
 import { format, parseISO } from 'date-fns';
 import { enUS, ptBR } from 'date-fns/locale';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from '@/i18n/useTranslation';
 import {
   Building2,
   CalendarCheck,
@@ -99,18 +99,14 @@ const SHORT_DATE_FORMATS = {
 } as const;
 
 const DashboardView: FC = () => {
-  const { t, i18n } = useTranslation(['dashboard', 'common']);
+  const { t, language } = useTranslation(['dashboard', 'common']);
   const { filters, addFilter } = useFilters();
   const [calendarOpen, setCalendarOpen] = useState(false);
 
-  const lang =
-    i18n.language in DATE_FNS_LOCALES
-      ? (i18n.language as keyof typeof DATE_FNS_LOCALES)
-      : 'pt';
-  const dateFnsLocale = DATE_FNS_LOCALES[lang];
-  const intlLocale = INTL_LOCALES[lang];
-  const longDateFormat = LONG_DATE_FORMATS[lang];
-  const shortDateFormat = SHORT_DATE_FORMATS[lang];
+  const dateFnsLocale = DATE_FNS_LOCALES[language];
+  const intlLocale = INTL_LOCALES[language];
+  const longDateFormat = LONG_DATE_FORMATS[language];
+  const shortDateFormat = SHORT_DATE_FORMATS[language];
 
   const todayStr = format(new Date(), 'yyyy-MM-dd');
   const dateStr =

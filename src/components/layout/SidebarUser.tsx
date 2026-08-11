@@ -30,8 +30,8 @@ import {
 } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import type { FC } from 'react';
-import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import { useTranslation } from '@/i18n/useTranslation';
 
 export const SidebarUser: FC = () => {
   const { logout } = useLogout();
@@ -39,10 +39,10 @@ export const SidebarUser: FC = () => {
   const user = useAuth();
   const { resolvedTheme, setTheme } = useTheme();
   const isDark = resolvedTheme === 'dark';
-  const { t, i18n } = useTranslation();
+  const { t, language, changeLanguage } = useTranslation();
 
   const toggleLanguage = () => {
-    i18n.changeLanguage(i18n.language === 'pt' ? 'en' : 'pt');
+    changeLanguage(language === 'pt' ? 'en' : 'pt');
   };
 
   return (
