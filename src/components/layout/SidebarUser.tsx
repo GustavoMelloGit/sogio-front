@@ -18,9 +18,18 @@ import {
 } from '@/components/ui/sidebar';
 import { useAuth } from '@/hooks/useAuth';
 import { useLogout } from '@/modules/auth/service/AuthService.hooks';
-import { EllipsisVertical, LogOut, Moon, Sun, UserCircle } from 'lucide-react';
+import { ROUTES } from '@/routes/routes';
+import {
+  EllipsisVertical,
+  LogOut,
+  Moon,
+  Plug,
+  Sun,
+  UserCircle,
+} from 'lucide-react';
 import { useTheme } from 'next-themes';
 import type { FC } from 'react';
+import { Link } from 'react-router-dom';
 
 export const SidebarUser: FC = () => {
   const { logout } = useLogout();
@@ -77,6 +86,12 @@ export const SidebarUser: FC = () => {
               <DropdownMenuItem>
                 <UserCircle />
                 Perfil
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link to={ROUTES.connectedApps}>
+                  <Plug />
+                  Aplicativos conectados
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuItem
                 onSelect={event => {

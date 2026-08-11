@@ -36,3 +36,9 @@ export const LazyReconcileStaysView = lazy(
 export const LazyCreatePropertyView = lazy(
   () => import('@/modules/property/view/CreatePropertyView')
 );
+export const LazyConnectAuthorizeView = lazy(
+  () => import('@/modules/auth/view/ConnectAuthorizeView')
+);
+export const LazyConnectedAppsView = lazy(
+  () => import('@/modules/auth/view/ConnectedAppsView')
+);
