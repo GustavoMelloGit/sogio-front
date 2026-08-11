@@ -21,6 +21,7 @@ import { useLogout } from '@/modules/auth/service/AuthService.hooks';
 import { ROUTES } from '@/routes/routes';
 import {
   EllipsisVertical,
+  Languages,
   LogOut,
   Moon,
   Plug,
@@ -29,6 +30,7 @@ import {
 } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import type { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 export const SidebarUser: FC = () => {
@@ -37,6 +39,11 @@ export const SidebarUser: FC = () => {
   const user = useAuth();
   const { resolvedTheme, setTheme } = useTheme();
   const isDark = resolvedTheme === 'dark';
+  const { t, i18n } = useTranslation();
+
+  const toggleLanguage = () => {
+    i18n.changeLanguage(i18n.language === 'pt' ? 'en' : 'pt');
+  };
 
   return (
     <SidebarMenu>
@@ -85,12 +92,12 @@ export const SidebarUser: FC = () => {
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <UserCircle />
-                Perfil
+                {t('sidebar.profile')}
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link to={ROUTES.connectedApps}>
                   <Plug />
-                  Aplicativos conectados
+                  {t('sidebar.connectedApps')}
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem
@@ -100,13 +107,22 @@ export const SidebarUser: FC = () => {
                 }}
               >
                 {isDark ? <Sun /> : <Moon />}
-                {isDark ? 'Tema claro' : 'Tema escuro'}
+                {isDark ? t('sidebar.lightTheme') : t('sidebar.darkTheme')}
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onSelect={event => {
+                  event.preventDefault();
+                  toggleLanguage();
+                }}
+              >
+                <Languages />
+                {t('sidebar.switchLanguage')}
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={logout}>
               <LogOut />
-              Sair
+              {t('sidebar.logout')}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

@@ -1,0 +1,13 @@
+{
+  "sidebar": {
+    "profile": "Perfil",
+    "connectedApps": "Aplicativos conectados",
+    "lightTheme": "Tema claro",
+    "darkTheme": "Tema escuro",
+    "switchLanguage": "English",
+    "logout": "Sair"
+  },
+  "actions": {
+    "viewAll": "Ver todas"
+  }
+}

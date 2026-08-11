@@ -1,6 +1,7 @@
 import { type FC, type ElementType, useState } from 'react';
 import { format, parseISO } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
+import { enUS, ptBR } from 'date-fns/locale';
+import { useTranslation } from 'react-i18next';
 import {
   Building2,
   CalendarCheck,
@@ -86,9 +87,30 @@ const KpiCard: FC<KpiCardProps> = ({ title, value, icon: Icon, cardClass }) => (
   </div>
 );
 
+const DATE_FNS_LOCALES = { pt: ptBR, en: enUS } as const;
+const INTL_LOCALES = { pt: 'pt-BR', en: 'en-US' } as const;
+const LONG_DATE_FORMATS = {
+  pt: "d 'de' MMMM 'de' yyyy",
+  en: 'MMMM d, yyyy',
+} as const;
+const SHORT_DATE_FORMATS = {
+  pt: "d 'de' MMM",
+  en: 'MMM d',
+} as const;
+
 const DashboardView: FC = () => {
+  const { t, i18n } = useTranslation(['dashboard', 'common']);
   const { filters, addFilter } = useFilters();
   const [calendarOpen, setCalendarOpen] = useState(false);
+
+  const lang =
+    i18n.language in DATE_FNS_LOCALES
+      ? (i18n.language as keyof typeof DATE_FNS_LOCALES)
+      : 'pt';
+  const dateFnsLocale = DATE_FNS_LOCALES[lang];
+  const intlLocale = INTL_LOCALES[lang];
+  const longDateFormat = LONG_DATE_FORMATS[lang];
+  const shortDateFormat = SHORT_DATE_FORMATS[lang];
 
   const todayStr = format(new Date(), 'yyyy-MM-dd');
   const dateStr =
@@ -108,9 +130,9 @@ const DashboardView: FC = () => {
         {/* Cabeçalho com date picker */}
         <div className='flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
           <div>
-            <h1 className='text-2xl font-bold text-foreground'>Dashboard</h1>
+            <h1 className='text-2xl font-bold text-foreground'>{t('title')}</h1>
             <p className='mt-1 text-sm text-muted-foreground'>
-              Visão geral das suas propriedades
+              {t('subtitle')}
             </p>
           </div>
           <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
@@ -121,8 +143,8 @@ const DashboardView: FC = () => {
               >
                 <CalendarIcon className='h-4 w-4 shrink-0 text-muted-foreground' />
                 <span>
-                  {format(selectedDate, "d 'de' MMMM 'de' yyyy", {
-                    locale: ptBR,
+                  {format(selectedDate, longDateFormat, {
+                    locale: dateFnsLocale,
                   }).replace(/^\w/, c => c.toUpperCase())}
                 </span>
               </Button>
@@ -137,7 +159,7 @@ const DashboardView: FC = () => {
                   }
                   setCalendarOpen(false);
                 }}
-                locale={ptBR}
+                locale={dateFnsLocale}
               />
             </PopoverContent>
           </Popover>
@@ -146,13 +168,13 @@ const DashboardView: FC = () => {
         {/* KPIs */}
         <div className='grid grid-cols-2 gap-3 lg:grid-cols-4'>
           <KpiCard
-            title='Propriedades'
+            title={t('kpis.properties')}
             value={propertiesLoading ? '—' : properties.length.toString()}
             icon={Building2}
             cardClass='bg-gradient-to-br from-teal-500 to-teal-700'
           />
           <KpiCard
-            title='Ocupadas hoje'
+            title={t('kpis.occupiedToday')}
             value={
               overviewLoading
                 ? '—'
@@ -162,7 +184,7 @@ const DashboardView: FC = () => {
             cardClass='bg-gradient-to-br from-sky-500 to-sky-700'
           />
           <KpiCard
-            title='Check-ins em 7 dias'
+            title={t('kpis.checkInsIn7Days')}
             value={
               overviewLoading
                 ? '—'
@@ -172,11 +194,13 @@ const DashboardView: FC = () => {
             cardClass='bg-gradient-to-br from-amber-400 to-orange-600'
           />
           <KpiCard
-            title='Receita do mês'
+            title={t('kpis.monthlyRevenue')}
             value={
               overviewLoading
                 ? '—'
-                : Currency.format(overview?.kpis.monthly_revenue ?? 0)
+                : Currency.format(overview?.kpis.monthly_revenue ?? 0, {
+                    locale: intlLocale,
+                  })
             }
             icon={TrendingUp}
             cardClass='bg-gradient-to-br from-emerald-500 to-emerald-700'
@@ -188,7 +212,7 @@ const DashboardView: FC = () => {
           <Card className='border-border/50 bg-card/60 backdrop-blur-sm'>
             <CardHeader className='pb-3'>
               <CardTitle className='text-base font-semibold'>
-                Próximas estadias
+                {t('upcomingStays.title')}
               </CardTitle>
             </CardHeader>
             <CardContent className='space-y-2'>
@@ -211,7 +235,10 @@ const DashboardView: FC = () => {
                       key={stay.id}
                       to={ROUTES.property(stay.property_id)}
                       className='flex items-center gap-3 rounded-lg border border-border/40 bg-muted/20 p-3 text-sm transition-all duration-150 hover:border-border/70 hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
-                      aria-label={`Ver estadia em ${stay.property_name} para ${stay.tenant.name}`}
+                      aria-label={t('upcomingStays.viewStayAriaLabel', {
+                        property: stay.property_name,
+                        tenant: stay.tenant.name,
+                      })}
                     >
                       <div
                         className={cn(
@@ -230,7 +257,9 @@ const DashboardView: FC = () => {
                         </p>
                       </div>
                       <span className='shrink-0 rounded-md bg-primary/15 px-2 py-0.5 text-xs font-medium text-primary'>
-                        {format(stay.check_in, "d 'de' MMM", { locale: ptBR })}
+                        {format(stay.check_in, shortDateFormat, {
+                          locale: dateFnsLocale,
+                        })}
                       </span>
                       <ChevronRight
                         className='h-4 w-4 shrink-0 text-muted-foreground/40'
@@ -244,13 +273,13 @@ const DashboardView: FC = () => {
           <Card className='border-border/50 bg-card/60 backdrop-blur-sm'>
             <CardHeader className='flex flex-row items-center justify-between pb-3'>
               <CardTitle className='text-base font-semibold'>
-                Suas propriedades
+                {t('yourProperties.title')}
               </CardTitle>
               <Link
                 to={ROUTES.properties}
                 className={buttonVariants({ variant: 'ghost', size: 'sm' })}
               >
-                Ver todas
+                {t('common:actions.viewAll')}
               </Link>
             </CardHeader>
             <CardContent className='space-y-2'>
@@ -272,7 +301,9 @@ const DashboardView: FC = () => {
                       key={p.id}
                       to={ROUTES.property(p.id)}
                       className='flex items-center gap-3 rounded-lg border border-border/40 bg-muted/20 p-3 text-sm transition-all duration-150 hover:border-border/70 hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
-                      aria-label={`Ver detalhes de ${p.name}`}
+                      aria-label={t('yourProperties.viewDetailsAriaLabel', {
+                        name: p.name,
+                      })}
                     >
                       <div
                         className={cn(

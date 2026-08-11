@@ -5,6 +5,7 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ThemeProvider } from 'next-themes';
 import './index.css';
+import './i18n';
 import { router } from './routes/index.tsx';
 import { queryClient } from './lib/query-client';
 import { Toaster } from '@/components/ui/sonner';

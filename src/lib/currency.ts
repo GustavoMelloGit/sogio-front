@@ -1,19 +1,19 @@
 type FormatOptions = {
   isCents: boolean;
+  locale: string;
 };
 const defaultOptions: FormatOptions = {
   isCents: true,
+  locale: 'pt-BR',
 };
 
 export class Currency {
-  static format(
-    amount: number,
-    options: FormatOptions = defaultOptions
-  ): string {
-    return new Intl.NumberFormat('pt-BR', {
+  static format(amount: number, options: Partial<FormatOptions> = {}): string {
+    const { isCents, locale } = { ...defaultOptions, ...options };
+    return new Intl.NumberFormat(locale, {
       style: 'currency',
       currency: 'BRL',
-    }).format(options.isCents ? amount / 100 : amount);
+    }).format(isCents ? amount / 100 : amount);
   }
 
   static toCents(amount: number): number {
