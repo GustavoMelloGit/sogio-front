@@ -14,6 +14,7 @@ import { Edit } from 'lucide-react';
 import { Alert } from '@/components/Alert';
 import { DateUtils } from '@/lib/date';
 import { Currency } from '@/lib/currency';
+import { useTranslation } from '@/i18n/useTranslation';
 
 type Props = {
   stay: Stay;
@@ -22,6 +23,7 @@ type Props = {
 };
 
 export const UpdateStay: FC<Props> = ({ stay, isOpen, onClose }) => {
+  const { t } = useTranslation(['stay', 'common']);
   const { mutateAsync, error } = useUpdateStay({
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['stay', stay.id] });
@@ -45,18 +47,16 @@ export const UpdateStay: FC<Props> = ({ stay, isOpen, onClose }) => {
         <SheetHeader>
           <SheetTitle className='flex items-center gap-2'>
             <Edit className='h-5 w-5' />
-            Editar Estadia
+            {t('updateStay.title')}
           </SheetTitle>
-          <SheetDescription>
-            Atualize as informações da estadia.
-          </SheetDescription>
+          <SheetDescription>{t('updateStay.description')}</SheetDescription>
         </SheetHeader>
 
         <div className='px-4'>
           {error && (
             <Alert
               variant='destructive'
-              title='Erro'
+              title={t('updateStay.errorTitle')}
               message={error.message}
               className='mb-4'
             />
@@ -70,7 +70,7 @@ export const UpdateStay: FC<Props> = ({ stay, isOpen, onClose }) => {
               price: Currency.fromCents(stay.price),
             }}
             onSubmit={handleSubmit}
-            submitButtonText='Atualizar Estadia'
+            submitButtonText={t('updateStay.submitButton')}
           />
         </div>
       </SheetContent>
