@@ -1,4 +1,4 @@
-import { useRef, useState, type FC } from 'react';
+import { useMemo, useRef, useState, type FC } from 'react';
 import { toast } from 'sonner';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -12,25 +12,29 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Alert } from '@/components/Alert';
+import { useTranslation } from '@/i18n/useTranslation';
+import { INTL_LOCALES } from '@/i18n/locale-maps';
 import { useDisconnectApp } from '../service/OAuthService.hooks';
 import type { ConnectedApp } from '../types/OAuthTypes';
-
-const dateFormatter = new Intl.DateTimeFormat('pt-BR', {
-  dateStyle: 'short',
-  timeStyle: 'short',
-});
-
-const DISCONNECT_FALLBACK_MESSAGE =
-  'Não foi possível desconectar este aplicativo. Tente novamente.';
 
 type ConnectedAppCardProps = {
   app: ConnectedApp;
 };
 
 export const ConnectedAppCard: FC<ConnectedAppCardProps> = ({ app }) => {
+  const { t, language } = useTranslation('auth');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const cancelButtonRef = useRef<HTMLButtonElement>(null);
   const { disconnect, isLoading, error, reset } = useDisconnectApp();
+
+  const dateFormatter = useMemo(
+    () =>
+      new Intl.DateTimeFormat(INTL_LOCALES[language], {
+        dateStyle: 'short',
+        timeStyle: 'short',
+      }),
+    [language]
+  );
 
   const handleOpenChange = (open: boolean): void => {
     if (isLoading) return;
@@ -44,7 +48,11 @@ export const ConnectedAppCard: FC<ConnectedAppCardProps> = ({ app }) => {
     disconnect(app.consent_id, {
       onSuccess: () => {
         setIsDialogOpen(false);
-        toast.success(`${app.app_display_name} foi desconectado.`);
+        toast.success(
+          t('connectedAppCard.disconnectSuccessToast', {
+            name: app.app_display_name,
+          })
+        );
       },
     });
   };
@@ -56,13 +64,15 @@ export const ConnectedAppCard: FC<ConnectedAppCardProps> = ({ app }) => {
           <div className='flex flex-wrap items-center gap-2'>
             <span className='font-semibold'>{app.app_display_name}</span>
             {!app.app_display_name_verified && (
-              <Badge variant='outline'>Não verificado</Badge>
+              <Badge variant='outline'>
+                {t('connectedAppCard.notVerifiedBadge')}
+              </Badge>
             )}
           </div>
 
           <div className='space-y-1'>
             <p className='text-xs font-medium text-muted-foreground'>
-              Domínios autorizados
+              {t('connectedAppCard.authorizedDomainsLabel')}
             </p>
             <div className='flex flex-wrap gap-1'>
               {app.redirect_hosts.map(host => (
@@ -75,12 +85,14 @@ export const ConnectedAppCard: FC<ConnectedAppCardProps> = ({ app }) => {
 
           <div className='grid grid-cols-1 gap-2 text-sm sm:grid-cols-2'>
             <div>
-              <p className='text-xs text-muted-foreground'>Concedido em</p>
+              <p className='text-xs text-muted-foreground'>
+                {t('connectedAppCard.grantedAtLabel')}
+              </p>
               <p>{dateFormatter.format(app.granted_at)}</p>
             </div>
             <div>
               <p className='text-xs text-muted-foreground'>
-                Usado pela última vez em
+                {t('connectedAppCard.lastUsedLabel')}
               </p>
               <p>{dateFormatter.format(app.last_used_at)}</p>
             </div>
@@ -90,10 +102,12 @@ export const ConnectedAppCard: FC<ConnectedAppCardProps> = ({ app }) => {
           <Button
             variant='outline'
             size='sm'
-            aria-label={`Desconectar ${app.app_display_name}`}
+            aria-label={t('connectedAppCard.disconnectAriaLabel', {
+              name: app.app_display_name,
+            })}
             onClick={() => setIsDialogOpen(true)}
           >
-            Desconectar
+            {t('connectedAppCard.disconnectButton')}
           </Button>
         </CardFooter>
       </Card>
@@ -106,11 +120,13 @@ export const ConnectedAppCard: FC<ConnectedAppCardProps> = ({ app }) => {
           }}
         >
           <DialogHeader>
-            <DialogTitle>Desconectar {app.app_display_name}?</DialogTitle>
+            <DialogTitle>
+              {t('connectedAppCard.disconnectDialogTitle', {
+                name: app.app_display_name,
+              })}
+            </DialogTitle>
             <DialogDescription>
-              Este aplicativo perderá acesso à sua conta imediatamente. Você
-              pode reconectar depois pedindo ao aplicativo para autorizar
-              novamente.
+              {t('connectedAppCard.disconnectDialogDescription')}
             </DialogDescription>
           </DialogHeader>
 
@@ -121,7 +137,7 @@ export const ConnectedAppCard: FC<ConnectedAppCardProps> = ({ app }) => {
               message={
                 error instanceof Error
                   ? error.message
-                  : DISCONNECT_FALLBACK_MESSAGE
+                  : t('connectedAppCard.disconnectFallbackMessage')
               }
             />
           )}
@@ -134,7 +150,7 @@ export const ConnectedAppCard: FC<ConnectedAppCardProps> = ({ app }) => {
               disabled={isLoading}
               onClick={() => handleOpenChange(false)}
             >
-              Cancelar
+              {t('connectedAppCard.cancelButton')}
             </Button>
             <Button
               type='button'
@@ -142,7 +158,7 @@ export const ConnectedAppCard: FC<ConnectedAppCardProps> = ({ app }) => {
               isLoading={isLoading}
               onClick={handleConfirm}
             >
-              Desconectar
+              {t('connectedAppCard.confirmDisconnectButton')}
             </Button>
           </DialogFooter>
         </DialogContent>

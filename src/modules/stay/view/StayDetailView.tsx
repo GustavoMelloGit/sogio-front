@@ -1,5 +1,7 @@
 import { useState, type FC, type ReactNode } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from '@/i18n/useTranslation';
+import { INTL_LOCALES } from '@/i18n/locale-maps';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
@@ -38,8 +40,8 @@ import type { Stay } from '../types/Stay';
 import { WhatsApp } from '@/components/icons/WhatsApp';
 import { Skeleton } from '@/components/ui/skeleton';
 
-const formatDate = (date: Date): string =>
-  new Intl.DateTimeFormat('pt-BR', {
+const formatDate = (date: Date, locale: string): string =>
+  new Intl.DateTimeFormat(locale, {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',
@@ -53,10 +55,10 @@ const getInitials = (name: string): string =>
     .join('')
     .toUpperCase();
 
-const SOURCE_LABELS: Record<Stay['source'], string> = {
-  INTERNAL: 'Reserva direta',
-  AIRBNB: 'Airbnb',
-  BOOKING: 'Booking.com',
+const SOURCE_LABEL_KEYS: Record<Stay['source'], string> = {
+  INTERNAL: 'stayDetail.sourceLabels.internal',
+  AIRBNB: 'stayDetail.sourceLabels.airbnb',
+  BOOKING: 'stayDetail.sourceLabels.booking',
 };
 
 type MetricCardProps = {
@@ -91,6 +93,8 @@ const MetricCard: FC<MetricCardProps> = ({
 );
 
 export const StayDetailView: FC = () => {
+  const { t, language } = useTranslation(['stay', 'common']);
+  const intlLocale = INTL_LOCALES[language];
   const { stay_id, property_id } = useParams<{
     stay_id: string;
     property_id: string;
@@ -100,20 +104,20 @@ export const StayDetailView: FC = () => {
   const { data: stay, isLoading, error } = useGetStay(stay_id || '');
   const { mutate: cancelStay, isPending: isCancelingStay } = useCancelStay({
     onSuccess: () => {
-      toast.success('Estadia cancelada com sucesso');
+      toast.success(t('stayDetail.toasts.cancelSuccess'));
       queryClient.invalidateQueries({ queryKey: ['stayWithTenant'] });
       queryClient.invalidateQueries({ queryKey: ['propertyStays'] });
       queryClient.invalidateQueries({ queryKey: ['finance-movements'] });
       navigate(ROUTES.property(property_id || ''), { replace: true });
     },
     onError: () => {
-      toast.error('Erro ao cancelar estadia');
+      toast.error(t('stayDetail.toasts.cancelError'));
     },
   });
 
   const copyText = (text: string) => {
     toClipboard(text);
-    toast.success('Copiado com sucesso');
+    toast.success(t('stayDetail.toasts.copySuccess'));
   };
 
   const getCohostData = (): string => {
@@ -121,8 +125,8 @@ export const StayDetailView: FC = () => {
     return [
       stay.tenant.name,
       Phone.toHumanReadable(stay.tenant.phone),
-      `${formatDate(stay.check_in)} - ${formatDate(stay.check_out)}`,
-      `${stay.guests} hóspedes`,
+      `${formatDate(stay.check_in, intlLocale)} - ${formatDate(stay.check_out, intlLocale)}`,
+      t('stayDetail.cohostData.guestsCount', { count: stay.guests }),
     ].join('\n');
   };
 
@@ -135,7 +139,10 @@ export const StayDetailView: FC = () => {
   const getWhatsAppHref = (): string => {
     if (!stay) return '';
     const url = new URL(ROUTES.stayInstructions(stay.id), location.origin);
-    const text = `Olá ${stay.tenant.name}, como você está? Me chamo Gustavo, sou o host da sua estadia em Castelhanos. Por favor, Veja abaixo as instruções de check-in e check-out: ${url.toString()}`;
+    const text = t('stayDetail.whatsappMessage', {
+      name: stay.tenant.name,
+      url: url.toString(),
+    });
     return `https://wa.me/${Phone.toAPI(stay.tenant.phone)}?text=${encodeURIComponent(text)}`;
   };
 
@@ -149,11 +156,14 @@ export const StayDetailView: FC = () => {
       <Page.Container>
         <Page.Topbar
           nav={[
-            { label: 'Minhas Propriedades', to: ROUTES.home },
-            { label: 'Detalhes da Estadia' },
+            { label: t('stayDetail.breadcrumb.myProperties'), to: ROUTES.home },
+            { label: t('stayDetail.breadcrumb.stayDetails') },
           ]}
         />
-        <Page.Header title='Carregando...' description='Detalhes da estadia' />
+        <Page.Header
+          title={t('stayDetail.loadingTitle')}
+          description={t('stayDetail.loadingDescription')}
+        />
         <Page.Content>
           <div className='grid grid-cols-2 gap-3 md:grid-cols-4'>
             {Array.from({ length: 4 }).map((_, i) => (
@@ -174,20 +184,20 @@ export const StayDetailView: FC = () => {
       <Page.Container>
         <Page.Topbar
           nav={[
-            { label: 'Minhas Propriedades', to: ROUTES.home },
-            { label: 'Detalhes da Estadia' },
+            { label: t('stayDetail.breadcrumb.myProperties'), to: ROUTES.home },
+            { label: t('stayDetail.breadcrumb.stayDetails') },
           ]}
         />
         <Page.Content>
           <Alert
             variant='destructive'
             message={
-              error ? 'Erro ao carregar estadia' : 'Estadia não encontrada'
+              error ? t('stayDetail.errorTitle') : t('stayDetail.notFoundTitle')
             }
           >
             {error
-              ? 'Não foi possível carregar os detalhes da estadia. Tente novamente mais tarde.'
-              : 'A estadia solicitada não foi encontrada ou você não tem permissão para visualizá-la.'}
+              ? t('stayDetail.errorDescription')
+              : t('stayDetail.notFoundDescription')}
           </Alert>
           <div className='mt-4'>
             <Link
@@ -198,7 +208,7 @@ export const StayDetailView: FC = () => {
               })}
             >
               <ArrowLeft className='mr-2 size-4' />
-              Voltar para início
+              {t('stayDetail.backToHome')}
             </Link>
           </div>
         </Page.Content>
@@ -210,13 +220,16 @@ export const StayDetailView: FC = () => {
     <Page.Container>
       <Page.Topbar
         nav={[
-          { label: 'Minhas Propriedades', to: ROUTES.home },
+          { label: t('stayDetail.breadcrumb.myProperties'), to: ROUTES.home },
           { label: stay.tenant.name },
         ]}
       />
       <Page.Header
         title={stay.tenant.name}
-        description={`${formatDate(stay.check_in)} → ${formatDate(stay.check_out)}`}
+        description={t('stayDetail.dateRange', {
+          checkIn: formatDate(stay.check_in, intlLocale),
+          checkOut: formatDate(stay.check_out, intlLocale),
+        })}
         actions={
           <div className='flex items-center gap-2'>
             <Button
@@ -227,22 +240,26 @@ export const StayDetailView: FC = () => {
               }}
             >
               <Pencil className='mr-2 size-4' />
-              Editar
+              {t('stayDetail.editButton')}
             </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant='outline' size='icon' aria-label='Mais ações'>
+                <Button
+                  variant='outline'
+                  size='icon'
+                  aria-label={t('stayDetail.moreActionsAriaLabel')}
+                >
                   <MoreHorizontal className='size-4' />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align='end'>
                 <DropdownMenuItem onClick={() => copyText(getCohostData())}>
                   <CopyIcon className='mr-2 size-4' />
-                  Copiar dados para coanfitrião
+                  {t('stayDetail.copyCohostData')}
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={copyApartmentInstructionsUrl}>
                   <LinkIcon className='mr-2 size-4' />
-                  Copiar link das instruções
+                  {t('stayDetail.copyInstructionsLink')}
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <a
@@ -251,7 +268,7 @@ export const StayDetailView: FC = () => {
                     rel='noopener noreferrer'
                   >
                     <WhatsApp className='mr-2 size-4' />
-                    Enviar pelo WhatsApp
+                    {t('stayDetail.sendViaWhatsApp')}
                   </a>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
@@ -261,7 +278,9 @@ export const StayDetailView: FC = () => {
                   className='text-destructive focus:text-destructive'
                 >
                   <CircleX className='mr-2 size-4' />
-                  {isCancelingStay ? 'Cancelando...' : 'Cancelar estadia'}
+                  {isCancelingStay
+                    ? t('stayDetail.cancelingStay')
+                    : t('stayDetail.cancelStay')}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -274,23 +293,23 @@ export const StayDetailView: FC = () => {
         <div className='grid grid-cols-2 gap-3 md:grid-cols-4'>
           <MetricCard
             icon={<Calendar className='size-3.5' />}
-            label='Check-in'
-            value={formatDate(stay.check_in)}
+            label={t('stayDetail.checkInLabel')}
+            value={formatDate(stay.check_in, intlLocale)}
           />
           <MetricCard
             icon={<Calendar className='size-3.5' />}
-            label='Check-out'
-            value={formatDate(stay.check_out)}
+            label={t('stayDetail.checkOutLabel')}
+            value={formatDate(stay.check_out, intlLocale)}
           />
           <MetricCard
             icon={<Users className='size-3.5' />}
-            label='Hóspedes'
+            label={t('stayDetail.guestsLabel')}
             value={String(stay.guests)}
           />
           <MetricCard
             icon={null}
-            label='Valor total'
-            value={Currency.format(stay.price)}
+            label={t('stayDetail.totalValueLabel')}
+            value={Currency.format(stay.price, { locale: intlLocale })}
             highlighted
           />
         </div>
@@ -300,13 +319,13 @@ export const StayDetailView: FC = () => {
           {/* Stay details — 2 cols */}
           <Card className='md:col-span-2'>
             <CardHeader>
-              <CardTitle>Detalhes da Estadia</CardTitle>
+              <CardTitle>{t('stayDetail.stayDetailsTitle')}</CardTitle>
             </CardHeader>
             <CardContent className='space-y-4'>
               <div className='space-y-1.5'>
                 <p className='flex items-center gap-1.5 text-xs font-medium uppercase tracking-wide text-muted-foreground'>
                   <KeyRound className='size-3.5' />
-                  Código de entrada
+                  {t('stayDetail.entranceCodeLabel')}
                 </p>
                 <div className='flex items-center gap-2'>
                   <code className='flex-1 rounded-md bg-muted px-3 py-2 font-mono text-sm'>
@@ -316,7 +335,7 @@ export const StayDetailView: FC = () => {
                     variant='ghost'
                     size='icon'
                     onClick={() => copyText(stay.entrance_code)}
-                    aria-label='Copiar código de entrada'
+                    aria-label={t('stayDetail.copyEntranceCodeAriaLabel')}
                   >
                     <CopyIcon className='size-4' />
                   </Button>
@@ -327,10 +346,10 @@ export const StayDetailView: FC = () => {
 
               <div>
                 <p className='mb-1 text-xs font-medium uppercase tracking-wide text-muted-foreground'>
-                  Origem da reserva
+                  {t('stayDetail.bookingSourceLabel')}
                 </p>
                 <p className='text-sm font-medium'>
-                  {SOURCE_LABELS[stay.source]}
+                  {t(SOURCE_LABEL_KEYS[stay.source])}
                 </p>
               </div>
             </CardContent>
@@ -339,7 +358,7 @@ export const StayDetailView: FC = () => {
           {/* Guest card — 1 col */}
           <Card>
             <CardHeader>
-              <CardTitle>Hóspede</CardTitle>
+              <CardTitle>{t('stayDetail.guestTitle')}</CardTitle>
             </CardHeader>
             <CardContent className='space-y-4'>
               <div className='flex items-center gap-3'>
@@ -369,7 +388,7 @@ export const StayDetailView: FC = () => {
                   onClick={() =>
                     copyText(Phone.toHumanReadable(stay.tenant.phone))
                   }
-                  aria-label='Copiar telefone'
+                  aria-label={t('stayDetail.copyPhoneAriaLabel')}
                 >
                   <CopyIcon className='size-3.5' />
                 </Button>
@@ -386,7 +405,7 @@ export const StayDetailView: FC = () => {
                 })}
               >
                 <WhatsApp className='mr-2 size-4' />
-                Enviar pelo WhatsApp
+                {t('stayDetail.sendViaWhatsApp')}
               </a>
             </CardContent>
           </Card>

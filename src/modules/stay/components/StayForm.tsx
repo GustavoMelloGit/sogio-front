@@ -13,6 +13,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import type { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import z from 'zod';
+import { useTranslation } from '@/i18n/useTranslation';
 
 const stayFormSchema = z.object({
   check_in: z.string(),
@@ -34,6 +35,7 @@ export const StayForm: FC<Props> = ({
   onSubmit,
   submitButtonText,
 }) => {
+  const { t } = useTranslation(['stay', 'common']);
   const form = useForm<StayFormData>({
     resolver: zodResolver(stayFormSchema),
     defaultValues,
@@ -51,7 +53,7 @@ export const StayForm: FC<Props> = ({
           name='check_in'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Check-In</FormLabel>
+              <FormLabel>{t('stayForm.checkInLabel')}</FormLabel>
               <FormControl>
                 <Input type='datetime-local' {...field} />
               </FormControl>
@@ -64,7 +66,7 @@ export const StayForm: FC<Props> = ({
           name='check_out'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Check-Out</FormLabel>
+              <FormLabel>{t('stayForm.checkOutLabel')}</FormLabel>
               <FormControl>
                 <Input type='datetime-local' {...field} />
               </FormControl>
@@ -77,12 +79,12 @@ export const StayForm: FC<Props> = ({
           name='guests'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Número de Hóspedes</FormLabel>
+              <FormLabel>{t('stayForm.guestsLabel')}</FormLabel>
               <FormControl>
                 <NumberInput
                   decimalPlaces={0}
                   inputMode='numeric'
-                  placeholder='Digite o número de hóspedes'
+                  placeholder={t('stayForm.guestsPlaceholder')}
                   {...field}
                   onValueChange={field.onChange}
                 />
@@ -96,12 +98,12 @@ export const StayForm: FC<Props> = ({
           name='price'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Preço da Estadia</FormLabel>
+              <FormLabel>{t('stayForm.priceLabel')}</FormLabel>
               <FormControl>
                 <NumberInput
                   decimalPlaces={2}
                   inputMode='decimal'
-                  placeholder='Digite o preço da estadia'
+                  placeholder={t('stayForm.pricePlaceholder')}
                   {...field}
                   onValueChange={field.onChange}
                 />

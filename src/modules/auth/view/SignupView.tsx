@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -23,29 +23,44 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { useTranslation } from '@/i18n/useTranslation';
 
-const signupSchema = z
-  .object({
-    name: z.string().min(2, 'Nome deve ter pelo menos 2 caracteres'),
-    email: z.email('Email inválido').min(1, 'Email é obrigatório'),
-    password: z.string().min(8, 'Senha deve ter pelo menos 8 caracteres'),
-    confirmPassword: z.string().min(1, 'Confirmação de senha é obrigatória'),
-  })
-  .refine(data => data.password === data.confirmPassword, {
-    message: 'Senhas não coincidem',
-    path: ['confirmPassword'],
-  });
-
-type SignupFormData = z.infer<typeof signupSchema>;
+type SignupFormData = {
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+};
 
 /**
  * Página de cadastro de usuário
  * Permite que novos usuários se registrem na aplicação
  */
 const SignupView: React.FC = () => {
+  const { t } = useTranslation('auth');
   const navigate = useNavigate();
   const location = useLocation();
   const { signup, isSignupLoading, signupError } = useSignup();
+
+  const signupSchema = useMemo(
+    () =>
+      z
+        .object({
+          name: z.string().min(2, t('validation.nameMin')),
+          email: z
+            .email(t('validation.emailInvalid'))
+            .min(1, t('validation.emailRequired')),
+          password: z.string().min(8, t('validation.passwordMin')),
+          confirmPassword: z
+            .string()
+            .min(1, t('validation.confirmPasswordRequired')),
+        })
+        .refine(data => data.password === data.confirmPassword, {
+          message: t('validation.passwordMismatch'),
+          path: ['confirmPassword'],
+        }),
+    [t]
+  );
 
   const form = useForm<SignupFormData>({
     resolver: zodResolver(signupSchema),
@@ -70,7 +85,7 @@ const SignupView: React.FC = () => {
         navigate(from, { replace: true });
       },
       onError: error => {
-        console.error('Erro no cadastro:', error);
+        console.error(t('signup.consoleErrorPrefix'), error);
       },
     });
   };
@@ -79,10 +94,8 @@ const SignupView: React.FC = () => {
     <main className='min-h-dvh flex items-center justify-center bg-background py-12 px-4 sm:px-6 lg:px-8'>
       <Card className='max-w-md w-full'>
         <CardHeader>
-          <CardTitle>Criar nova conta</CardTitle>
-          <CardDescription>
-            Preencha os dados abaixo para se cadastrar no StayHub
-          </CardDescription>
+          <CardTitle>{t('signup.title')}</CardTitle>
+          <CardDescription>{t('signup.subtitle')}</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -93,11 +106,11 @@ const SignupView: React.FC = () => {
                   name='name'
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Nome completo</FormLabel>
+                      <FormLabel>{t('signup.nameLabel')}</FormLabel>
                       <FormControl>
                         <Input
                           type='text'
-                          placeholder='Seu nome completo'
+                          placeholder={t('signup.namePlaceholder')}
                           {...field}
                         />
                       </FormControl>
@@ -111,11 +124,11 @@ const SignupView: React.FC = () => {
                   name='email'
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Email</FormLabel>
+                      <FormLabel>{t('signup.emailLabel')}</FormLabel>
                       <FormControl>
                         <Input
                           type='email'
-                          placeholder='seu@email.com'
+                          placeholder={t('signup.emailPlaceholder')}
                           {...field}
                         />
                       </FormControl>
@@ -129,11 +142,11 @@ const SignupView: React.FC = () => {
                   name='password'
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Senha</FormLabel>
+                      <FormLabel>{t('signup.passwordLabel')}</FormLabel>
                       <FormControl>
                         <Input
                           type='password'
-                          placeholder='Mínimo 8 caracteres'
+                          placeholder={t('signup.passwordPlaceholder')}
                           {...field}
                         />
                       </FormControl>
@@ -147,11 +160,11 @@ const SignupView: React.FC = () => {
                   name='confirmPassword'
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Confirmar senha</FormLabel>
+                      <FormLabel>{t('signup.confirmPasswordLabel')}</FormLabel>
                       <FormControl>
                         <Input
                           type='password'
-                          placeholder='Digite a senha novamente'
+                          placeholder={t('signup.confirmPasswordPlaceholder')}
                           {...field}
                         />
                       </FormControl>
@@ -167,7 +180,7 @@ const SignupView: React.FC = () => {
                   message={
                     signupError instanceof Error
                       ? signupError.message
-                      : 'Erro ao criar conta. Tente novamente.'
+                      : t('signup.genericError')
                   }
                 />
               )}
@@ -178,33 +191,33 @@ const SignupView: React.FC = () => {
                   className='w-full'
                   isLoading={isSignupLoading}
                 >
-                  Cadastrar
+                  {t('signup.submitButton')}
                 </Button>
               </div>
 
               <div className='text-center'>
                 <span className='text-sm text-muted-foreground'>
-                  Já tem uma conta?{' '}
+                  {t('signup.alreadyHaveAccountText')}{' '}
                   <Link
                     to='/login'
                     className='font-medium text-blue-600 hover:text-blue-500'
                   >
-                    Faça login
+                    {t('signup.loginLink')}
                   </Link>
                 </span>
               </div>
 
               <div className='text-xs text-muted-foreground'>
-                Ao se cadastrar, você concorda com nossos{' '}
+                {t('signup.termsText')}{' '}
                 <Link to='/terms' className='text-blue-600 hover:text-blue-500'>
-                  Termos de Uso
+                  {t('signup.termsLink')}
                 </Link>{' '}
-                e{' '}
+                {t('signup.andConnector')}{' '}
                 <Link
                   to='/privacy'
                   className='text-blue-600 hover:text-blue-500'
                 >
-                  Política de Privacidade
+                  {t('signup.privacyLink')}
                 </Link>
                 .
               </div>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -23,22 +23,33 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { useTranslation } from '@/i18n/useTranslation';
 
-const loginSchema = z.object({
-  email: z.email('Email inválido').min(1, 'Email é obrigatório'),
-  password: z.string().min(8, 'Senha deve ter pelo menos 8 caracteres'),
-});
-
-type LoginFormData = z.infer<typeof loginSchema>;
+type LoginFormData = {
+  email: string;
+  password: string;
+};
 
 /**
  * Página de login do usuário
  * Permite que usuários existentes façam login na aplicação
  */
 const LoginView: React.FC = () => {
+  const { t } = useTranslation('auth');
   const navigate = useNavigate();
   const location = useLocation();
   const { signin, isSigninLoading, signinError } = useSignin();
+
+  const loginSchema = useMemo(
+    () =>
+      z.object({
+        email: z
+          .email(t('validation.emailInvalid'))
+          .min(1, t('validation.emailRequired')),
+        password: z.string().min(8, t('validation.passwordMin')),
+      }),
+    [t]
+  );
 
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -58,7 +69,7 @@ const LoginView: React.FC = () => {
         navigate(from, { replace: true });
       },
       onError: error => {
-        console.error('Erro no login:', error);
+        console.error(t('login.consoleErrorPrefix'), error);
       },
     });
   };
@@ -67,10 +78,8 @@ const LoginView: React.FC = () => {
     <main className='min-h-dvh flex items-center justify-center bg-background py-12 px-4 sm:px-6 lg:px-8'>
       <Card className='max-w-sm w-full'>
         <CardHeader>
-          <CardTitle>Entrar na sua conta</CardTitle>
-          <CardDescription>
-            Digite suas credenciais para acessar o StayHub
-          </CardDescription>
+          <CardTitle>{t('login.title')}</CardTitle>
+          <CardDescription>{t('login.subtitle')}</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -81,11 +90,11 @@ const LoginView: React.FC = () => {
                   name='email'
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Email</FormLabel>
+                      <FormLabel>{t('login.emailLabel')}</FormLabel>
                       <FormControl>
                         <Input
                           type='email'
-                          placeholder='seu@email.com'
+                          placeholder={t('login.emailPlaceholder')}
                           {...field}
                         />
                       </FormControl>
@@ -99,11 +108,11 @@ const LoginView: React.FC = () => {
                   name='password'
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Senha</FormLabel>
+                      <FormLabel>{t('login.passwordLabel')}</FormLabel>
                       <FormControl>
                         <Input
                           type='password'
-                          placeholder='Sua senha'
+                          placeholder={t('login.passwordPlaceholder')}
                           {...field}
                         />
                       </FormControl>
@@ -119,7 +128,7 @@ const LoginView: React.FC = () => {
                   message={
                     signinError instanceof Error
                       ? signinError.message
-                      : 'Erro ao fazer login. Verifique suas credenciais.'
+                      : t('login.genericError')
                   }
                 />
               )}
@@ -130,18 +139,18 @@ const LoginView: React.FC = () => {
                   className='w-full'
                   isLoading={isSigninLoading}
                 >
-                  Entrar
+                  {t('login.submitButton')}
                 </Button>
               </div>
 
               <div className='text-center'>
                 <span className='text-sm text-muted-foreground'>
-                  Não tem uma conta?{' '}
+                  {t('login.noAccountText')}{' '}
                   <Link
                     to='/signup'
                     className='font-medium text-blue-600 hover:text-blue-500'
                   >
-                    Cadastre-se
+                    {t('login.signupLink')}
                   </Link>
                 </span>
               </div>
@@ -151,7 +160,7 @@ const LoginView: React.FC = () => {
                   to='/forgot-password'
                   className='text-sm text-blue-600 hover:text-blue-500'
                 >
-                  Esqueceu sua senha?
+                  {t('login.forgotPasswordLink')}
                 </Link>
               </div>
             </form>
