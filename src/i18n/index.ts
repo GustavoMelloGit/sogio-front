@@ -9,6 +9,8 @@ import authEn from './locales/en/auth.json';
 import authPt from './locales/pt/auth.json';
 import errorEn from './locales/en/error.json';
 import errorPt from './locales/pt/error.json';
+import stayEn from './locales/en/stay.json';
+import stayPt from './locales/pt/stay.json';
 import { DEFAULT_LANGUAGE, SUPPORTED_LANGUAGES } from './language';
 
 export const defaultNS = 'common';
@@ -19,12 +21,14 @@ export const resources = {
     dashboard: dashboardEn,
     auth: authEn,
     error: errorEn,
+    stay: stayEn,
   },
   pt: {
     common: commonPt,
     dashboard: dashboardPt,
     auth: authPt,
     error: errorPt,
+    stay: stayPt,
   },
 } as const;
 

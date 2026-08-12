@@ -1,0 +1,104 @@
+{
+  "stayDetail": {
+    "breadcrumb": {
+      "myProperties": "Minhas Propriedades",
+      "stayDetails": "Detalhes da Estadia"
+    },
+    "loadingTitle": "Carregando...",
+    "loadingDescription": "Detalhes da estadia",
+    "errorTitle": "Erro ao carregar estadia",
+    "notFoundTitle": "Estadia não encontrada",
+    "errorDescription": "Não foi possível carregar os detalhes da estadia. Tente novamente mais tarde.",
+    "notFoundDescription": "A estadia solicitada não foi encontrada ou você não tem permissão para visualizá-la.",
+    "backToHome": "Voltar para início",
+    "editButton": "Editar",
+    "moreActionsAriaLabel": "Mais ações",
+    "copyCohostData": "Copiar dados para coanfitrião",
+    "copyInstructionsLink": "Copiar link das instruções",
+    "sendViaWhatsApp": "Enviar pelo WhatsApp",
+    "cancelingStay": "Cancelando...",
+    "cancelStay": "Cancelar estadia",
+    "dateRange": "{{checkIn}} → {{checkOut}}",
+    "checkInLabel": "Check-in",
+    "checkOutLabel": "Check-out",
+    "guestsLabel": "Hóspedes",
+    "totalValueLabel": "Valor total",
+    "stayDetailsTitle": "Detalhes da Estadia",
+    "entranceCodeLabel": "Código de entrada",
+    "copyEntranceCodeAriaLabel": "Copiar código de entrada",
+    "bookingSourceLabel": "Origem da reserva",
+    "sourceLabels": {
+      "internal": "Reserva direta",
+      "airbnb": "Airbnb",
+      "booking": "Booking.com"
+    },
+    "guestTitle": "Hóspede",
+    "copyPhoneAriaLabel": "Copiar telefone",
+    "toasts": {
+      "cancelSuccess": "Estadia cancelada com sucesso",
+      "cancelError": "Erro ao cancelar estadia",
+      "copySuccess": "Copiado com sucesso"
+    },
+    "cohostData": {
+      "guestsCount": "{{count}} hóspedes"
+    },
+    "whatsappMessage": "Olá {{name}}, como você está? Me chamo Gustavo, sou o host da sua estadia em Castelhanos. Por favor, veja abaixo as instruções de check-in e check-out: {{url}}"
+  },
+  "stayInstructions": {
+    "imageAlt": "apartamento 201 - Praia dos Castelhanos",
+    "greeting": "Olá, {{name}}",
+    "welcomeMessage": "Que bom ter você com a gente! Para tornar sua estadia ainda mais tranquila, reunimos aqui algumas informações importantes:",
+    "passwordLabel": "Senha",
+    "howToArrive": {
+      "title": "COMO CHEGAR",
+      "addressLabel": "Endereço",
+      "addressLine1": "Rua Salma Souki Oliveira, S/N, Praia dos Castelhanos.",
+      "addressLine2": "Ed. Bandeira Azul, Ap. 201",
+      "openInMaps": "Abrir no Google Maps"
+    },
+    "checkInOut": {
+      "title": "CHECK-IN & CHECK-OUT",
+      "afterLabel": "Após",
+      "untilLabel": "Até",
+      "cohostLabel": "Co-anfitrião",
+      "cohostNoticeLead": "O co-anfitrião acompanhará seu check-in e check-out. Por isso,",
+      "cohostNoticeStrong": "avise o horário da sua chegada com antecedência.",
+      "passwordNoticeLead": "Sua senha da fechadura eletrônica é:",
+      "passwordNoticeRest": "Ela é exclusiva da sua estadia e será desativada automaticamente logo após o check-out."
+    },
+    "wifi": {
+      "title": "WIFI",
+      "nameLabel": "Nome"
+    },
+    "houseRules": {
+      "title": "REGRAS DA CASA",
+      "parking": "Use apenas a vaga 201.",
+      "pets": "Pets só com autorização prévia do anfitrião.",
+      "guestsOnly": "Apenas os hóspedes combinados devem permanecer no imóvel.",
+      "doors": "Mantenha as portas do condomínio sempre fechadas.",
+      "maintenance": "Se algo estiver quebrado ou apresentar problemas, informe imediatamente."
+    },
+    "electronicLock": {
+      "title": "FECHADURA ELETRÔNICA",
+      "enterPasswordLabel": "Digite a senha:",
+      "enterPasswordText": "toque na parte superior da fechadura até os números acenderem. Em seguida, insira sua senha e aperte \"#\".",
+      "avoidIssuesLabel": "Evite problemas:",
+      "avoidIssuesText": "mantenha o pequeno \"interruptor\" abaixo da maçaneta (lado de dentro) sempre na posição para baixo.",
+      "videoTitle": "Tuya APP WIFI Fechadura Digital de Sobrepor, Fechadura Eletronica Fechaduras Digital de Embutir"
+    }
+  },
+  "stayForm": {
+    "checkInLabel": "Check-In",
+    "checkOutLabel": "Check-Out",
+    "guestsLabel": "Número de Hóspedes",
+    "guestsPlaceholder": "Digite o número de hóspedes",
+    "priceLabel": "Preço da Estadia",
+    "pricePlaceholder": "Digite o preço da estadia"
+  },
+  "updateStay": {
+    "title": "Editar Estadia",
+    "description": "Atualize as informações da estadia.",
+    "errorTitle": "Erro",
+    "submitButton": "Atualizar Estadia"
+  }
+}
