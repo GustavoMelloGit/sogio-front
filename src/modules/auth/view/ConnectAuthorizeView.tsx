@@ -18,6 +18,8 @@ import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Spinner } from '@/components/ui/spinner';
 import { Alert } from '@/components/Alert';
+import { useTranslation } from '@/i18n/useTranslation';
+import type { TranslateFn } from '@/i18n/useTranslation';
 import { useAuthData } from '../service/AuthService.hooks';
 import {
   useDecideAuthorizationRequest,
@@ -30,25 +32,22 @@ import {
 import { InlineSigninForm } from '../components/InlineSigninForm';
 import type { AuthorizationDecision } from '../types/OAuthTypes';
 
-const INVALID_LINK_TITLE = 'Link de autorização inválido';
-const INVALID_LINK_MESSAGE =
-  'Este link de autorização é inválido. Feche esta janela e tente novamente a partir do aplicativo que solicitou o acesso.';
-const EXPIRED_LINK_MESSAGE =
-  'Este link expirou, já foi usado, ou não existe mais. Feche esta janela e tente novamente a partir do aplicativo que solicitou o acesso.';
-
 const PageShell: FC<PropsWithChildren> = ({ children }) => (
   <main className='flex min-h-dvh items-center justify-center bg-background px-4 py-12'>
     <Card className='w-full max-w-sm'>{children}</Card>
   </main>
 );
 
-const AppIdentity: FC<{ name: string; verified: boolean }> = ({
+const AppIdentity: FC<{ name: string; verified: boolean; t: TranslateFn }> = ({
   name,
   verified,
+  t,
 }) => (
   <div className='flex flex-wrap items-center gap-2'>
     <span className='font-semibold'>{name}</span>
-    {!verified && <Badge variant='outline'>Não verificado</Badge>}
+    {!verified && (
+      <Badge variant='outline'>{t('connectAuthorize.notVerifiedBadge')}</Badge>
+    )}
   </div>
 );
 
@@ -90,6 +89,7 @@ const LoadingCard: FC = () => (
  * axios em 401 para esta rota.
  */
 const ConnectAuthorizeView: FC = () => {
+  const { t } = useTranslation('auth');
   const [searchParams] = useSearchParams();
   const requestId = searchParams.get('request_id');
   const queryClient = useQueryClient();
@@ -154,9 +154,15 @@ const ConnectAuthorizeView: FC = () => {
     );
   };
 
+  const invalidLinkTitle = t('connectAuthorize.invalidLinkTitle');
+  const expiredLinkMessage = t('connectAuthorize.expiredLinkMessage');
+
   if (!requestId) {
     return (
-      <ErrorCard title={INVALID_LINK_TITLE} message={INVALID_LINK_MESSAGE} />
+      <ErrorCard
+        title={invalidLinkTitle}
+        message={t('connectAuthorize.invalidLinkMessage')}
+      />
     );
   }
 
@@ -168,9 +174,9 @@ const ConnectAuthorizeView: FC = () => {
     const notFound = isRequestNotFoundError(requestError);
     return (
       <ErrorCard
-        title={INVALID_LINK_TITLE}
+        title={invalidLinkTitle}
         message={
-          notFound ? EXPIRED_LINK_MESSAGE : getOAuthErrorMessage(requestError)
+          notFound ? expiredLinkMessage : getOAuthErrorMessage(requestError)
         }
       />
     );
@@ -180,9 +186,9 @@ const ConnectAuthorizeView: FC = () => {
     const notFound = isRequestNotFoundError(decisionError);
     return (
       <ErrorCard
-        title={INVALID_LINK_TITLE}
+        title={invalidLinkTitle}
         message={
-          notFound ? EXPIRED_LINK_MESSAGE : getOAuthErrorMessage(decisionError)
+          notFound ? expiredLinkMessage : getOAuthErrorMessage(decisionError)
         }
       />
     );
@@ -192,10 +198,13 @@ const ConnectAuthorizeView: FC = () => {
     return (
       <PageShell>
         <CardHeader className='space-y-3'>
-          <h1 className='text-lg leading-none font-semibold'>Reconectando</h1>
+          <h1 className='text-lg leading-none font-semibold'>
+            {t('connectAuthorize.reconnectingTitle')}
+          </h1>
           <AppIdentity
             name={request.app_display_name}
             verified={request.app_display_name_verified}
+            t={t}
           />
         </CardHeader>
         <CardContent>
@@ -206,7 +215,9 @@ const ConnectAuthorizeView: FC = () => {
             <span aria-hidden='true'>
               <Spinner />
             </span>
-            <span className='text-sm text-muted-foreground'>Reconectando…</span>
+            <span className='text-sm text-muted-foreground'>
+              {t('connectAuthorize.reconnectingText')}
+            </span>
           </div>
         </CardContent>
       </PageShell>
@@ -218,14 +229,15 @@ const ConnectAuthorizeView: FC = () => {
       <PageShell>
         <CardHeader className='space-y-3'>
           <h1 className='text-lg leading-none font-semibold'>
-            Entrar para continuar
+            {t('connectAuthorize.signInTitle')}
           </h1>
           <AppIdentity
             name={request.app_display_name}
             verified={request.app_display_name_verified}
+            t={t}
           />
           <CardDescription>
-            Entre com sua conta StayHub para revisar este pedido de acesso.
+            {t('connectAuthorize.signInDescription')}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -240,25 +252,26 @@ const ConnectAuthorizeView: FC = () => {
     : false;
 
   if (decisionNotFound) {
-    return (
-      <ErrorCard title={INVALID_LINK_TITLE} message={EXPIRED_LINK_MESSAGE} />
-    );
+    return <ErrorCard title={invalidLinkTitle} message={expiredLinkMessage} />;
   }
 
   return (
     <PageShell>
       <CardHeader className='space-y-3'>
-        <h1 className='text-lg leading-none font-semibold'>Autorizar acesso</h1>
+        <h1 className='text-lg leading-none font-semibold'>
+          {t('connectAuthorize.authorizeTitle')}
+        </h1>
         <AppIdentity
           name={request.app_display_name}
           verified={request.app_display_name_verified}
+          t={t}
         />
         <CardDescription>{request.scope_description}</CardDescription>
       </CardHeader>
       <CardContent className='space-y-4'>
         <div className='rounded-md border bg-muted p-3'>
           <p className='text-xs text-muted-foreground'>
-            Você será redirecionado para
+            {t('connectAuthorize.redirectNotice')}
           </p>
           <p className='break-all font-mono text-sm'>{request.redirect_host}</p>
         </div>
@@ -279,7 +292,7 @@ const ConnectAuthorizeView: FC = () => {
             disabled={isDeciding}
             onClick={() => handleDecision('approve')}
           >
-            Aprovar
+            {t('connectAuthorize.approveButton')}
           </Button>
           <Button
             size='lg'
@@ -289,7 +302,7 @@ const ConnectAuthorizeView: FC = () => {
             disabled={isDeciding}
             onClick={() => handleDecision('deny')}
           >
-            Negar
+            {t('connectAuthorize.denyButton')}
           </Button>
         </div>
       </CardContent>

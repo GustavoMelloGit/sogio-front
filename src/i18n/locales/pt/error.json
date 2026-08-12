@@ -1,0 +1,10 @@
+{
+  "notFound": {
+    "title": "Página não encontrada",
+    "description": "A página que você está procurando não existe ou foi movida.",
+    "backToDashboard": "Voltar ao Dashboard",
+    "goToLogin": "Ir para Login",
+    "supportMessagePrefix": "Se você acredita que isso é um erro, entre em contato com o",
+    "supportLinkLabel": "suporte"
+  }
+}
