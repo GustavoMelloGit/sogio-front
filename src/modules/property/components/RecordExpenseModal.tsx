@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import { type FC, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
@@ -32,33 +32,57 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { useTranslation } from '@/i18n/useTranslation';
+import type { TranslateFn } from '@/i18n/useTranslation';
 
-const expenseCategories: Array<{ value: string; label: string }> = [
-  { value: 'MANUTENÇÃO', label: 'Manutenção' },
-  { value: 'ESTADIA', label: 'Estadia' },
-  { value: 'AQUISIÇÕES', label: 'Aquisições' },
-  { value: 'FINANCIAMENTO', label: 'Financiamento' },
-  { value: 'GASTOS_FIXOS', label: 'Gastos Fixos' },
-  { value: 'OUTROS', label: 'Outros' },
+const expenseCategoryValues = [
+  'MANUTENÇÃO',
+  'ESTADIA',
+  'AQUISIÇÕES',
+  'FINANCIAMENTO',
+  'GASTOS_FIXOS',
+  'OUTROS',
+] as const;
+
+const getExpenseCategories = (
+  t: TranslateFn
+): Array<{ value: string; label: string }> => [
+  {
+    value: 'MANUTENÇÃO',
+    label: t('recordExpenseModal.categories.maintenance'),
+  },
+  { value: 'ESTADIA', label: t('recordExpenseModal.categories.stay') },
+  {
+    value: 'AQUISIÇÕES',
+    label: t('recordExpenseModal.categories.acquisitions'),
+  },
+  {
+    value: 'FINANCIAMENTO',
+    label: t('recordExpenseModal.categories.financing'),
+  },
+  {
+    value: 'GASTOS_FIXOS',
+    label: t('recordExpenseModal.categories.fixedExpenses'),
+  },
+  { value: 'OUTROS', label: t('recordExpenseModal.categories.other') },
 ];
 
-const formSchema = z.object({
-  amount: z.number().positive('O valor deve ser maior que zero'),
-  description: z.string().optional(),
-  category: z.enum(
-    expenseCategories.map(category => category.value),
-    {
-      message: 'É necessário informar a categoria',
-    }
-  ),
-});
+const createFormSchema = (t: TranslateFn) =>
+  z.object({
+    amount: z
+      .number()
+      .positive(t('recordExpenseModal.validation.amountPositive')),
+    description: z.string().optional(),
+    category: z.enum(expenseCategoryValues, {
+      message: t('recordExpenseModal.validation.categoryRequired'),
+    }),
+  });
 
-type FormData = z.infer<typeof formSchema>;
+type FormData = z.infer<ReturnType<typeof createFormSchema>>;
 
 const defaultValues: Partial<FormData> = {
   amount: 0,
   description: '',
-  category: '',
 };
 
 type Props = {
@@ -72,6 +96,10 @@ export const RecordExpenseModal: FC<Props> = ({
   isOpen,
   onClose,
 }) => {
+  const { t } = useTranslation(['property']);
+  const expenseCategories = useMemo(() => getExpenseCategories(t), [t]);
+  const formSchema = useMemo(() => createFormSchema(t), [t]);
+
   const { mutate, isLoading, error } = useRecordExpense({
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -111,10 +139,10 @@ export const RecordExpenseModal: FC<Props> = ({
         <SheetHeader>
           <SheetTitle className='flex items-center gap-2'>
             <Minus className='h-5 w-5' />
-            Cadastrar Despesa
+            {t('recordExpenseModal.title')}
           </SheetTitle>
           <SheetDescription>
-            Registre uma nova despesa para esta propriedade.
+            {t('recordExpenseModal.description')}
           </SheetDescription>
         </SheetHeader>
 
@@ -122,7 +150,7 @@ export const RecordExpenseModal: FC<Props> = ({
           {error && (
             <Alert
               variant='destructive'
-              title='Erro'
+              title={t('recordExpenseModal.errorTitle')}
               message={error.message}
               className='mb-4'
             />
@@ -138,12 +166,12 @@ export const RecordExpenseModal: FC<Props> = ({
                 name='amount'
                 render={({ field: { onChange, ...field } }) => (
                   <FormItem>
-                    <FormLabel>Valor</FormLabel>
+                    <FormLabel>{t('recordExpenseModal.amountLabel')}</FormLabel>
                     <FormControl>
                       <NumberInput
                         decimalPlaces={2}
                         inputMode='decimal'
-                        placeholder='0,00'
+                        placeholder={t('recordExpenseModal.amountPlaceholder')}
                         onValueChange={onChange}
                         {...field}
                       />
@@ -158,11 +186,17 @@ export const RecordExpenseModal: FC<Props> = ({
                 name='category'
                 render={({ field: { onChange, value, ...field } }) => (
                   <FormItem>
-                    <FormLabel>Categoria</FormLabel>
+                    <FormLabel>
+                      {t('recordExpenseModal.categoryLabel')}
+                    </FormLabel>
                     <Select onValueChange={onChange} defaultValue={value}>
                       <FormControl>
                         <SelectTrigger className='w-full' {...field}>
-                          <SelectValue placeholder='Selecione a categoria' />
+                          <SelectValue
+                            placeholder={t(
+                              'recordExpenseModal.categoryPlaceholder'
+                            )}
+                          />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -186,10 +220,14 @@ export const RecordExpenseModal: FC<Props> = ({
                 name='description'
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Descrição (opcional)</FormLabel>
+                    <FormLabel>
+                      {t('recordExpenseModal.descriptionLabel')}
+                    </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder='Adicione uma descrição para esta despesa'
+                        placeholder={t(
+                          'recordExpenseModal.descriptionPlaceholder'
+                        )}
                         {...field}
                       />
                     </FormControl>
@@ -205,10 +243,10 @@ export const RecordExpenseModal: FC<Props> = ({
                   onClick={handleClose}
                   className='flex-1'
                 >
-                  Cancelar
+                  {t('recordExpenseModal.cancel')}
                 </Button>
                 <Button type='submit' isLoading={isLoading} className='flex-1'>
-                  Cadastrar
+                  {t('recordExpenseModal.submit')}
                 </Button>
               </div>
             </form>

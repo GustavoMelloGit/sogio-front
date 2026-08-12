@@ -19,14 +19,8 @@ import { useNamespacedFilters } from '@/hooks/useNamespacedFilters';
 import { useDebounce } from '@/hooks/useDebounce';
 import { CalendarIcon, Plus, X } from 'lucide-react';
 import { capitalize } from '@/lib/string';
-
-const formatDate = (date: Date): string => {
-  return new Intl.DateTimeFormat('pt-BR', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-  }).format(date);
-};
+import { useTranslation } from '@/i18n/useTranslation';
+import { INTL_LOCALES } from '@/i18n/locale-maps';
 
 type Props = {
   propertyId: string;
@@ -35,6 +29,17 @@ type Props = {
 const PAGE_SIZE = 10;
 
 export const PropertyMovementsList: FC<Props> = ({ propertyId }) => {
+  const { t, language } = useTranslation(['property']);
+  const intlLocale = INTL_LOCALES[language];
+
+  const formatDate = (date: Date): string => {
+    return new Intl.DateTimeFormat(intlLocale, {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    }).format(date);
+  };
+
   const { filters, addFilter, removeFilter } =
     useNamespacedFilters('movements');
   const currentPage = +filters.page || 1;
@@ -77,14 +82,14 @@ export const PropertyMovementsList: FC<Props> = ({ propertyId }) => {
       <CardHeader>
         <div className='flex items-center justify-between'>
           <div>
-            <CardTitle>Movimentações Financeiras</CardTitle>
+            <CardTitle>{t('propertyMovementsList.title')}</CardTitle>
             <CardDescription>
-              Histórico de receitas e despesas da propriedade
+              {t('propertyMovementsList.description')}
             </CardDescription>
           </div>
           <Button onClick={open}>
             <Plus />
-            Nova Despesa
+            {t('propertyMovementsList.newExpenseButton')}
           </Button>
         </div>
       </CardHeader>
@@ -97,7 +102,7 @@ export const PropertyMovementsList: FC<Props> = ({ propertyId }) => {
                 className='flex items-center gap-1.5'
               >
                 <CalendarIcon className='size-3.5 text-muted-foreground' />
-                De
+                {t('propertyMovementsList.filterFromLabel')}
               </Label>
               <Input
                 id='movements-filter-start'
@@ -109,7 +114,9 @@ export const PropertyMovementsList: FC<Props> = ({ propertyId }) => {
               />
             </div>
             <div className='flex flex-col gap-1.5'>
-              <Label htmlFor='movements-filter-end'>até</Label>
+              <Label htmlFor='movements-filter-end'>
+                {t('propertyMovementsList.filterToLabel')}
+              </Label>
               <Input
                 id='movements-filter-end'
                 type='date'
@@ -128,7 +135,7 @@ export const PropertyMovementsList: FC<Props> = ({ propertyId }) => {
               className='self-end'
             >
               <X className='mr-2 size-4' />
-              Limpar filtro
+              {t('propertyMovementsList.clearFilter')}
             </Button>
           )}
         </div>
@@ -143,7 +150,7 @@ export const PropertyMovementsList: FC<Props> = ({ propertyId }) => {
           }}
           columns={[
             {
-              header: 'Descrição',
+              header: t('propertyMovementsList.columns.description'),
               accessorKey: 'description',
               render: (row: FinanceMovement) => row.description || '-',
               mobile: {
@@ -151,20 +158,21 @@ export const PropertyMovementsList: FC<Props> = ({ propertyId }) => {
               },
             },
             {
-              header: 'Categoria',
+              header: t('propertyMovementsList.columns.category'),
               accessorKey: 'category',
               render: (row: FinanceMovement) => capitalize(row.category),
             },
             {
-              header: 'Valor',
+              header: t('propertyMovementsList.columns.amount'),
               accessorKey: 'amount',
-              render: (row: FinanceMovement) => Currency.format(row.amount),
+              render: (row: FinanceMovement) =>
+                Currency.format(row.amount, { locale: intlLocale }),
               cell: {
                 className: 'text-right tabular-nums',
               },
             },
             {
-              header: 'Data',
+              header: t('propertyMovementsList.columns.date'),
               accessorKey: 'created_at',
               render: (row: FinanceMovement) => formatDate(row.created_at),
             },

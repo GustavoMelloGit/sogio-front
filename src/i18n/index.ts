@@ -5,13 +5,15 @@ import commonEn from './locales/en/common.json';
 import commonPt from './locales/pt/common.json';
 import dashboardEn from './locales/en/dashboard.json';
 import dashboardPt from './locales/pt/dashboard.json';
+import propertyEn from './locales/en/property.json';
+import propertyPt from './locales/pt/property.json';
 import { DEFAULT_LANGUAGE, SUPPORTED_LANGUAGES } from './language';
 
 export const defaultNS = 'common';
 
 export const resources = {
-  en: { common: commonEn, dashboard: dashboardEn },
-  pt: { common: commonPt, dashboard: dashboardPt },
+  en: { common: commonEn, dashboard: dashboardEn, property: propertyEn },
+  pt: { common: commonPt, dashboard: dashboardPt, property: propertyPt },
 } as const;
 
 i18n

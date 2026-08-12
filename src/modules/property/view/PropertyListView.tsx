@@ -1,4 +1,5 @@
 import { type FC } from 'react';
+import { useTranslation } from '@/i18n/useTranslation';
 import { useUserProperties } from '../service/PropertyService.hooks';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Alert } from '@/components/Alert';
@@ -10,6 +11,7 @@ import { Plus } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 
 const PropertyListView: FC = () => {
+  const { t } = useTranslation(['property', 'common']);
   const navigate = useNavigate();
   const { properties, isLoading, error } = useUserProperties();
 
@@ -18,17 +20,17 @@ const PropertyListView: FC = () => {
       <Page.Container>
         <Page.Topbar
           nav={[
-            { label: 'Dashboard', to: ROUTES.home },
-            { label: 'Propriedades' },
+            { label: t('common:sidebar.nav.dashboard'), to: ROUTES.home },
+            { label: t('common:sidebar.nav.properties') },
           ]}
         />
         <Page.Header
-          title='Minhas Propriedades'
-          description='Gerencie suas propriedades e visualize informações importantes'
+          title={t('propertyList.title')}
+          description={t('propertyList.description')}
           actions={
             <Button onClick={() => navigate(ROUTES.createProperty)}>
               <Plus className='w-4 h-4' />
-              Nova Propriedade
+              {t('propertyList.newPropertyButton')}
             </Button>
           }
         />
@@ -46,9 +48,8 @@ const PropertyListView: FC = () => {
   if (error) {
     return (
       <div className='container mx-auto px-4 py-8'>
-        <Alert variant='destructive' message='Erro ao carregar propriedades'>
-          Não foi possível carregar suas propriedades. Tente novamente mais
-          tarde.
+        <Alert variant='destructive' message={t('propertyList.errorTitle')}>
+          {t('propertyList.errorMessage')}
         </Alert>
       </div>
     );
@@ -58,17 +59,17 @@ const PropertyListView: FC = () => {
     <Page.Container>
       <Page.Topbar
         nav={[
-          { label: 'Dashboard', to: ROUTES.home },
-          { label: 'Propriedades' },
+          { label: t('common:sidebar.nav.dashboard'), to: ROUTES.home },
+          { label: t('common:sidebar.nav.properties') },
         ]}
       />
       <Page.Header
-        title='Minhas Propriedades'
-        description='Gerencie suas propriedades e visualize informações importantes'
+        title={t('propertyList.title')}
+        description={t('propertyList.description')}
         actions={
           <Button onClick={() => navigate(ROUTES.createProperty)}>
             <Plus className='w-4 h-4' />
-            Nova Propriedade
+            {t('propertyList.newPropertyButton')}
           </Button>
         }
       />
@@ -91,14 +92,13 @@ const PropertyListView: FC = () => {
               </svg>
             </div>
             <h3 className='text-lg font-medium text-gray-900 mb-2'>
-              Nenhuma propriedade encontrada
+              {t('propertyList.emptyState.title')}
             </h3>
             <p className='text-gray-500 mb-6'>
-              Comece adicionando sua primeira propriedade para gerenciar suas
-              estadias.
+              {t('propertyList.emptyState.description')}
             </p>
             <Button onClick={() => navigate(ROUTES.createProperty)}>
-              Adicionar Primeira Propriedade
+              {t('propertyList.emptyState.cta')}
             </Button>
           </div>
         ) : (
@@ -109,7 +109,7 @@ const PropertyListView: FC = () => {
                   <CardHeader className='p-0 rounded-[inherit]'>
                     <img
                       src='/apartment.webp'
-                      alt='Imagem da propriedade'
+                      alt={t('propertyList.propertyImageAlt')}
                       className='rounded-[inherit] rounded-b-none w-full aspect-video object-cover'
                     />
                   </CardHeader>
@@ -122,7 +122,7 @@ const PropertyListView: FC = () => {
                         className: 'w-full',
                       })}
                     >
-                      Ver detalhes
+                      {t('propertyList.viewDetails')}
                     </Link>
                   </CardContent>
                 </Card>
