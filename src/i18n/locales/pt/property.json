@@ -1,0 +1,243 @@
+{
+  "propertyList": {
+    "title": "Minhas Propriedades",
+    "description": "Gerencie suas propriedades e visualize informações importantes",
+    "newPropertyButton": "Nova Propriedade",
+    "errorTitle": "Erro ao carregar propriedades",
+    "errorMessage": "Não foi possível carregar suas propriedades. Tente novamente mais tarde.",
+    "propertyImageAlt": "Imagem da propriedade",
+    "viewDetails": "Ver detalhes",
+    "emptyState": {
+      "title": "Nenhuma propriedade encontrada",
+      "description": "Comece adicionando sua primeira propriedade para gerenciar suas estadias.",
+      "cta": "Adicionar Primeira Propriedade"
+    }
+  },
+  "propertyDetail": {
+    "loadingBreadcrumb": "Carregando...",
+    "loadingTitle": "Carregando...",
+    "loadingDescription": "Detalhes da propriedade",
+    "errorTitle": "Erro ao carregar propriedade",
+    "errorMessage": "Não foi possível carregar os detalhes da propriedade. Tente novamente mais tarde.",
+    "notFoundTitle": "Propriedade não encontrada",
+    "notFoundMessage": "A propriedade solicitada não foi encontrada ou você não tem permissão para visualizá-la.",
+    "backToHome": "Voltar para início",
+    "description": "Detalhes da propriedade",
+    "addLink": "Adicionar Link",
+    "edit": "Editar",
+    "tabs": {
+      "stays": "Estadias",
+      "movements": "Movimentações"
+    }
+  },
+  "createProperty": {
+    "breadcrumb": "Nova Propriedade",
+    "title": "Nova Propriedade",
+    "description": "Preencha as informações para cadastrar uma nova propriedade",
+    "errorTitle": "Erro",
+    "basicInfoTitle": "Informações Básicas",
+    "nameLabel": "Nome da Propriedade",
+    "namePlaceholder": "Ex: Apartamento Centro",
+    "capacityLabel": "Capacidade (hóspedes)",
+    "capacityPlaceholder": "Ex: 4",
+    "imagesTitle": "Imagens",
+    "imageUrlLabel": "URL da Imagem {{index}}",
+    "imageUrlPlaceholder": "https://...",
+    "addImage": "Adicionar Imagem",
+    "addressTitle": "Endereço",
+    "zipCodeLabel": "CEP",
+    "zipCodePlaceholder": "00000-000",
+    "countryLabel": "País",
+    "countryPlaceholder": "Brasil",
+    "streetLabel": "Rua",
+    "streetPlaceholder": "Ex: Rua das Flores",
+    "numberLabel": "Número",
+    "numberPlaceholder": "Ex: 123",
+    "complementLabel": "Complemento",
+    "complementPlaceholder": "Ex: Apto 42 (opcional)",
+    "neighborhoodLabel": "Bairro",
+    "neighborhoodPlaceholder": "Ex: Centro",
+    "cityLabel": "Cidade",
+    "cityPlaceholder": "Ex: São Paulo",
+    "stateLabel": "Estado",
+    "statePlaceholder": "Ex: SP",
+    "cancel": "Cancelar",
+    "submit": "Cadastrar Propriedade",
+    "validation": {
+      "capacityMin": "Capacidade deve ser pelo menos 1",
+      "imageUrlRequired": "URL é obrigatória",
+      "imagesMinOne": "Pelo menos uma imagem é obrigatória"
+    }
+  },
+  "reconcileStaysView": {
+    "title": "Reconciliar Estadias Externas",
+    "description": "Encontradas {{count}} estadias externas que ainda não foram cadastradas.",
+    "errorTitle": "Erro",
+    "loading": "Carregando...",
+    "emptyState": "Não há estadias externas pendentes para reconciliar.",
+    "checkInLabel": "Check-in",
+    "checkOutLabel": "Check-out",
+    "registerStay": "Cadastrar Estadia"
+  },
+  "reconcileStayForm": {
+    "breadcrumb": "Cadastrar Estadia Externa",
+    "title": "Cadastrar Estadia Externa",
+    "description": "Cadastre a estadia externa da propriedade {{property}}.",
+    "propertyLabel": "Propriedade:",
+    "platformLabel": "Plataforma:",
+    "submitButton": "Cadastrar Estadia"
+  },
+  "addStay": {
+    "title": "Nova Estadia",
+    "description": "Cadastre uma nova estadia para esta propriedade.",
+    "submitButton": "Cadastrar Estadia",
+    "successToast": "Estadia cadastrada com sucesso"
+  },
+  "bookStayForm": {
+    "errorTitle": "Erro",
+    "checkInLabel": "Check-in",
+    "checkOutLabel": "Check-out",
+    "tenantNameLabel": "Nome do Hóspede",
+    "tenantPhoneLabel": "Telefone do Hóspede",
+    "tenantPhonePlaceholder": "Digite o telefone do hóspede",
+    "entranceCodeLabel": "Código de Entrada",
+    "entranceCodePlaceholder": "Digite o código de entrada",
+    "generateCodeAriaLabel": "Gerar código de entrada aleatório",
+    "tenantSexLabel": "Sexo do Hóspede",
+    "tenantSexPlaceholder": "Selecione o sexo",
+    "sexOptions": {
+      "male": "Masculino",
+      "female": "Feminino",
+      "other": "Outro"
+    },
+    "guestsLabel": "Número de Hóspedes",
+    "guestsPlaceholder": "Digite o número de hóspedes",
+    "priceLabel": "Preço da Estadia",
+    "pricePlaceholder": "Digite o preço da estadia",
+    "validation": {
+      "checkInRequired": "Data e hora de check-in é obrigatória",
+      "checkOutRequired": "Data e hora de check-out é obrigatória",
+      "entranceCodeMin": "O código de entrada deve ter pelo menos {{length}} dígitos",
+      "tenantNameRequired": "Nome do hóspede é obrigatório",
+      "tenantPhoneInvalid": "Telefone do hóspede é inválido",
+      "tenantSexRequired": "Sexo do hóspede é obrigatório",
+      "guestsMin": "Número de hóspedes deve ser pelo menos 1",
+      "priceRequired": "Preço da estadia é obrigatório"
+    }
+  },
+  "editPropertyModal": {
+    "title": "Editar Propriedade",
+    "description": "Atualize as informações da propriedade.",
+    "errorTitle": "Erro",
+    "nameLabel": "Nome da Propriedade",
+    "namePlaceholder": "Digite o nome da propriedade",
+    "capacityLabel": "Capacidade",
+    "capacityPlaceholder": "Digite a capacidade da propriedade",
+    "cancel": "Cancelar",
+    "save": "Salvar",
+    "validation": {
+      "nameRequired": "Nome é obrigatório",
+      "capacityMin": "Capacidade deve ser pelo menos 1"
+    }
+  },
+  "externalBookingModal": {
+    "title": "Cadastrar Link de Plataforma",
+    "description": "Adicione um link de sincronização para que a API possa reconciliar reservas das plataformas de aluguel.",
+    "errorTitle": "Erro",
+    "platformLabel": "Plataforma",
+    "platformPlaceholder": "Selecione a plataforma",
+    "platforms": {
+      "airbnb": "Airbnb",
+      "booking": "Booking.com"
+    },
+    "syncUrlLabel": "URL de Sincronização",
+    "syncUrlPlaceholder": "https://www.exemplo.com/ical",
+    "cancel": "Cancelar",
+    "submit": "Cadastrar"
+  },
+  "propertyMovementsList": {
+    "title": "Movimentações Financeiras",
+    "description": "Histórico de receitas e despesas da propriedade",
+    "newExpenseButton": "Nova Despesa",
+    "filterFromLabel": "De",
+    "filterToLabel": "até",
+    "clearFilter": "Limpar filtro",
+    "columns": {
+      "description": "Descrição",
+      "category": "Categoria",
+      "amount": "Valor",
+      "date": "Data"
+    }
+  },
+  "propertyStaysList": {
+    "title": "Listagem de estadias",
+    "description": "Filtre pelo período de check-in para encontrar estadias",
+    "newStayButton": "Nova Estadia",
+    "filterFromLabel": "Check-in de",
+    "filterToLabel": "até",
+    "clearFilter": "Limpar filtro",
+    "copiedSuccess": "Copiado com sucesso",
+    "actionsButton": "Ações",
+    "copyCohostData": "Copiar dados para coanfitrião",
+    "clearSelection": "Limpar seleção",
+    "guestsCount_one": "{{count}} hóspede",
+    "guestsCount_other": "{{count}} hóspedes",
+    "selectedStaysCount_one": "{{count}} estadia selecionada",
+    "selectedStaysCount_other": "{{count}} estadias selecionadas",
+    "columns": {
+      "guest": "Hóspede",
+      "guests": "Hóspedes",
+      "checkIn": "Check-in",
+      "checkOut": "Check-out",
+      "code": "Código",
+      "amount": "Valor",
+      "actions": "Ações"
+    }
+  },
+  "recordExpenseModal": {
+    "title": "Cadastrar Despesa",
+    "description": "Registre uma nova despesa para esta propriedade.",
+    "errorTitle": "Erro",
+    "amountLabel": "Valor",
+    "amountPlaceholder": "0,00",
+    "categoryLabel": "Categoria",
+    "categoryPlaceholder": "Selecione a categoria",
+    "categories": {
+      "maintenance": "Manutenção",
+      "stay": "Estadia",
+      "acquisitions": "Aquisições",
+      "financing": "Financiamento",
+      "fixedExpenses": "Gastos Fixos",
+      "other": "Outros"
+    },
+    "descriptionLabel": "Descrição (opcional)",
+    "descriptionPlaceholder": "Adicione uma descrição para esta despesa",
+    "cancel": "Cancelar",
+    "submit": "Cadastrar",
+    "validation": {
+      "amountPositive": "O valor deve ser maior que zero",
+      "categoryRequired": "É necessário informar a categoria"
+    }
+  },
+  "tenantCombobox": {
+    "defaultPlaceholder": "Digite o nome do hóspede",
+    "searching": "Buscando...",
+    "noResults": "Nenhum hóspede encontrado."
+  },
+  "propertyDashboard": {
+    "yearSelectorPlaceholder": "Ano",
+    "coHostChart": {
+      "title": "Valor a pagar do coanfitrião",
+      "legendLabel": "Valor coanfitrião"
+    },
+    "incomePerMonth": {
+      "title": "Receita por mês",
+      "legendLabel": "Receita"
+    },
+    "propertyNumbers": {
+      "staysCountLabel": "Número de estadias",
+      "totalAmountLabel": "Valor total das estadias",
+      "medianAmountLabel": "Valor médio das estadias (mediana)"
+    }
+  }
+}

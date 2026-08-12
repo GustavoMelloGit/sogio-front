@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import { type FC, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
@@ -26,28 +26,38 @@ import { WandSparkles } from 'lucide-react';
 import { ENTRANCE_CODE_LENGTH } from '@/config/constants';
 import { Phone } from '@/lib/phone';
 import { NumberInput } from '@/components/ui/number-input';
+import { useTranslation } from '@/i18n/useTranslation';
+import type { TranslateFn } from '@/i18n/useTranslation';
 
-export const bookStayFormSchema = z.object({
-  check_in: z.string().min(1, 'Data e hora de check-in é obrigatória'),
-  check_out: z.string().min(1, 'Data e hora de check-out é obrigatória'),
-  entrance_code: z
-    .string()
-    .min(
+const createBookStayFormSchema = (t: TranslateFn) =>
+  z.object({
+    check_in: z.string().min(1, t('bookStayForm.validation.checkInRequired')),
+    check_out: z.string().min(1, t('bookStayForm.validation.checkOutRequired')),
+    entrance_code: z.string().min(
       ENTRANCE_CODE_LENGTH,
-      `O código de entrada deve ter pelo menos ${ENTRANCE_CODE_LENGTH} dígitos`
+      t('bookStayForm.validation.entranceCodeMin', {
+        length: ENTRANCE_CODE_LENGTH,
+      })
     ),
-  tenant_name: z.string().min(1, 'Nome do hóspede é obrigatório'),
-  tenant_phone: z.string().refine(value => Phone.isValid(value), {
-    message: 'Telefone do hóspede é inválido',
-  }),
-  tenant_sex: z.enum(['MALE', 'FEMALE', 'OTHER'], {
-    message: 'Sexo do hóspede é obrigatório',
-  }),
-  guests: z.int().positive().min(1, 'Número de hóspedes deve ser pelo menos 1'),
-  price: z.number().positive().min(0, 'Preço da estadia é obrigatório'),
-});
+    tenant_name: z
+      .string()
+      .min(1, t('bookStayForm.validation.tenantNameRequired')),
+    tenant_phone: z.string().refine(value => Phone.isValid(value), {
+      message: t('bookStayForm.validation.tenantPhoneInvalid'),
+    }),
+    tenant_sex: z.enum(['MALE', 'FEMALE', 'OTHER'], {
+      message: t('bookStayForm.validation.tenantSexRequired'),
+    }),
+    guests: z.int().positive().min(1, t('bookStayForm.validation.guestsMin')),
+    price: z
+      .number()
+      .positive()
+      .min(0, t('bookStayForm.validation.priceRequired')),
+  });
 
-export type BookStayFormData = z.infer<typeof bookStayFormSchema>;
+export type BookStayFormData = z.infer<
+  ReturnType<typeof createBookStayFormSchema>
+>;
 
 type Props = {
   defaultValues: BookStayFormData;
@@ -70,6 +80,9 @@ export const BookStayForm: FC<Props> = ({
   errorMessage,
   submitButtonText,
 }) => {
+  const { t } = useTranslation(['property']);
+  const bookStayFormSchema = useMemo(() => createBookStayFormSchema(t), [t]);
+
   const form = useForm<BookStayFormData>({
     resolver: zodResolver(bookStayFormSchema),
     defaultValues,
@@ -80,7 +93,7 @@ export const BookStayForm: FC<Props> = ({
       {errorMessage && (
         <Alert
           variant='destructive'
-          title='Erro'
+          title={t('bookStayForm.errorTitle')}
           message={errorMessage}
           className='mb-4'
         />
@@ -92,7 +105,7 @@ export const BookStayForm: FC<Props> = ({
             name='check_in'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Check-in</FormLabel>
+                <FormLabel>{t('bookStayForm.checkInLabel')}</FormLabel>
                 <FormControl>
                   <Input type='datetime-local' {...field} />
                 </FormControl>
@@ -106,7 +119,7 @@ export const BookStayForm: FC<Props> = ({
             name='check_out'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Check-out</FormLabel>
+                <FormLabel>{t('bookStayForm.checkOutLabel')}</FormLabel>
                 <FormControl>
                   <Input type='datetime-local' {...field} />
                 </FormControl>
@@ -120,7 +133,7 @@ export const BookStayForm: FC<Props> = ({
             name='tenant_name'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Nome do Hóspede</FormLabel>
+                <FormLabel>{t('bookStayForm.tenantNameLabel')}</FormLabel>
                 <FormControl>
                   <TenantCombobox
                     value={field.value}
@@ -145,10 +158,10 @@ export const BookStayForm: FC<Props> = ({
             name='tenant_phone'
             render={({ field: { onBlur, ...field } }) => (
               <FormItem>
-                <FormLabel>Telefone do Hóspede</FormLabel>
+                <FormLabel>{t('bookStayForm.tenantPhoneLabel')}</FormLabel>
                 <FormControl ref={withMask(Phone.MASK)}>
                   <Input
-                    placeholder='Digite o telefone do hóspede'
+                    placeholder={t('bookStayForm.tenantPhonePlaceholder')}
                     inputMode='numeric'
                     {...field}
                     onBlur={() => {
@@ -173,11 +186,11 @@ export const BookStayForm: FC<Props> = ({
             name='entrance_code'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Código de Entrada</FormLabel>
+                <FormLabel>{t('bookStayForm.entranceCodeLabel')}</FormLabel>
                 <FormControl>
                   <div className='flex items-center gap-2'>
                     <Input
-                      placeholder='Digite o código de entrada'
+                      placeholder={t('bookStayForm.entranceCodePlaceholder')}
                       inputMode='numeric'
                       maxLength={ENTRANCE_CODE_LENGTH}
                       minLength={ENTRANCE_CODE_LENGTH}
@@ -187,7 +200,7 @@ export const BookStayForm: FC<Props> = ({
                       type='button'
                       variant='outline'
                       size='icon'
-                      aria-label='Gerar código de entrada aleatório'
+                      aria-label={t('bookStayForm.generateCodeAriaLabel')}
                       onClick={() => field.onChange(generateEntranceCode())}
                     >
                       <WandSparkles />
@@ -204,20 +217,28 @@ export const BookStayForm: FC<Props> = ({
             name='tenant_sex'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Sexo do Hóspede</FormLabel>
+                <FormLabel>{t('bookStayForm.tenantSexLabel')}</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
                   <FormControl>
                     <SelectTrigger className='w-full'>
-                      <SelectValue placeholder='Selecione o sexo' />
+                      <SelectValue
+                        placeholder={t('bookStayForm.tenantSexPlaceholder')}
+                      />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value='MALE'>Masculino</SelectItem>
-                    <SelectItem value='FEMALE'>Feminino</SelectItem>
-                    <SelectItem value='OTHER'>Outro</SelectItem>
+                    <SelectItem value='MALE'>
+                      {t('bookStayForm.sexOptions.male')}
+                    </SelectItem>
+                    <SelectItem value='FEMALE'>
+                      {t('bookStayForm.sexOptions.female')}
+                    </SelectItem>
+                    <SelectItem value='OTHER'>
+                      {t('bookStayForm.sexOptions.other')}
+                    </SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -230,11 +251,11 @@ export const BookStayForm: FC<Props> = ({
             name='guests'
             render={({ field: { onChange, value, ...field } }) => (
               <FormItem>
-                <FormLabel>Número de Hóspedes</FormLabel>
+                <FormLabel>{t('bookStayForm.guestsLabel')}</FormLabel>
                 <FormControl>
                   <NumberInput
                     decimalPlaces={0}
-                    placeholder='Digite o número de hóspedes'
+                    placeholder={t('bookStayForm.guestsPlaceholder')}
                     {...field}
                     onValueChange={onChange}
                     value={value}
@@ -250,13 +271,13 @@ export const BookStayForm: FC<Props> = ({
             name='price'
             render={({ field: { onChange, value, ...field } }) => (
               <FormItem>
-                <FormLabel>Preço da Estadia</FormLabel>
+                <FormLabel>{t('bookStayForm.priceLabel')}</FormLabel>
                 <FormControl>
                   <NumberInput
                     min={0}
                     step={0.01}
                     decimalPlaces={2}
-                    placeholder='Digite o preço da estadia'
+                    placeholder={t('bookStayForm.pricePlaceholder')}
                     inputMode='decimal'
                     {...field}
                     onValueChange={onChange}

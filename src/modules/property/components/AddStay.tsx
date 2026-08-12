@@ -12,6 +12,7 @@ import { queryClient } from '@/lib/query-client';
 import { Currency } from '@/lib/currency';
 import { DateUtils } from '@/lib/date';
 import { toast } from 'sonner';
+import { useTranslation } from '@/i18n/useTranslation';
 import { useBookStay } from '../service/PropertyService.hooks';
 import { CHECK_IN_HOUR, CHECK_OUT_HOUR } from '../types/Property';
 import { BookStayForm, type BookStayFormData } from './BookStayForm';
@@ -42,10 +43,11 @@ const getDefaultValues = (): BookStayFormData => {
 };
 
 export const AddStay: FC<Props> = ({ propertyId, isOpen, onClose }) => {
+  const { t } = useTranslation(['property']);
   const { mutate, isLoading, error } = useBookStay({
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['propertyStays'] });
-      toast.success('Estadia cadastrada com sucesso');
+      toast.success(t('addStay.successToast'));
       onClose();
     },
   });
@@ -73,11 +75,9 @@ export const AddStay: FC<Props> = ({ propertyId, isOpen, onClose }) => {
         <SheetHeader>
           <SheetTitle className='flex items-center gap-2'>
             <PlusIcon className='size-5' />
-            Nova Estadia
+            {t('addStay.title')}
           </SheetTitle>
-          <SheetDescription>
-            Cadastre uma nova estadia para esta propriedade.
-          </SheetDescription>
+          <SheetDescription>{t('addStay.description')}</SheetDescription>
         </SheetHeader>
 
         <div className='px-4 pb-6'>
@@ -86,7 +86,7 @@ export const AddStay: FC<Props> = ({ propertyId, isOpen, onClose }) => {
             onSubmit={handleSubmit}
             isSubmitting={isLoading}
             errorMessage={error?.message}
-            submitButtonText='Cadastrar Estadia'
+            submitButtonText={t('addStay.submitButton')}
           />
         </div>
       </SheetContent>
