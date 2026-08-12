@@ -1,5 +1,12 @@
 {
   "sidebar": {
+    "tagline": "Gestão de Propriedades",
+    "navigation": "Navegação",
+    "nav": {
+      "dashboard": "Dashboard",
+      "properties": "Propriedades",
+      "reconcileStays": "Reconciliar Estadias"
+    },
     "profile": "Perfil",
     "connectedApps": "Aplicativos conectados",
     "lightTheme": "Tema claro",

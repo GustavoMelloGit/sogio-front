@@ -1,5 +1,12 @@
 {
   "sidebar": {
+    "tagline": "Property Management",
+    "navigation": "Navigation",
+    "nav": {
+      "dashboard": "Dashboard",
+      "properties": "Properties",
+      "reconcileStays": "Reconcile Stays"
+    },
     "profile": "Profile",
     "connectedApps": "Connected apps",
     "lightTheme": "Light theme",
