@@ -7,13 +7,25 @@ import dashboardEn from './locales/en/dashboard.json';
 import dashboardPt from './locales/pt/dashboard.json';
 import authEn from './locales/en/auth.json';
 import authPt from './locales/pt/auth.json';
+import errorEn from './locales/en/error.json';
+import errorPt from './locales/pt/error.json';
 import { DEFAULT_LANGUAGE, SUPPORTED_LANGUAGES } from './language';
 
 export const defaultNS = 'common';
 
 export const resources = {
-  en: { common: commonEn, dashboard: dashboardEn, auth: authEn },
-  pt: { common: commonPt, dashboard: dashboardPt, auth: authPt },
+  en: {
+    common: commonEn,
+    dashboard: dashboardEn,
+    auth: authEn,
+    error: errorEn,
+  },
+  pt: {
+    common: commonPt,
+    dashboard: dashboardPt,
+    auth: authPt,
+    error: errorPt,
+  },
 } as const;
 
 i18n
