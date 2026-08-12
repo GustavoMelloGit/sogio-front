@@ -3,25 +3,25 @@ import { Page } from '@/components/layout/Page';
 import { Alert } from '@/components/Alert';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ROUTES } from '@/routes/routes';
+import { useTranslation } from '@/i18n/useTranslation';
 import { useConnectedApps } from '../service/OAuthService.hooks';
 import { ConnectedAppCard } from '../components/ConnectedAppCard';
 
-const LIST_ERROR_FALLBACK_MESSAGE = 'Erro ao carregar aplicativos conectados.';
-
 const ConnectedAppsView: FC = () => {
+  const { t } = useTranslation('auth');
   const { apps, isLoading, error } = useConnectedApps();
 
   return (
     <Page.Container>
       <Page.Topbar
         nav={[
-          { label: 'Dashboard', to: ROUTES.home },
-          { label: 'Aplicativos conectados' },
+          { label: t('connectedApps.breadcrumbDashboard'), to: ROUTES.home },
+          { label: t('connectedApps.breadcrumbConnectedApps') },
         ]}
       />
       <Page.Header
-        title='Aplicativos conectados'
-        description='Gerencie os aplicativos que têm acesso à sua conta StayHub.'
+        title={t('connectedApps.title')}
+        description={t('connectedApps.description')}
       />
       <Page.Content>
         {isLoading && (
@@ -38,14 +38,14 @@ const ConnectedAppsView: FC = () => {
             message={
               error instanceof Error
                 ? error.message
-                : LIST_ERROR_FALLBACK_MESSAGE
+                : t('connectedApps.listErrorFallback')
             }
           />
         )}
 
         {!isLoading && !error && apps.length === 0 && (
           <p className='text-center text-muted-foreground'>
-            Quando você conectar um cliente MCP à sua conta, ele aparecerá aqui.
+            {t('connectedApps.emptyState')}
           </p>
         )}
 
