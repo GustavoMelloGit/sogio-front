@@ -1,7 +1,12 @@
 import { type FC, type ElementType, useState } from 'react';
 import { format, parseISO } from 'date-fns';
-import { enUS, ptBR } from 'date-fns/locale';
 import { useTranslation } from '@/i18n/useTranslation';
+import {
+  DATE_FNS_LOCALES,
+  INTL_LOCALES,
+  LONG_DATE_FORMATS,
+  SHORT_DATE_FORMATS,
+} from '@/i18n/locale-maps';
 import {
   Building2,
   CalendarCheck,
@@ -86,17 +91,6 @@ const KpiCard: FC<KpiCardProps> = ({ title, value, icon: Icon, cardClass }) => (
     </div>
   </div>
 );
-
-const DATE_FNS_LOCALES = { pt: ptBR, en: enUS } as const;
-const INTL_LOCALES = { pt: 'pt-BR', en: 'en-US' } as const;
-const LONG_DATE_FORMATS = {
-  pt: "d 'de' MMMM 'de' yyyy",
-  en: 'MMMM d, yyyy',
-} as const;
-const SHORT_DATE_FORMATS = {
-  pt: "d 'de' MMM",
-  en: 'MMM d',
-} as const;
 
 const DashboardView: FC = () => {
   const { t, language } = useTranslation(['dashboard', 'common']);
