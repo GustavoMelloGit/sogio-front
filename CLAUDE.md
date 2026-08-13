@@ -62,6 +62,7 @@ Pattern files live in `.claude/patterns/`. Examples of when to load them:
 | Styling a component                      | `styling.md`                              |
 | Accessing the current user               | `authentication.md`                       |
 | Writing an import path                   | `path-alias.md`                           |
+| Translating a screen or adding a string  | `i18n.md`                                 |
 
 ## Rules
 

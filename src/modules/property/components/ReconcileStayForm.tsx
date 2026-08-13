@@ -8,6 +8,7 @@ import { ROUTES } from '@/routes/routes';
 import { CHECK_IN_HOUR, CHECK_OUT_HOUR } from '../types/Property';
 import { Currency } from '@/lib/currency';
 import { DateUtils } from '@/lib/date';
+import { useTranslation } from '@/i18n/useTranslation';
 import { BookStayForm, type BookStayFormData } from './BookStayForm';
 
 type Props = {
@@ -16,6 +17,7 @@ type Props = {
 };
 
 const ReconcileStayForm: FC<Props> = ({ externalStay, goBack }) => {
+  const { t } = useTranslation(['property']);
   const {
     mutate,
     isLoading: isSubmitting,
@@ -69,27 +71,31 @@ const ReconcileStayForm: FC<Props> = ({ externalStay, goBack }) => {
       <Page.Topbar
         nav={[
           {
-            label: 'Reconciliar Estadias Externas',
+            label: t('reconcileStaysView.title'),
             to: ROUTES.reconcileStays,
             onClick: () => goBack(),
           },
-          { label: 'Cadastrar Estadia Externa' },
+          { label: t('reconcileStayForm.breadcrumb') },
         ]}
       />
       <Page.Header
-        title='Cadastrar Estadia Externa'
-        description={`Cadastre a estadia externa da propriedade ${externalStay.property.name}.`}
+        title={t('reconcileStayForm.title')}
+        description={t('reconcileStayForm.description', {
+          property: externalStay.property.name,
+        })}
       />
       <Page.Content>
         <Card className='w-full max-w-2xl'>
           <CardHeader>
-            <CardTitle>Cadastrar Estadia Externa</CardTitle>
+            <CardTitle>{t('reconcileStayForm.title')}</CardTitle>
             <div className='text-sm text-muted-foreground space-y-1'>
               <p>
-                <strong>Propriedade:</strong> {externalStay.property.name}
+                <strong>{t('reconcileStayForm.propertyLabel')}</strong>{' '}
+                {externalStay.property.name}
               </p>
               <p>
-                <strong>Plataforma:</strong> {externalStay.sourcePlatform}
+                <strong>{t('reconcileStayForm.platformLabel')}</strong>{' '}
+                {externalStay.sourcePlatform}
               </p>
             </div>
           </CardHeader>
@@ -99,7 +105,7 @@ const ReconcileStayForm: FC<Props> = ({ externalStay, goBack }) => {
               onSubmit={handleSubmit}
               isSubmitting={isSubmitting}
               errorMessage={error?.message}
-              submitButtonText='Cadastrar Estadia'
+              submitButtonText={t('reconcileStayForm.submitButton')}
             />
           </CardContent>
         </Card>

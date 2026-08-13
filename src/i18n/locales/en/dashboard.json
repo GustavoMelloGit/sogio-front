@@ -1,0 +1,18 @@
+{
+  "title": "Dashboard",
+  "subtitle": "Overview of your properties",
+  "kpis": {
+    "properties": "Properties",
+    "occupiedToday": "Occupied today",
+    "checkInsIn7Days": "Check-ins in 7 days",
+    "monthlyRevenue": "Monthly revenue"
+  },
+  "upcomingStays": {
+    "title": "Upcoming stays",
+    "viewStayAriaLabel": "View stay at {{property}} for {{tenant}}"
+  },
+  "yourProperties": {
+    "title": "Your properties",
+    "viewDetailsAriaLabel": "View details for {{name}}"
+  }
+}

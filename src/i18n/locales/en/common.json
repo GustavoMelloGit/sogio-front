@@ -1,0 +1,20 @@
+{
+  "sidebar": {
+    "tagline": "Property Management",
+    "navigation": "Navigation",
+    "nav": {
+      "dashboard": "Dashboard",
+      "properties": "Properties",
+      "reconcileStays": "Reconcile Stays"
+    },
+    "profile": "Profile",
+    "connectedApps": "Connected apps",
+    "lightTheme": "Light theme",
+    "darkTheme": "Dark theme",
+    "switchLanguage": "Português",
+    "logout": "Log out"
+  },
+  "actions": {
+    "viewAll": "View all"
+  }
+}

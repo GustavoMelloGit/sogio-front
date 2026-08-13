@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import { useMemo, type FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -13,14 +13,13 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Alert } from '@/components/Alert';
+import { useTranslation } from '@/i18n/useTranslation';
 import { useSignin } from '../service/AuthService.hooks';
 
-const signinSchema = z.object({
-  email: z.email('Email inválido').min(1, 'Email é obrigatório'),
-  password: z.string().min(8, 'Senha deve ter pelo menos 8 caracteres'),
-});
-
-type SigninFormData = z.infer<typeof signinSchema>;
+type SigninFormData = {
+  email: string;
+  password: string;
+};
 
 type InlineSigninFormProps = {
   onSuccess: () => void;
@@ -32,7 +31,19 @@ type InlineSigninFormProps = {
  * precisa exigir autenticação sem sair da rota atual.
  */
 export const InlineSigninForm: FC<InlineSigninFormProps> = ({ onSuccess }) => {
+  const { t } = useTranslation('auth');
   const { signin, isSigninLoading, signinError } = useSignin();
+
+  const signinSchema = useMemo(
+    () =>
+      z.object({
+        email: z
+          .email(t('validation.emailInvalid'))
+          .min(1, t('validation.emailRequired')),
+        password: z.string().min(8, t('validation.passwordMin')),
+      }),
+    [t]
+  );
 
   const form = useForm<SigninFormData>({
     resolver: zodResolver(signinSchema),
@@ -55,9 +66,13 @@ export const InlineSigninForm: FC<InlineSigninFormProps> = ({ onSuccess }) => {
           name='email'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel>{t('inlineSigninForm.emailLabel')}</FormLabel>
               <FormControl>
-                <Input type='email' placeholder='seu@email.com' {...field} />
+                <Input
+                  type='email'
+                  placeholder={t('inlineSigninForm.emailPlaceholder')}
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -69,9 +84,13 @@ export const InlineSigninForm: FC<InlineSigninFormProps> = ({ onSuccess }) => {
           name='password'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Senha</FormLabel>
+              <FormLabel>{t('inlineSigninForm.passwordLabel')}</FormLabel>
               <FormControl>
-                <Input type='password' placeholder='Sua senha' {...field} />
+                <Input
+                  type='password'
+                  placeholder={t('inlineSigninForm.passwordPlaceholder')}
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -85,7 +104,7 @@ export const InlineSigninForm: FC<InlineSigninFormProps> = ({ onSuccess }) => {
             message={
               signinError instanceof Error
                 ? signinError.message
-                : 'Erro ao entrar. Verifique suas credenciais.'
+                : t('inlineSigninForm.genericError')
             }
           />
         )}
@@ -96,7 +115,7 @@ export const InlineSigninForm: FC<InlineSigninFormProps> = ({ onSuccess }) => {
           className='w-full'
           isLoading={isSigninLoading}
         >
-          Entrar
+          {t('inlineSigninForm.submitButton')}
         </Button>
       </form>
     </Form>

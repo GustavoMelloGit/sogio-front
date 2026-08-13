@@ -1,9 +1,11 @@
-import { type FC } from 'react';
+import { type FC, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import z from 'zod';
 import { Plus, Trash2 } from 'lucide-react';
+import { useTranslation } from '@/i18n/useTranslation';
+import type { TranslateFn } from '@/i18n/useTranslation';
 import { Page } from '@/components/layout/Page';
 import { Button } from '@/components/ui/button';
 import {
@@ -21,19 +23,29 @@ import { createPropertyRequestSchema } from '../types/Property';
 import { useCreateProperty } from '../service/PropertyService.hooks';
 import { queryClient } from '@/lib/query-client';
 
-const formSchema = createPropertyRequestSchema.extend({
-  capacity: z.string().refine(v => Number(v) >= 1, {
-    message: 'Capacidade deve ser pelo menos 1',
-  }),
-  images: z
-    .array(z.object({ url: z.string().min(1, 'URL é obrigatória') }))
-    .min(1, 'Pelo menos uma imagem é obrigatória'),
-});
+const createFormSchema = (t: TranslateFn) =>
+  createPropertyRequestSchema.extend({
+    capacity: z.string().refine(v => Number(v) >= 1, {
+      message: t('createProperty.validation.capacityMin'),
+    }),
+    images: z
+      .array(
+        z.object({
+          url: z
+            .string()
+            .min(1, t('createProperty.validation.imageUrlRequired')),
+        })
+      )
+      .min(1, t('createProperty.validation.imagesMinOne')),
+  });
 
-type FormData = z.infer<typeof formSchema>;
+type FormData = z.infer<ReturnType<typeof createFormSchema>>;
 
 const CreatePropertyView: FC = () => {
+  const { t } = useTranslation(['property']);
   const navigate = useNavigate();
+
+  const formSchema = useMemo(() => createFormSchema(t), [t]);
 
   const { mutate, isLoading, error } = useCreateProperty({
     onSuccess: property => {
@@ -79,20 +91,20 @@ const CreatePropertyView: FC = () => {
     <Page.Container>
       <Page.Topbar
         nav={[
-          { label: 'Minhas Propriedades', to: ROUTES.home },
-          { label: 'Nova Propriedade' },
+          { label: t('propertyList.title'), to: ROUTES.home },
+          { label: t('createProperty.breadcrumb') },
         ]}
       />
       <Page.Header
-        title='Nova Propriedade'
-        description='Preencha as informações para cadastrar uma nova propriedade'
+        title={t('createProperty.title')}
+        description={t('createProperty.description')}
       />
       <Page.Content>
         <div className='max-w-2xl'>
           {error && (
             <Alert
               variant='destructive'
-              title='Erro'
+              title={t('createProperty.errorTitle')}
               message={error.message}
               className='mb-4'
             />
@@ -104,17 +116,19 @@ const CreatePropertyView: FC = () => {
               className='space-y-6'
             >
               <div className='space-y-4'>
-                <h2 className='text-lg font-semibold'>Informações Básicas</h2>
+                <h2 className='text-lg font-semibold'>
+                  {t('createProperty.basicInfoTitle')}
+                </h2>
 
                 <FormField
                   control={form.control}
                   name='name'
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Nome da Propriedade</FormLabel>
+                      <FormLabel>{t('createProperty.nameLabel')}</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder='Ex: Apartamento Centro'
+                          placeholder={t('createProperty.namePlaceholder')}
                           {...field}
                         />
                       </FormControl>
@@ -128,14 +142,14 @@ const CreatePropertyView: FC = () => {
                   name='capacity'
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Capacidade (hóspedes)</FormLabel>
+                      <FormLabel>{t('createProperty.capacityLabel')}</FormLabel>
                       <FormControl>
                         <Input
                           type='number'
                           min={1}
                           step={1}
                           inputMode='numeric'
-                          placeholder='Ex: 4'
+                          placeholder={t('createProperty.capacityPlaceholder')}
                           {...field}
                         />
                       </FormControl>
@@ -146,7 +160,9 @@ const CreatePropertyView: FC = () => {
               </div>
 
               <div className='space-y-4'>
-                <h2 className='text-lg font-semibold'>Imagens</h2>
+                <h2 className='text-lg font-semibold'>
+                  {t('createProperty.imagesTitle')}
+                </h2>
 
                 {fields.map((field, index) => (
                   <FormField
@@ -155,10 +171,19 @@ const CreatePropertyView: FC = () => {
                     name={`images.${index}.url`}
                     render={({ field: inputField }) => (
                       <FormItem>
-                        <FormLabel>URL da Imagem {index + 1}</FormLabel>
+                        <FormLabel>
+                          {t('createProperty.imageUrlLabel', {
+                            index: index + 1,
+                          })}
+                        </FormLabel>
                         <div className='flex gap-2'>
                           <FormControl>
-                            <Input placeholder='https://...' {...inputField} />
+                            <Input
+                              placeholder={t(
+                                'createProperty.imageUrlPlaceholder'
+                              )}
+                              {...inputField}
+                            />
                           </FormControl>
                           {fields.length > 1 && (
                             <Button
@@ -184,12 +209,14 @@ const CreatePropertyView: FC = () => {
                   onClick={() => append({ url: '' })}
                 >
                   <Plus className='h-4 w-4 mr-1' />
-                  Adicionar Imagem
+                  {t('createProperty.addImage')}
                 </Button>
               </div>
 
               <div className='space-y-4'>
-                <h2 className='text-lg font-semibold'>Endereço</h2>
+                <h2 className='text-lg font-semibold'>
+                  {t('createProperty.addressTitle')}
+                </h2>
 
                 <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
                   <FormField
@@ -197,9 +224,14 @@ const CreatePropertyView: FC = () => {
                     name='address.zip_code'
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>CEP</FormLabel>
+                        <FormLabel>
+                          {t('createProperty.zipCodeLabel')}
+                        </FormLabel>
                         <FormControl>
-                          <Input placeholder='00000-000' {...field} />
+                          <Input
+                            placeholder={t('createProperty.zipCodePlaceholder')}
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -211,9 +243,14 @@ const CreatePropertyView: FC = () => {
                     name='address.country'
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>País</FormLabel>
+                        <FormLabel>
+                          {t('createProperty.countryLabel')}
+                        </FormLabel>
                         <FormControl>
-                          <Input placeholder='Brasil' {...field} />
+                          <Input
+                            placeholder={t('createProperty.countryPlaceholder')}
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -226,9 +263,12 @@ const CreatePropertyView: FC = () => {
                   name='address.street'
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Rua</FormLabel>
+                      <FormLabel>{t('createProperty.streetLabel')}</FormLabel>
                       <FormControl>
-                        <Input placeholder='Ex: Rua das Flores' {...field} />
+                        <Input
+                          placeholder={t('createProperty.streetPlaceholder')}
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -241,9 +281,12 @@ const CreatePropertyView: FC = () => {
                     name='address.number'
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Número</FormLabel>
+                        <FormLabel>{t('createProperty.numberLabel')}</FormLabel>
                         <FormControl>
-                          <Input placeholder='Ex: 123' {...field} />
+                          <Input
+                            placeholder={t('createProperty.numberPlaceholder')}
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -255,10 +298,14 @@ const CreatePropertyView: FC = () => {
                     name='address.complement'
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Complemento</FormLabel>
+                        <FormLabel>
+                          {t('createProperty.complementLabel')}
+                        </FormLabel>
                         <FormControl>
                           <Input
-                            placeholder='Ex: Apto 42 (opcional)'
+                            placeholder={t(
+                              'createProperty.complementPlaceholder'
+                            )}
                             {...field}
                           />
                         </FormControl>
@@ -273,9 +320,16 @@ const CreatePropertyView: FC = () => {
                   name='address.neighborhood'
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Bairro</FormLabel>
+                      <FormLabel>
+                        {t('createProperty.neighborhoodLabel')}
+                      </FormLabel>
                       <FormControl>
-                        <Input placeholder='Ex: Centro' {...field} />
+                        <Input
+                          placeholder={t(
+                            'createProperty.neighborhoodPlaceholder'
+                          )}
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -288,9 +342,12 @@ const CreatePropertyView: FC = () => {
                     name='address.city'
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Cidade</FormLabel>
+                        <FormLabel>{t('createProperty.cityLabel')}</FormLabel>
                         <FormControl>
-                          <Input placeholder='Ex: São Paulo' {...field} />
+                          <Input
+                            placeholder={t('createProperty.cityPlaceholder')}
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -302,9 +359,12 @@ const CreatePropertyView: FC = () => {
                     name='address.state'
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Estado</FormLabel>
+                        <FormLabel>{t('createProperty.stateLabel')}</FormLabel>
                         <FormControl>
-                          <Input placeholder='Ex: SP' {...field} />
+                          <Input
+                            placeholder={t('createProperty.statePlaceholder')}
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -320,10 +380,10 @@ const CreatePropertyView: FC = () => {
                   onClick={() => navigate(ROUTES.home)}
                   className='flex-1'
                 >
-                  Cancelar
+                  {t('createProperty.cancel')}
                 </Button>
                 <Button type='submit' className='flex-1' isLoading={isLoading}>
-                  Cadastrar Propriedade
+                  {t('createProperty.submit')}
                 </Button>
               </div>
             </form>

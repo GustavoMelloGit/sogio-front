@@ -1,0 +1,243 @@
+{
+  "propertyList": {
+    "title": "My Properties",
+    "description": "Manage your properties and view important information",
+    "newPropertyButton": "New Property",
+    "errorTitle": "Error loading properties",
+    "errorMessage": "We couldn't load your properties. Please try again later.",
+    "propertyImageAlt": "Property image",
+    "viewDetails": "View details",
+    "emptyState": {
+      "title": "No properties found",
+      "description": "Start by adding your first property to manage your stays.",
+      "cta": "Add First Property"
+    }
+  },
+  "propertyDetail": {
+    "loadingBreadcrumb": "Loading...",
+    "loadingTitle": "Loading...",
+    "loadingDescription": "Property details",
+    "errorTitle": "Error loading property",
+    "errorMessage": "We couldn't load the property details. Please try again later.",
+    "notFoundTitle": "Property not found",
+    "notFoundMessage": "The requested property was not found or you don't have permission to view it.",
+    "backToHome": "Back to home",
+    "description": "Property details",
+    "addLink": "Add Link",
+    "edit": "Edit",
+    "tabs": {
+      "stays": "Stays",
+      "movements": "Movements"
+    }
+  },
+  "createProperty": {
+    "breadcrumb": "New Property",
+    "title": "New Property",
+    "description": "Fill in the information to register a new property",
+    "errorTitle": "Error",
+    "basicInfoTitle": "Basic Information",
+    "nameLabel": "Property Name",
+    "namePlaceholder": "E.g.: Downtown Apartment",
+    "capacityLabel": "Capacity (guests)",
+    "capacityPlaceholder": "E.g.: 4",
+    "imagesTitle": "Images",
+    "imageUrlLabel": "Image URL {{index}}",
+    "imageUrlPlaceholder": "https://...",
+    "addImage": "Add Image",
+    "addressTitle": "Address",
+    "zipCodeLabel": "ZIP Code",
+    "zipCodePlaceholder": "00000-000",
+    "countryLabel": "Country",
+    "countryPlaceholder": "Brazil",
+    "streetLabel": "Street",
+    "streetPlaceholder": "E.g.: Flower Street",
+    "numberLabel": "Number",
+    "numberPlaceholder": "E.g.: 123",
+    "complementLabel": "Complement",
+    "complementPlaceholder": "E.g.: Apt 42 (optional)",
+    "neighborhoodLabel": "Neighborhood",
+    "neighborhoodPlaceholder": "E.g.: Downtown",
+    "cityLabel": "City",
+    "cityPlaceholder": "E.g.: São Paulo",
+    "stateLabel": "State",
+    "statePlaceholder": "E.g.: SP",
+    "cancel": "Cancel",
+    "submit": "Register Property",
+    "validation": {
+      "capacityMin": "Capacity must be at least 1",
+      "imageUrlRequired": "URL is required",
+      "imagesMinOne": "At least one image is required"
+    }
+  },
+  "reconcileStaysView": {
+    "title": "Reconcile External Stays",
+    "description": "Found {{count}} external stays that haven't been registered yet.",
+    "errorTitle": "Error",
+    "loading": "Loading...",
+    "emptyState": "There are no pending external stays to reconcile.",
+    "checkInLabel": "Check-in",
+    "checkOutLabel": "Check-out",
+    "registerStay": "Register Stay"
+  },
+  "reconcileStayForm": {
+    "breadcrumb": "Register External Stay",
+    "title": "Register External Stay",
+    "description": "Register the external stay for property {{property}}.",
+    "propertyLabel": "Property:",
+    "platformLabel": "Platform:",
+    "submitButton": "Register Stay"
+  },
+  "addStay": {
+    "title": "New Stay",
+    "description": "Register a new stay for this property.",
+    "submitButton": "Register Stay",
+    "successToast": "Stay registered successfully"
+  },
+  "bookStayForm": {
+    "errorTitle": "Error",
+    "checkInLabel": "Check-in",
+    "checkOutLabel": "Check-out",
+    "tenantNameLabel": "Guest Name",
+    "tenantPhoneLabel": "Guest Phone",
+    "tenantPhonePlaceholder": "Enter the guest's phone number",
+    "entranceCodeLabel": "Entrance Code",
+    "entranceCodePlaceholder": "Enter the entrance code",
+    "generateCodeAriaLabel": "Generate random entrance code",
+    "tenantSexLabel": "Guest Gender",
+    "tenantSexPlaceholder": "Select gender",
+    "sexOptions": {
+      "male": "Male",
+      "female": "Female",
+      "other": "Other"
+    },
+    "guestsLabel": "Number of Guests",
+    "guestsPlaceholder": "Enter the number of guests",
+    "priceLabel": "Stay Price",
+    "pricePlaceholder": "Enter the stay price",
+    "validation": {
+      "checkInRequired": "Check-in date and time is required",
+      "checkOutRequired": "Check-out date and time is required",
+      "entranceCodeMin": "The entrance code must have at least {{length}} digits",
+      "tenantNameRequired": "Guest name is required",
+      "tenantPhoneInvalid": "Guest phone number is invalid",
+      "tenantSexRequired": "Guest gender is required",
+      "guestsMin": "Number of guests must be at least 1",
+      "priceRequired": "Stay price is required"
+    }
+  },
+  "editPropertyModal": {
+    "title": "Edit Property",
+    "description": "Update the property information.",
+    "errorTitle": "Error",
+    "nameLabel": "Property Name",
+    "namePlaceholder": "Enter the property name",
+    "capacityLabel": "Capacity",
+    "capacityPlaceholder": "Enter the property capacity",
+    "cancel": "Cancel",
+    "save": "Save",
+    "validation": {
+      "nameRequired": "Name is required",
+      "capacityMin": "Capacity must be at least 1"
+    }
+  },
+  "externalBookingModal": {
+    "title": "Register Platform Link",
+    "description": "Add a sync link so the API can reconcile bookings from rental platforms.",
+    "errorTitle": "Error",
+    "platformLabel": "Platform",
+    "platformPlaceholder": "Select the platform",
+    "platforms": {
+      "airbnb": "Airbnb",
+      "booking": "Booking.com"
+    },
+    "syncUrlLabel": "Sync URL",
+    "syncUrlPlaceholder": "https://www.example.com/ical",
+    "cancel": "Cancel",
+    "submit": "Register"
+  },
+  "propertyMovementsList": {
+    "title": "Financial Movements",
+    "description": "History of the property's income and expenses",
+    "newExpenseButton": "New Expense",
+    "filterFromLabel": "From",
+    "filterToLabel": "to",
+    "clearFilter": "Clear filter",
+    "columns": {
+      "description": "Description",
+      "category": "Category",
+      "amount": "Amount",
+      "date": "Date"
+    }
+  },
+  "propertyStaysList": {
+    "title": "Stay Listing",
+    "description": "Filter by check-in period to find stays",
+    "newStayButton": "New Stay",
+    "filterFromLabel": "Check-in from",
+    "filterToLabel": "to",
+    "clearFilter": "Clear filter",
+    "copiedSuccess": "Copied successfully",
+    "actionsButton": "Actions",
+    "copyCohostData": "Copy co-host data",
+    "clearSelection": "Clear selection",
+    "guestsCount_one": "{{count}} guest",
+    "guestsCount_other": "{{count}} guests",
+    "selectedStaysCount_one": "{{count}} stay selected",
+    "selectedStaysCount_other": "{{count}} stays selected",
+    "columns": {
+      "guest": "Guest",
+      "guests": "Guests",
+      "checkIn": "Check-in",
+      "checkOut": "Check-out",
+      "code": "Code",
+      "amount": "Amount",
+      "actions": "Actions"
+    }
+  },
+  "recordExpenseModal": {
+    "title": "Register Expense",
+    "description": "Register a new expense for this property.",
+    "errorTitle": "Error",
+    "amountLabel": "Amount",
+    "amountPlaceholder": "0.00",
+    "categoryLabel": "Category",
+    "categoryPlaceholder": "Select the category",
+    "categories": {
+      "maintenance": "Maintenance",
+      "stay": "Stay",
+      "acquisitions": "Acquisitions",
+      "financing": "Financing",
+      "fixedExpenses": "Fixed Expenses",
+      "other": "Other"
+    },
+    "descriptionLabel": "Description (optional)",
+    "descriptionPlaceholder": "Add a description for this expense",
+    "cancel": "Cancel",
+    "submit": "Register",
+    "validation": {
+      "amountPositive": "Amount must be greater than zero",
+      "categoryRequired": "Category is required"
+    }
+  },
+  "tenantCombobox": {
+    "defaultPlaceholder": "Enter the guest's name",
+    "searching": "Searching...",
+    "noResults": "No guests found."
+  },
+  "propertyDashboard": {
+    "yearSelectorPlaceholder": "Year",
+    "coHostChart": {
+      "title": "Co-host payout",
+      "legendLabel": "Co-host amount"
+    },
+    "incomePerMonth": {
+      "title": "Revenue per month",
+      "legendLabel": "Revenue"
+    },
+    "propertyNumbers": {
+      "staysCountLabel": "Number of stays",
+      "totalAmountLabel": "Total stays value",
+      "medianAmountLabel": "Average stay value (median)"
+    }
+  }
+}

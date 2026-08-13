@@ -1,0 +1,18 @@
+{
+  "title": "Dashboard",
+  "subtitle": "Visão geral das suas propriedades",
+  "kpis": {
+    "properties": "Propriedades",
+    "occupiedToday": "Ocupadas hoje",
+    "checkInsIn7Days": "Check-ins em 7 dias",
+    "monthlyRevenue": "Receita do mês"
+  },
+  "upcomingStays": {
+    "title": "Próximas estadias",
+    "viewStayAriaLabel": "Ver estadia em {{property}} para {{tenant}}"
+  },
+  "yourProperties": {
+    "title": "Suas propriedades",
+    "viewDetailsAriaLabel": "Ver detalhes de {{name}}"
+  }
+}

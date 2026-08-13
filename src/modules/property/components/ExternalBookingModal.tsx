@@ -33,6 +33,7 @@ import {
 import { useCreateExternalBooking } from '../service/PropertyService.hooks';
 import { queryClient } from '@/lib/query-client';
 import { Link } from 'lucide-react';
+import { useTranslation } from '@/i18n/useTranslation';
 
 type Props = {
   propertyId: string;
@@ -41,6 +42,7 @@ type Props = {
 };
 
 const ExternalBookingModal: FC<Props> = ({ propertyId, isOpen, onClose }) => {
+  const { t } = useTranslation(['property']);
   const {
     mutate,
     isLoading: isSubmitting,
@@ -78,11 +80,10 @@ const ExternalBookingModal: FC<Props> = ({ propertyId, isOpen, onClose }) => {
         <SheetHeader>
           <SheetTitle className='flex items-center gap-2'>
             <Link className='h-5 w-5' />
-            Cadastrar Link de Plataforma
+            {t('externalBookingModal.title')}
           </SheetTitle>
           <SheetDescription>
-            Adicione um link de sincronização para que a API possa reconciliar
-            reservas das plataformas de aluguel.
+            {t('externalBookingModal.description')}
           </SheetDescription>
         </SheetHeader>
 
@@ -90,7 +91,7 @@ const ExternalBookingModal: FC<Props> = ({ propertyId, isOpen, onClose }) => {
           {error && (
             <Alert
               variant='destructive'
-              title='Erro'
+              title={t('externalBookingModal.errorTitle')}
               message={error.message}
               className='mb-4'
             />
@@ -106,19 +107,29 @@ const ExternalBookingModal: FC<Props> = ({ propertyId, isOpen, onClose }) => {
                 name='platform_name'
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Plataforma</FormLabel>
+                    <FormLabel>
+                      {t('externalBookingModal.platformLabel')}
+                    </FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                     >
                       <FormControl>
                         <SelectTrigger className='w-full'>
-                          <SelectValue placeholder='Selecione a plataforma' />
+                          <SelectValue
+                            placeholder={t(
+                              'externalBookingModal.platformPlaceholder'
+                            )}
+                          />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value='AIRBNB'>Airbnb</SelectItem>
-                        <SelectItem value='BOOKING'>Booking.com</SelectItem>
+                        <SelectItem value='AIRBNB'>
+                          {t('externalBookingModal.platforms.airbnb')}
+                        </SelectItem>
+                        <SelectItem value='BOOKING'>
+                          {t('externalBookingModal.platforms.booking')}
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -131,10 +142,14 @@ const ExternalBookingModal: FC<Props> = ({ propertyId, isOpen, onClose }) => {
                 name='sync_url'
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>URL de Sincronização</FormLabel>
+                    <FormLabel>
+                      {t('externalBookingModal.syncUrlLabel')}
+                    </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder='https://www.exemplo.com/ical'
+                        placeholder={t(
+                          'externalBookingModal.syncUrlPlaceholder'
+                        )}
                         type='url'
                         {...field}
                       />
@@ -151,14 +166,14 @@ const ExternalBookingModal: FC<Props> = ({ propertyId, isOpen, onClose }) => {
                   onClick={handleClose}
                   className='flex-1'
                 >
-                  Cancelar
+                  {t('externalBookingModal.cancel')}
                 </Button>
                 <Button
                   type='submit'
                   isLoading={isSubmitting}
                   className='flex-1'
                 >
-                  Cadastrar
+                  {t('externalBookingModal.submit')}
                 </Button>
               </div>
             </form>

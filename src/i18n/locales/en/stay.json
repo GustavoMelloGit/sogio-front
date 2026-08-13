@@ -1,0 +1,104 @@
+{
+  "stayDetail": {
+    "breadcrumb": {
+      "myProperties": "My Properties",
+      "stayDetails": "Stay Details"
+    },
+    "loadingTitle": "Loading...",
+    "loadingDescription": "Stay details",
+    "errorTitle": "Error loading stay",
+    "notFoundTitle": "Stay not found",
+    "errorDescription": "Unable to load the stay details. Please try again later.",
+    "notFoundDescription": "The requested stay could not be found or you don't have permission to view it.",
+    "backToHome": "Back to home",
+    "editButton": "Edit",
+    "moreActionsAriaLabel": "More actions",
+    "copyCohostData": "Copy co-host data",
+    "copyInstructionsLink": "Copy instructions link",
+    "sendViaWhatsApp": "Send via WhatsApp",
+    "cancelingStay": "Canceling...",
+    "cancelStay": "Cancel stay",
+    "dateRange": "{{checkIn}} → {{checkOut}}",
+    "checkInLabel": "Check-in",
+    "checkOutLabel": "Check-out",
+    "guestsLabel": "Guests",
+    "totalValueLabel": "Total value",
+    "stayDetailsTitle": "Stay Details",
+    "entranceCodeLabel": "Entrance code",
+    "copyEntranceCodeAriaLabel": "Copy entrance code",
+    "bookingSourceLabel": "Booking source",
+    "sourceLabels": {
+      "internal": "Direct booking",
+      "airbnb": "Airbnb",
+      "booking": "Booking.com"
+    },
+    "guestTitle": "Guest",
+    "copyPhoneAriaLabel": "Copy phone",
+    "toasts": {
+      "cancelSuccess": "Stay canceled successfully",
+      "cancelError": "Error canceling stay",
+      "copySuccess": "Copied successfully"
+    },
+    "cohostData": {
+      "guestsCount": "{{count}} guests"
+    },
+    "whatsappMessage": "Hello {{name}}, how are you? My name is Gustavo, I'm the host for your stay in Castelhanos. Please see below the check-in and check-out instructions: {{url}}"
+  },
+  "stayInstructions": {
+    "imageAlt": "Apartment 201 - Praia dos Castelhanos",
+    "greeting": "Hello, {{name}}",
+    "welcomeMessage": "Great to have you with us! To make your stay even more comfortable, we've gathered some important information here:",
+    "passwordLabel": "Password",
+    "howToArrive": {
+      "title": "HOW TO GET THERE",
+      "addressLabel": "Address",
+      "addressLine1": "Rua Salma Souki Oliveira, S/N, Praia dos Castelhanos.",
+      "addressLine2": "Ed. Bandeira Azul, Ap. 201",
+      "openInMaps": "Open in Google Maps"
+    },
+    "checkInOut": {
+      "title": "CHECK-IN & CHECK-OUT",
+      "afterLabel": "After",
+      "untilLabel": "Until",
+      "cohostLabel": "Co-host",
+      "cohostNoticeLead": "The co-host will be present for your check-in and check-out. So,",
+      "cohostNoticeStrong": "please let us know your arrival time in advance.",
+      "passwordNoticeLead": "Your electronic lock password is:",
+      "passwordNoticeRest": "It's exclusive to your stay and will be automatically deactivated right after check-out."
+    },
+    "wifi": {
+      "title": "WIFI",
+      "nameLabel": "Name"
+    },
+    "houseRules": {
+      "title": "HOUSE RULES",
+      "parking": "Use only parking spot 201.",
+      "pets": "Pets only with the host's prior authorization.",
+      "guestsOnly": "Only the agreed-upon guests may stay in the property.",
+      "doors": "Always keep the building's doors closed.",
+      "maintenance": "If anything is broken or having issues, please report it immediately."
+    },
+    "electronicLock": {
+      "title": "ELECTRONIC LOCK",
+      "enterPasswordLabel": "Enter the password:",
+      "enterPasswordText": "tap the top of the lock until the numbers light up. Then enter your password and press \"#\".",
+      "avoidIssuesLabel": "Avoid issues:",
+      "avoidIssuesText": "keep the small \"switch\" below the handle (inside) always in the down position.",
+      "videoTitle": "Tuya App WIFI Surface-Mounted Digital Lock, Electronic Lock, Embedded Digital Locks"
+    }
+  },
+  "stayForm": {
+    "checkInLabel": "Check-In",
+    "checkOutLabel": "Check-Out",
+    "guestsLabel": "Number of Guests",
+    "guestsPlaceholder": "Enter the number of guests",
+    "priceLabel": "Stay Price",
+    "pricePlaceholder": "Enter the stay price"
+  },
+  "updateStay": {
+    "title": "Edit Stay",
+    "description": "Update the stay information.",
+    "errorTitle": "Error",
+    "submitButton": "Update Stay"
+  }
+}

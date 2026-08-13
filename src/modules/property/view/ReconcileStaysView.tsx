@@ -9,12 +9,15 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Alert } from '@/components/Alert';
+import { useTranslation } from '@/i18n/useTranslation';
+import { INTL_LOCALES } from '@/i18n/locale-maps';
 import { useReconcileExternalStays } from '../service/PropertyService.hooks';
 import ReconcileStayForm from '../components/ReconcileStayForm';
 import type { ExternalStay } from '@/modules/stay/types/Stay';
 import { Page } from '@/components/layout/Page';
 
 const ReconcileStaysView: FC = () => {
+  const { t, language } = useTranslation(['property']);
   const [selectedStay, setSelectedStay] = useState<ExternalStay | null>(null);
 
   const {
@@ -28,7 +31,7 @@ const ReconcileStaysView: FC = () => {
   };
 
   const formatDate = (date: Date): string => {
-    return new Intl.DateTimeFormat('pt-BR', {
+    return new Intl.DateTimeFormat(INTL_LOCALES[language], {
       day: '2-digit',
       month: '2-digit',
       year: 'numeric',
@@ -43,23 +46,27 @@ const ReconcileStaysView: FC = () => {
 
   return (
     <Page.Container>
-      <Page.Topbar nav={[{ label: 'Reconciliar Estadias Externas' }]} />
+      <Page.Topbar nav={[{ label: t('reconcileStaysView.title') }]} />
       <Page.Header
-        title='Reconciliar Estadias Externas'
-        description={`Encontradas ${externalStays?.length} estadias externas que ainda não foram cadastradas.`}
+        title={t('reconcileStaysView.title')}
+        description={t('reconcileStaysView.description', {
+          count: externalStays?.length ?? 0,
+        })}
       />
       <Page.Content>
         {staysError && (
           <Alert
             variant='destructive'
-            title='Erro'
+            title={t('reconcileStaysView.errorTitle')}
             message={staysError.message}
           />
         )}
-        {isLoadingStays && <p className='text-center'>Carregando...</p>}
+        {isLoadingStays && (
+          <p className='text-center'>{t('reconcileStaysView.loading')}</p>
+        )}
         {(!externalStays || externalStays.length === 0) && !isLoadingStays && (
           <p className='text-muted-foreground text-center'>
-            Não há estadias externas pendentes para reconciliar.
+            {t('reconcileStaysView.emptyState')}
           </p>
         )}
         {externalStays && externalStays.length > 0 && (
@@ -80,11 +87,15 @@ const ReconcileStaysView: FC = () => {
                 <CardContent>
                   <div className='[&>div]:flex [&>div]:justify-between [&>div]:items-center [&>div]:gap-1'>
                     <div>
-                      <p className='text-muted-foreground'>Check-in</p>
+                      <p className='text-muted-foreground'>
+                        {t('reconcileStaysView.checkInLabel')}
+                      </p>
                       <p className='font-medium'>{formatDate(stay.start)}</p>
                     </div>
                     <div>
-                      <p className='text-muted-foreground'>Check-out</p>
+                      <p className='text-muted-foreground'>
+                        {t('reconcileStaysView.checkOutLabel')}
+                      </p>
                       <p className='font-medium'>{formatDate(stay.end)}</p>
                     </div>
                   </div>
@@ -94,7 +105,7 @@ const ReconcileStaysView: FC = () => {
                     onClick={() => setSelectedStay(stay)}
                     className='w-full'
                   >
-                    Cadastrar Estadia
+                    {t('reconcileStaysView.registerStay')}
                   </Button>
                 </CardFooter>
               </Card>

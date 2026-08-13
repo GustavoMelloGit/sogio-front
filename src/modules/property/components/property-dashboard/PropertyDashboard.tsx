@@ -1,5 +1,6 @@
 import { useState, useMemo, type FC } from 'react';
 import { format, startOfYear, endOfYear } from 'date-fns';
+import { useTranslation } from '@/i18n/useTranslation';
 import { usePropertyStays } from '../../service/PropertyService.hooks';
 import { CoHostChart } from './CoHostChart';
 import { IncomePerMonth } from './IncomePerMonth';
@@ -20,6 +21,7 @@ const CURRENT_YEAR = new Date().getFullYear();
 const AVAILABLE_YEARS = Array.from({ length: 5 }, (_, i) => CURRENT_YEAR - i);
 
 export const PropertyDashboard: FC<Props> = ({ propertyId }) => {
+  const { t } = useTranslation(['property']);
   const [selectedYear, setSelectedYear] = useState(CURRENT_YEAR.toString());
 
   const dateRange = useMemo(() => {
@@ -41,7 +43,9 @@ export const PropertyDashboard: FC<Props> = ({ propertyId }) => {
       <div className='flex justify-end'>
         <Select value={selectedYear} onValueChange={setSelectedYear}>
           <SelectTrigger className='w-[120px]'>
-            <SelectValue placeholder='Ano' />
+            <SelectValue
+              placeholder={t('propertyDashboard.yearSelectorPlaceholder')}
+            />
           </SelectTrigger>
           <SelectContent>
             {AVAILABLE_YEARS.map(year => (

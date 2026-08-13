@@ -35,24 +35,29 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { pluralize, toClipboard } from '@/lib/utils';
+import { toClipboard } from '@/lib/utils';
 import { Link } from 'react-router-dom';
 import { useNamespacedFilters } from '@/hooks/useNamespacedFilters';
 import { useDebounce } from '@/hooks/useDebounce';
-
-const formatDate = (date: Date): string => {
-  return new Intl.DateTimeFormat('pt-BR', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-  }).format(date);
-};
+import { useTranslation } from '@/i18n/useTranslation';
+import { INTL_LOCALES } from '@/i18n/locale-maps';
 
 type Props = {
   propertyId: string;
 };
 
 export const PropertyStaysList: FC<Props> = ({ propertyId }) => {
+  const { t, language } = useTranslation(['property']);
+  const intlLocale = INTL_LOCALES[language];
+
+  const formatDate = (date: Date): string => {
+    return new Intl.DateTimeFormat(intlLocale, {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    }).format(date);
+  };
+
   const { filters, addFilter, removeFilter } = useNamespacedFilters('stays');
   const currentPage = +filters.page || 1;
   const fromFilter =
@@ -102,7 +107,7 @@ export const PropertyStaysList: FC<Props> = ({ propertyId }) => {
 
   const copyText = (text: string) => {
     toClipboard(text);
-    toast.success('Copiado com sucesso');
+    toast.success(t('propertyStaysList.copiedSuccess'));
   };
 
   const getCohostData = (stay: WithTenant<Stay>): string => {
@@ -110,7 +115,7 @@ export const PropertyStaysList: FC<Props> = ({ propertyId }) => {
       stay.tenant.name,
       Phone.toHumanReadable(stay.tenant.phone),
       `${formatDate(stay.check_in)} - ${formatDate(stay.check_out)}`,
-      `${stay.guests} hóspedes`,
+      t('propertyStaysList.guestsCount', { count: stay.guests }),
     ];
     return data.join('\n');
   };
@@ -130,14 +135,12 @@ export const PropertyStaysList: FC<Props> = ({ propertyId }) => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Listagem de estadias</CardTitle>
-        <CardDescription>
-          Filtre pelo período de check-in para encontrar estadias
-        </CardDescription>
+        <CardTitle>{t('propertyStaysList.title')}</CardTitle>
+        <CardDescription>{t('propertyStaysList.description')}</CardDescription>
         <CardAction>
           <Button size='sm' onClick={addStayDisclosure.open}>
             <PlusIcon className='size-4' />
-            Nova Estadia
+            {t('propertyStaysList.newStayButton')}
           </Button>
         </CardAction>
       </CardHeader>
@@ -150,7 +153,7 @@ export const PropertyStaysList: FC<Props> = ({ propertyId }) => {
                 className='flex items-center gap-1.5'
               >
                 <CalendarIcon className='size-3.5 text-muted-foreground' />
-                Check-in de
+                {t('propertyStaysList.filterFromLabel')}
               </Label>
               <Input
                 id='filter-from'
@@ -162,7 +165,9 @@ export const PropertyStaysList: FC<Props> = ({ propertyId }) => {
               />
             </div>
             <div className='flex flex-col gap-1.5'>
-              <Label htmlFor='filter-to'>até</Label>
+              <Label htmlFor='filter-to'>
+                {t('propertyStaysList.filterToLabel')}
+              </Label>
               <Input
                 id='filter-to'
                 type='date'
@@ -181,7 +186,7 @@ export const PropertyStaysList: FC<Props> = ({ propertyId }) => {
               className='self-end'
             >
               <X className='mr-2 size-4' />
-              Limpar filtro
+              {t('propertyStaysList.clearFilter')}
             </Button>
           )}
         </div>
@@ -189,13 +194,9 @@ export const PropertyStaysList: FC<Props> = ({ propertyId }) => {
           <div className='mb-4 flex items-center flex-wrap gap-2 justify-between rounded-lg border bg-muted/50 p-3'>
             <div className='flex items-center flex-wrap gap-2'>
               <span className='text-sm font-medium'>
-                {selectedStayIds.length}{' '}
-                {pluralize(selectedStayIds.length, 'estadia', 'estadias')}{' '}
-                {pluralize(
-                  selectedStayIds.length,
-                  'selecionada',
-                  'selecionadas'
-                )}
+                {t('propertyStaysList.selectedStaysCount', {
+                  count: selectedStayIds.length,
+                })}
               </span>
             </div>
             <div className='flex items-center gap-2'>
@@ -203,13 +204,13 @@ export const PropertyStaysList: FC<Props> = ({ propertyId }) => {
                 <DropdownMenuTrigger asChild>
                   <Button variant='outline' size='sm'>
                     <MoreHorizontal className='mr-2 size-4' />
-                    Ações
+                    {t('propertyStaysList.actionsButton')}
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align='end'>
                   <DropdownMenuItem onClick={copySelectedCohostData}>
                     <CopyIcon className='mr-2 size-4' />
-                    Copiar dados para coanfitrião
+                    {t('propertyStaysList.copyCohostData')}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -219,7 +220,7 @@ export const PropertyStaysList: FC<Props> = ({ propertyId }) => {
                 onClick={() => setSelectedStayIds([])}
               >
                 <X className='mr-2 size-4' />
-                Limpar seleção
+                {t('propertyStaysList.clearSelection')}
               </Button>
             </div>
           </div>
@@ -240,7 +241,7 @@ export const PropertyStaysList: FC<Props> = ({ propertyId }) => {
           }}
           columns={[
             {
-              header: 'Hóspede',
+              header: t('propertyStaysList.columns.guest'),
               accessorKey: 'tenant.name',
               render: row => row.tenant.name,
               mobile: {
@@ -248,7 +249,7 @@ export const PropertyStaysList: FC<Props> = ({ propertyId }) => {
               },
             },
             {
-              header: 'Hóspedes',
+              header: t('propertyStaysList.columns.guests'),
               accessorKey: 'guests',
               render: row => row.guests,
               cell: {
@@ -256,30 +257,30 @@ export const PropertyStaysList: FC<Props> = ({ propertyId }) => {
               },
             },
             {
-              header: 'Check-in',
+              header: t('propertyStaysList.columns.checkIn'),
               accessorKey: 'check_in',
               render: row => formatDate(row.check_in),
             },
             {
-              header: 'Check-out',
+              header: t('propertyStaysList.columns.checkOut'),
               accessorKey: 'check_out',
               render: row => formatDate(row.check_out),
             },
             {
-              header: 'Código',
+              header: t('propertyStaysList.columns.code'),
               accessorKey: 'entrance_code',
               render: row => row.entrance_code,
             },
             {
-              header: 'Valor',
+              header: t('propertyStaysList.columns.amount'),
               accessorKey: 'price',
-              render: row => Currency.format(row.price),
+              render: row => Currency.format(row.price, { locale: intlLocale }),
               cell: {
                 className: 'text-right tabular-nums',
               },
             },
             {
-              header: 'Ações',
+              header: t('propertyStaysList.columns.actions'),
               accessorKey: 'actions',
               render: row => (
                 <div className='flex gap-2'>

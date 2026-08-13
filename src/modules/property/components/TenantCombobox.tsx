@@ -18,6 +18,7 @@ import {
 import { useSearchTenants } from '@/modules/stay/service/TenantService.hooks';
 import { useDebounce } from '@/hooks/useDebounce';
 import { Phone } from '@/lib/phone';
+import { useTranslation } from '@/i18n/useTranslation';
 
 type Props = {
   value: string;
@@ -34,8 +35,11 @@ const TenantCombobox: FC<Props> = ({
   value,
   onInputChange,
   onTenantSelect,
-  placeholder = 'Digite o nome do hóspede',
+  placeholder,
 }) => {
+  const { t } = useTranslation(['property']);
+  const resolvedPlaceholder =
+    placeholder ?? t('tenantCombobox.defaultPlaceholder');
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState(value);
 
@@ -68,7 +72,9 @@ const TenantCombobox: FC<Props> = ({
         >
           <span className='truncate text-left'>
             {value || (
-              <span className='text-muted-foreground'>{placeholder}</span>
+              <span className='text-muted-foreground'>
+                {resolvedPlaceholder}
+              </span>
             )}
           </span>
           <ChevronsUpDown className='ml-2 size-4 shrink-0 opacity-50' />
@@ -80,18 +86,18 @@ const TenantCombobox: FC<Props> = ({
       >
         <Command shouldFilter={false}>
           <CommandInput
-            placeholder={placeholder}
+            placeholder={resolvedPlaceholder}
             value={search}
             onValueChange={handleInputChange}
           />
           <CommandList>
             {isLoading && debouncedSearch.trim().length >= 2 ? (
               <div className='py-6 text-center text-sm text-muted-foreground'>
-                Buscando...
+                {t('tenantCombobox.searching')}
               </div>
             ) : (
               <>
-                <CommandEmpty>Nenhum hóspede encontrado.</CommandEmpty>
+                <CommandEmpty>{t('tenantCombobox.noResults')}</CommandEmpty>
                 {tenants.length > 0 && (
                   <CommandGroup>
                     {tenants.map(tenant => (

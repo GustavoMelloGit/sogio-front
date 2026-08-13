@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import { type FC, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
@@ -24,16 +24,19 @@ import { useUpdateProperty } from '../service/PropertyService.hooks';
 import { queryClient } from '@/lib/query-client';
 import { Edit } from 'lucide-react';
 import z from 'zod';
+import { useTranslation } from '@/i18n/useTranslation';
+import type { TranslateFn } from '@/i18n/useTranslation';
 
-const formSchema = z.object({
-  name: z.string().min(1, 'Nome é obrigatório'),
-  capacity: z.string().refine(value => Number(value) >= 1, {
-    message: 'Capacidade deve ser pelo menos 1',
-  }),
-  address: addressSchema,
-});
+const createFormSchema = (t: TranslateFn) =>
+  z.object({
+    name: z.string().min(1, t('editPropertyModal.validation.nameRequired')),
+    capacity: z.string().refine(value => Number(value) >= 1, {
+      message: t('editPropertyModal.validation.capacityMin'),
+    }),
+    address: addressSchema,
+  });
 
-type FormData = z.infer<typeof formSchema>;
+type FormData = z.infer<ReturnType<typeof createFormSchema>>;
 
 type Props = {
   property: Property;
@@ -42,6 +45,9 @@ type Props = {
 };
 
 const EditPropertyModal: FC<Props> = ({ property, isOpen, onClose }) => {
+  const { t } = useTranslation(['property']);
+  const formSchema = useMemo(() => createFormSchema(t), [t]);
+
   const {
     mutate,
     isLoading: isSubmitting,
@@ -85,10 +91,10 @@ const EditPropertyModal: FC<Props> = ({ property, isOpen, onClose }) => {
         <SheetHeader>
           <SheetTitle className='flex items-center gap-2'>
             <Edit className='h-5 w-5' />
-            Editar Propriedade
+            {t('editPropertyModal.title')}
           </SheetTitle>
           <SheetDescription>
-            Atualize as informações da propriedade.
+            {t('editPropertyModal.description')}
           </SheetDescription>
         </SheetHeader>
 
@@ -96,7 +102,7 @@ const EditPropertyModal: FC<Props> = ({ property, isOpen, onClose }) => {
           {error && (
             <Alert
               variant='destructive'
-              title='Erro'
+              title={t('editPropertyModal.errorTitle')}
               message={error.message}
               className='mb-4'
             />
@@ -112,10 +118,10 @@ const EditPropertyModal: FC<Props> = ({ property, isOpen, onClose }) => {
                 name='name'
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Nome da Propriedade</FormLabel>
+                    <FormLabel>{t('editPropertyModal.nameLabel')}</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder='Digite o nome da propriedade'
+                        placeholder={t('editPropertyModal.namePlaceholder')}
                         {...field}
                       />
                     </FormControl>
@@ -129,14 +135,16 @@ const EditPropertyModal: FC<Props> = ({ property, isOpen, onClose }) => {
                 name='capacity'
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Capacidade</FormLabel>
+                    <FormLabel>
+                      {t('editPropertyModal.capacityLabel')}
+                    </FormLabel>
                     <FormControl>
                       <Input
                         type='number'
                         min={1}
                         step={1}
                         inputMode='numeric'
-                        placeholder='Digite a capacidade da propriedade'
+                        placeholder={t('editPropertyModal.capacityPlaceholder')}
                         {...field}
                       />
                     </FormControl>
@@ -151,14 +159,14 @@ const EditPropertyModal: FC<Props> = ({ property, isOpen, onClose }) => {
                   onClick={handleClose}
                   className='flex-1'
                 >
-                  Cancelar
+                  {t('editPropertyModal.cancel')}
                 </Button>
                 <Button
                   type='submit'
                   className='flex-1'
                   isLoading={isSubmitting}
                 >
-                  Salvar
+                  {t('editPropertyModal.save')}
                 </Button>
               </div>
             </form>
