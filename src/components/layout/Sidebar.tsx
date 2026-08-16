@@ -53,16 +53,17 @@ export const AppSidebar: FC = () => {
   return (
     <Sidebar>
       <SidebarHeader>
-        <div className='flex items-center gap-2 px-4 py-2'>
-          <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground'>
-            <Building2 className='h-4 w-4' />
-          </div>
-          <div className='grid flex-1 text-left text-sm leading-tight'>
-            <span className='truncate font-semibold'>Sogio</span>
-            <span className='truncate text-xs text-muted-foreground'>
-              {t('sidebar.tagline')}
-            </span>
-          </div>
+        <div className='[&>img]:w-1/2 px-2'>
+          <img
+            src='/assets/sogio-fundo-claro.png'
+            alt='Sogio'
+            className='dark:hidden'
+          />
+          <img
+            src='/assets/sogio-fundo-escuro.png'
+            alt='Sogio'
+            className='hidden dark:block'
+          />
         </div>
       </SidebarHeader>
 
