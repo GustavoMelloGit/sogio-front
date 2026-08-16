@@ -31,8 +31,8 @@ export const PlanCard: FC<Props> = ({
   onManageSubscription,
 }) => {
   const { t, language } = useTranslation('billing');
-  const isFree = plan.slug === 'free';
-  const upcomingFeatures = PLAN_UPCOMING_FEATURES[plan.slug];
+  const isFree = plan.code === 'free';
+  const upcomingFeatures = PLAN_UPCOMING_FEATURES[plan.code];
 
   return (
     <Card className={cn('flex-1', !isFree && 'border-primary shadow-md')}>
@@ -48,7 +48,9 @@ export const PlanCard: FC<Props> = ({
           <span className='text-3xl font-bold'>
             {isFree
               ? t('pricing.free')
-              : Currency.format(plan.price, { locale: INTL_LOCALES[language] })}
+              : Currency.format(plan.price_amount, {
+                  locale: INTL_LOCALES[language],
+                })}
           </span>
           {!isFree && (
             <span className='text-muted-foreground text-sm'>
@@ -57,9 +59,9 @@ export const PlanCard: FC<Props> = ({
           )}
         </div>
 
-        {plan.trialDays ? (
+        {plan.trial_days > 0 ? (
           <Badge variant='outline' className='w-fit'>
-            {t('pricing.trialBadge', { count: plan.trialDays })}
+            {t('pricing.trialBadge', { count: plan.trial_days })}
           </Badge>
         ) : null}
       </CardHeader>
@@ -71,9 +73,7 @@ export const PlanCard: FC<Props> = ({
               className='size-4 shrink-0 text-primary'
               aria-hidden='true'
             />
-            {plan.propertyLimit === null
-              ? t('pricing.propertyLimitUnlimited')
-              : t('pricing.propertyLimit', { count: plan.propertyLimit })}
+            {t('pricing.propertyLimit', { count: plan.max_properties })}
           </li>
           {upcomingFeatures.map(labelKey => (
             <li

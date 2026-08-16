@@ -1,19 +1,19 @@
 import type { FC } from 'react';
 import { useTranslation } from '@/i18n/useTranslation';
-import type { Plan, PlanSlug } from '../types/BillingTypes';
+import type { Plan, PlanCode } from '../types/BillingTypes';
 import { PlanCard } from './PlanCard';
 
 type Props = {
   plans: Plan[];
-  currentPlanSlug: PlanSlug;
+  currentPlanCode: PlanCode | undefined;
   isProcessing: boolean;
-  onSelectPlan: (planId: string) => void;
+  onSelectPlan: (planCode: PlanCode) => void;
   onManageSubscription: () => void;
 };
 
 export const PricingTable: FC<Props> = ({
   plans,
-  currentPlanSlug,
+  currentPlanCode,
   isProcessing,
   onSelectPlan,
   onManageSubscription,
@@ -34,11 +34,11 @@ export const PricingTable: FC<Props> = ({
       <div className='flex flex-col gap-4 md:flex-row'>
         {plans.map(plan => (
           <PlanCard
-            key={plan.id}
+            key={plan.code}
             plan={plan}
-            isCurrentPlan={plan.slug === currentPlanSlug}
+            isCurrentPlan={plan.code === currentPlanCode}
             isProcessing={isProcessing}
-            onSelectPlan={() => onSelectPlan(plan.id)}
+            onSelectPlan={() => onSelectPlan(plan.code)}
             onManageSubscription={onManageSubscription}
           />
         ))}

@@ -7,7 +7,9 @@
   },
   "loadErrorFallback": "Não foi possível carregar as informações de assinatura.",
   "checkoutErrorFallback": "Não foi possível iniciar o checkout. Tente novamente.",
+  "checkoutAlreadySubscribedError": "Você já tem uma assinatura ativa. Use \"Gerenciar assinatura\" para trocar de plano.",
   "portalErrorFallback": "Não foi possível abrir o gerenciamento de assinatura. Tente novamente.",
+  "portalNoSubscriptionError": "Você ainda não tem uma assinatura paga para gerenciar. Assine o plano Pro primeiro.",
   "checkout": {
     "successToast": "Assinatura confirmada! Bem-vindo ao plano Pro.",
     "canceledToast": "Checkout cancelado. Você pode assinar quando quiser."
@@ -19,13 +21,16 @@
       "active": "Ativo",
       "trialing": "Período de teste",
       "past_due": "Pagamento pendente",
-      "canceled": "Cancelado",
-      "incomplete": "Incompleto"
+      "canceled": "Cancelado"
+    },
+    "blockedReason": {
+      "trial_expired": "Seu período de teste do plano Pro expirou. Assine para continuar com acesso completo.",
+      "period_expired": "Sua assinatura expirou. Renove seu plano para continuar usando o Sogio.",
+      "payment_failed": "Não conseguimos processar seu pagamento. Atualize sua forma de pagamento para reativar seu acesso.",
+      "no_subscription": "Você ainda não tem uma assinatura ativa. Escolha um plano abaixo para começar."
     },
     "trialEndsAt": "Seu teste grátis termina em {{date}}",
-    "renewsAt": "Renova em {{date}}",
-    "cancelAtPeriodEnd": "Sua assinatura será cancelada em {{date}}",
-    "pastDueWarning": "Houve um problema com seu pagamento. Atualize sua forma de pagamento para não perder o acesso ao plano Pro."
+    "renewsAt": "Renova em {{date}}"
   },
   "pricing": {
     "title": "Planos disponíveis",
@@ -38,7 +43,6 @@
     "comingSoonBadge": "Em breve",
     "propertyLimit_one": "Até {{count}} propriedade",
     "propertyLimit_other": "Até {{count}} propriedades",
-    "propertyLimitUnlimited": "Propriedades ilimitadas",
     "selectButton": "Assinar {{plan}}",
     "currentButton": "Plano atual",
     "manageButton": "Gerenciar assinatura",
@@ -48,6 +52,24 @@
       "aiChat": "Chat com IA integrado",
       "aiChatWhatsapp": "Chat com IA via WhatsApp",
       "notifications": "Notificações"
+    }
+  },
+  "history": {
+    "title": "Histórico da assinatura",
+    "columns": {
+      "event": "Evento",
+      "plan": "Plano",
+      "status": "Status",
+      "occurredAt": "Data",
+      "accessUntil": "Acesso válido até",
+      "reason": "Motivo"
+    },
+    "eventType": {
+      "started": "Assinatura iniciada",
+      "plan_changed": "Plano alterado",
+      "payment_failed": "Falha no pagamento",
+      "canceled": "Assinatura cancelada",
+      "renewed": "Assinatura renovada"
     }
   }
 }

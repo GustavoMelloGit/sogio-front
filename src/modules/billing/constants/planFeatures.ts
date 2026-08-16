@@ -1,10 +1,10 @@
-import type { PlanSlug } from '../types/BillingTypes';
+import type { PlanCode } from '../types/BillingTypes';
 
 /**
  * Marketing copy for features not yet gated by the backend. Kept on the
  * frontend on purpose — it's presentation content, not a business rule.
  */
-export const PLAN_UPCOMING_FEATURES: Record<PlanSlug, string[]> = {
+export const PLAN_UPCOMING_FEATURES: Record<PlanCode, string[]> = {
   free: [],
   pro: [
     'pricing.features.reportExport',

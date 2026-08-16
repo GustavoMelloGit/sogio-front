@@ -7,7 +7,9 @@
   },
   "loadErrorFallback": "Could not load your subscription information.",
   "checkoutErrorFallback": "Could not start checkout. Please try again.",
+  "checkoutAlreadySubscribedError": "You already have an active subscription. Use \"Manage subscription\" to switch plans.",
   "portalErrorFallback": "Could not open subscription management. Please try again.",
+  "portalNoSubscriptionError": "You don't have a paid subscription to manage yet. Subscribe to the Pro plan first.",
   "checkout": {
     "successToast": "Subscription confirmed! Welcome to the Pro plan.",
     "canceledToast": "Checkout canceled. You can subscribe whenever you're ready."
@@ -19,13 +21,16 @@
       "active": "Active",
       "trialing": "Trial period",
       "past_due": "Payment past due",
-      "canceled": "Canceled",
-      "incomplete": "Incomplete"
+      "canceled": "Canceled"
+    },
+    "blockedReason": {
+      "trial_expired": "Your Pro plan trial has ended. Subscribe to keep full access.",
+      "period_expired": "Your subscription has expired. Renew your plan to keep using Sogio.",
+      "payment_failed": "We couldn't process your payment. Update your payment method to restore access.",
+      "no_subscription": "You don't have an active subscription yet. Choose a plan below to get started."
     },
     "trialEndsAt": "Your free trial ends on {{date}}",
-    "renewsAt": "Renews on {{date}}",
-    "cancelAtPeriodEnd": "Your subscription will be canceled on {{date}}",
-    "pastDueWarning": "There was a problem with your payment. Update your payment method to keep your Pro plan access."
+    "renewsAt": "Renews on {{date}}"
   },
   "pricing": {
     "title": "Available plans",
@@ -38,7 +43,6 @@
     "comingSoonBadge": "Coming soon",
     "propertyLimit_one": "Up to {{count}} property",
     "propertyLimit_other": "Up to {{count}} properties",
-    "propertyLimitUnlimited": "Unlimited properties",
     "selectButton": "Subscribe to {{plan}}",
     "currentButton": "Current plan",
     "manageButton": "Manage subscription",
@@ -48,6 +52,24 @@
       "aiChat": "Built-in AI chat",
       "aiChatWhatsapp": "AI chat via WhatsApp",
       "notifications": "Notifications"
+    }
+  },
+  "history": {
+    "title": "Subscription history",
+    "columns": {
+      "event": "Event",
+      "plan": "Plan",
+      "status": "Status",
+      "occurredAt": "Date",
+      "accessUntil": "Access valid until",
+      "reason": "Reason"
+    },
+    "eventType": {
+      "started": "Subscription started",
+      "plan_changed": "Plan changed",
+      "payment_failed": "Payment failed",
+      "canceled": "Subscription canceled",
+      "renewed": "Subscription renewed"
     }
   }
 }

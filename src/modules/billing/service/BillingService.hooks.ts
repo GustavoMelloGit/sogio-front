@@ -1,10 +1,13 @@
 import { useCallback } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { BillingService } from './BillingService';
+import type { PlanCode } from '../types/BillingTypes';
 
 export const billingQueryKeys = {
   plans: ['billing', 'plans'] as const,
   subscription: ['billing', 'subscription'] as const,
+  subscriptionHistory: (page: number) =>
+    ['billing', 'subscription', 'history', page] as const,
 };
 
 export const usePlans = () => {
@@ -33,6 +36,29 @@ export const useSubscription = () => {
   return { subscription, isLoading, error };
 };
 
+export const useSubscriptionHistory = (page: number) => {
+  const {
+    data,
+    isPending: isLoading,
+    error,
+  } = useQuery({
+    queryKey: billingQueryKeys.subscriptionHistory(page),
+    queryFn: () => BillingService.getSubscriptionHistory(page),
+    staleTime: 5 * 60 * 1000,
+  });
+  return {
+    history: data?.data ?? [],
+    pagination: data?.pagination,
+    isLoading,
+    error,
+  };
+};
+
+/**
+ * Invalidates both `/billing/subscription` and every cached
+ * `/billing/subscription/history` page — `['billing', 'subscription']` is a
+ * prefix of the history query key, so a single call covers both.
+ */
 export const useRefreshSubscription = () => {
   const queryClient = useQueryClient();
   return useCallback(
@@ -50,8 +76,8 @@ export const useCreateCheckoutSession = () => {
     isPending: isCreatingCheckoutSession,
     error: checkoutSessionError,
   } = useMutation({
-    mutationFn: (planId: string) =>
-      BillingService.createCheckoutSession(planId),
+    mutationFn: (planCode: PlanCode) =>
+      BillingService.createCheckoutSession(planCode),
     onSuccess: ({ url }) => {
       window.location.href = url;
     },

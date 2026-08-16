@@ -11,14 +11,14 @@ import { Alert } from '@/components/Alert';
 import { useTranslation } from '@/i18n/useTranslation';
 import { INTL_LOCALES } from '@/i18n/locale-maps';
 import type {
-  Plan,
   Subscription,
+  SubscriptionHistoryEntry,
   SubscriptionStatus,
 } from '../types/BillingTypes';
 
 type Props = {
   subscription: Subscription;
-  plan: Plan | undefined;
+  latestEvent: SubscriptionHistoryEntry | undefined;
   isManaging: boolean;
   onManageSubscription: () => void;
 };
@@ -31,12 +31,11 @@ const STATUS_BADGE_VARIANT: Record<
   trialing: 'secondary',
   past_due: 'destructive',
   canceled: 'outline',
-  incomplete: 'outline',
 };
 
 export const CurrentPlanCard: FC<Props> = ({
   subscription,
-  plan,
+  latestEvent,
   isManaging,
   onManageSubscription,
 }) => {
@@ -48,13 +47,15 @@ export const CurrentPlanCard: FC<Props> = ({
     [language]
   );
 
+  const canManageSubscription = latestEvent?.plan_code !== 'free';
+
   return (
     <Card>
       <CardHeader className='flex flex-row items-center justify-between gap-2'>
         <div>
           <h2 className='text-lg font-semibold'>{t('currentPlan.title')}</h2>
           <p className='text-muted-foreground text-sm'>
-            {plan?.name ?? subscription.planSlug}
+            {latestEvent?.plan_name ?? '—'}
           </p>
         </div>
         <Badge variant={STATUS_BADGE_VARIANT[subscription.status]}>
@@ -63,35 +64,33 @@ export const CurrentPlanCard: FC<Props> = ({
       </CardHeader>
 
       <CardContent className='space-y-3'>
-        {subscription.status === 'past_due' && (
-          <Alert role='alert' message={t('currentPlan.pastDueWarning')} />
+        {!subscription.has_platform_access && subscription.blocked_reason && (
+          <Alert
+            role='alert'
+            message={t(
+              `currentPlan.blockedReason.${subscription.blocked_reason}`
+            )}
+          />
         )}
 
-        {subscription.status === 'trialing' && subscription.trialEndsAt && (
+        {subscription.status === 'trialing' && latestEvent?.access_until && (
           <p className='text-sm'>
             {t('currentPlan.trialEndsAt', {
-              date: dateFormatter.format(new Date(subscription.trialEndsAt)),
+              date: dateFormatter.format(new Date(latestEvent.access_until)),
             })}
           </p>
         )}
 
-        {subscription.currentPeriodEnd && (
+        {subscription.status === 'active' && latestEvent?.access_until && (
           <p className='text-sm text-muted-foreground'>
-            {t(
-              subscription.cancelAtPeriodEnd
-                ? 'currentPlan.cancelAtPeriodEnd'
-                : 'currentPlan.renewsAt',
-              {
-                date: dateFormatter.format(
-                  new Date(subscription.currentPeriodEnd)
-                ),
-              }
-            )}
+            {t('currentPlan.renewsAt', {
+              date: dateFormatter.format(new Date(latestEvent.access_until)),
+            })}
           </p>
         )}
       </CardContent>
 
-      {subscription.planSlug !== 'free' && (
+      {canManageSubscription && (
         <CardFooter>
           <Button
             variant='outline'
