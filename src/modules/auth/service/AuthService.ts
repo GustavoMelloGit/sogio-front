@@ -19,9 +19,19 @@ export class AuthService {
    * Realiza login do usuário
    * @param credentials - Credenciais de login (email e senha)
    * @returns Promise com dados do usuário e token de autenticação
+   *
+   * Um 401 aqui significa "credenciais inválidas", não sessão expirada —
+   * `skipAuthRedirect` evita o logout forçado que o interceptor global
+   * dispara por padrão (ver `changePassword`).
    */
   static async login(credentials: LoginCredentials): Promise<AuthResponse> {
-    const response = await api.post<AuthResponse>('/auth/sign-in', credentials);
+    const response = await api.post<AuthResponse>(
+      '/auth/sign-in',
+      credentials,
+      {
+        skipAuthRedirect: true,
+      }
+    );
     return response.data;
   }
 
