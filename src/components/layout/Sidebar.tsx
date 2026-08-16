@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { LayoutDashboard, Building2, RefreshCw } from 'lucide-react';
 import {
   Sidebar,
@@ -13,6 +13,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '../ui/sidebar';
+import { SpecularButton } from '../SpecularButton';
 import { ROUTES } from '@/routes/routes';
 import { useTranslation } from '@/i18n/useTranslation';
 import { SidebarUser } from './SidebarUser';
@@ -48,6 +49,7 @@ const navigationItems: NavItem[] = [
 
 export const AppSidebar: FC = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { t } = useTranslation();
 
   return (
@@ -94,6 +96,22 @@ export const AppSidebar: FC = () => {
       </SidebarContent>
 
       <SidebarFooter>
+        <SpecularButton
+          size='sm'
+          radius={12}
+          tint='#111113'
+          tintOpacity={0.92}
+          textColor='#fafafa'
+          lineColor='#ffffff'
+          baseColor='#71717a'
+          proximity={200}
+          autoAnimate
+          followMouse
+          className='w-full'
+          onClick={() => navigate(ROUTES.billingSettings)}
+        >
+          {t('sidebar.activatePro')}
+        </SpecularButton>
         <SidebarUser />
       </SidebarFooter>
     </Sidebar>
