@@ -13,6 +13,8 @@ import stayEn from './locales/en/stay.json';
 import stayPt from './locales/pt/stay.json';
 import propertyEn from './locales/en/property.json';
 import propertyPt from './locales/pt/property.json';
+import billingEn from './locales/en/billing.json';
+import billingPt from './locales/pt/billing.json';
 import { DEFAULT_LANGUAGE, SUPPORTED_LANGUAGES } from './language';
 
 export const defaultNS = 'common';
@@ -25,6 +27,7 @@ export const resources = {
     error: errorEn,
     stay: stayEn,
     property: propertyEn,
+    billing: billingEn,
   },
   pt: {
     common: commonPt,
@@ -33,6 +36,7 @@ export const resources = {
     error: errorPt,
     stay: stayPt,
     property: propertyPt,
+    billing: billingPt,
   },
 } as const;
 

@@ -1,0 +1,53 @@
+{
+  "page": {
+    "title": "Billing",
+    "description": "Manage your plan and payment method.",
+    "breadcrumbHome": "Home",
+    "breadcrumbBilling": "Billing"
+  },
+  "loadErrorFallback": "Could not load your subscription information.",
+  "checkoutErrorFallback": "Could not start checkout. Please try again.",
+  "portalErrorFallback": "Could not open subscription management. Please try again.",
+  "checkout": {
+    "successToast": "Subscription confirmed! Welcome to the Pro plan.",
+    "canceledToast": "Checkout canceled. You can subscribe whenever you're ready."
+  },
+  "currentPlan": {
+    "title": "Current plan",
+    "manageButton": "Manage subscription",
+    "status": {
+      "active": "Active",
+      "trialing": "Trial period",
+      "past_due": "Payment past due",
+      "canceled": "Canceled",
+      "incomplete": "Incomplete"
+    },
+    "trialEndsAt": "Your free trial ends on {{date}}",
+    "renewsAt": "Renews on {{date}}",
+    "cancelAtPeriodEnd": "Your subscription will be canceled on {{date}}",
+    "pastDueWarning": "There was a problem with your payment. Update your payment method to keep your Pro plan access."
+  },
+  "pricing": {
+    "title": "Available plans",
+    "description": "Choose the plan that fits your business.",
+    "free": "Free",
+    "perMonth": "/month",
+    "trialBadge_one": "{{count}} day free",
+    "trialBadge_other": "{{count}} days free",
+    "currentPlanBadge": "Current plan",
+    "comingSoonBadge": "Coming soon",
+    "propertyLimit_one": "Up to {{count}} property",
+    "propertyLimit_other": "Up to {{count}} properties",
+    "propertyLimitUnlimited": "Unlimited properties",
+    "selectButton": "Subscribe to {{plan}}",
+    "currentButton": "Current plan",
+    "manageButton": "Manage subscription",
+    "features": {
+      "reportExport": "Report export",
+      "bulkImportExport": "Bulk data import/export",
+      "aiChat": "Built-in AI chat",
+      "aiChatWhatsapp": "AI chat via WhatsApp",
+      "notifications": "Notifications"
+    }
+  }
+}

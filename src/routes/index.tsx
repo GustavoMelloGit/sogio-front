@@ -19,6 +19,7 @@ import {
   LazyForgotPasswordView,
   LazyResetPasswordView,
   LazyChangePasswordView,
+  LazyBillingSettingsView,
 } from './lazyComponents';
 
 export const router = createBrowserRouter([
@@ -63,6 +64,10 @@ export const router = createBrowserRouter([
       {
         path: ROUTES.changePassword,
         element: <LazyChangePasswordView />,
+      },
+      {
+        path: ROUTES.billingSettings,
+        element: <LazyBillingSettingsView />,
       },
     ],
   },

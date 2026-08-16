@@ -20,6 +20,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useLogout } from '@/modules/auth/service/AuthService.hooks';
 import { ROUTES } from '@/routes/routes';
 import {
+  CreditCard,
   EllipsisVertical,
   Languages,
   LogOut,
@@ -100,6 +101,12 @@ export const SidebarUser: FC = () => {
                 <Link to={ROUTES.connectedApps}>
                   <Plug />
                   {t('sidebar.connectedApps')}
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link to={ROUTES.billingSettings}>
+                  <CreditCard />
+                  {t('sidebar.billing')}
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem

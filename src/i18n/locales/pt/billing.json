@@ -1,0 +1,53 @@
+{
+  "page": {
+    "title": "Assinatura",
+    "description": "Gerencie seu plano e forma de pagamento.",
+    "breadcrumbHome": "Início",
+    "breadcrumbBilling": "Assinatura"
+  },
+  "loadErrorFallback": "Não foi possível carregar as informações de assinatura.",
+  "checkoutErrorFallback": "Não foi possível iniciar o checkout. Tente novamente.",
+  "portalErrorFallback": "Não foi possível abrir o gerenciamento de assinatura. Tente novamente.",
+  "checkout": {
+    "successToast": "Assinatura confirmada! Bem-vindo ao plano Pro.",
+    "canceledToast": "Checkout cancelado. Você pode assinar quando quiser."
+  },
+  "currentPlan": {
+    "title": "Plano atual",
+    "manageButton": "Gerenciar assinatura",
+    "status": {
+      "active": "Ativo",
+      "trialing": "Período de teste",
+      "past_due": "Pagamento pendente",
+      "canceled": "Cancelado",
+      "incomplete": "Incompleto"
+    },
+    "trialEndsAt": "Seu teste grátis termina em {{date}}",
+    "renewsAt": "Renova em {{date}}",
+    "cancelAtPeriodEnd": "Sua assinatura será cancelada em {{date}}",
+    "pastDueWarning": "Houve um problema com seu pagamento. Atualize sua forma de pagamento para não perder o acesso ao plano Pro."
+  },
+  "pricing": {
+    "title": "Planos disponíveis",
+    "description": "Escolha o plano ideal para o seu negócio.",
+    "free": "Grátis",
+    "perMonth": "/mês",
+    "trialBadge_one": "{{count}} dia grátis",
+    "trialBadge_other": "{{count}} dias grátis",
+    "currentPlanBadge": "Plano atual",
+    "comingSoonBadge": "Em breve",
+    "propertyLimit_one": "Até {{count}} propriedade",
+    "propertyLimit_other": "Até {{count}} propriedades",
+    "propertyLimitUnlimited": "Propriedades ilimitadas",
+    "selectButton": "Assinar {{plan}}",
+    "currentButton": "Plano atual",
+    "manageButton": "Gerenciar assinatura",
+    "features": {
+      "reportExport": "Exportação de relatórios",
+      "bulkImportExport": "Importação/exportação em massa",
+      "aiChat": "Chat com IA integrado",
+      "aiChatWhatsapp": "Chat com IA via WhatsApp",
+      "notifications": "Notificações"
+    }
+  }
+}

@@ -14,4 +14,5 @@ export const ROUTES = {
   forgotPassword: '/forgot-password',
   resetPassword: '/reset-password',
   changePassword: '/settings/change-password',
+  billingSettings: '/settings/billing',
 } as const;

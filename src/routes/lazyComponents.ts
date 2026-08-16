@@ -51,3 +51,6 @@ export const LazyResetPasswordView = lazy(
 export const LazyChangePasswordView = lazy(
   () => import('@/modules/auth/view/ChangePasswordView')
 );
+export const LazyBillingSettingsView = lazy(
+  () => import('@/modules/billing/view/BillingSettingsView')
+);
