@@ -1,6 +1,14 @@
 import axios, { AxiosError } from 'axios';
 import { env } from './env';
 
+declare module 'axios' {
+  export interface AxiosRequestConfig {
+    // Some 401s aren't an expired session (e.g. wrong current password,
+    // invalid reset token) — set this to skip the global logout/redirect.
+    skipAuthRedirect?: boolean;
+  }
+}
+
 /**
  * Configuração base do Axios para a aplicação Sogio
  * Define interceptors, base URL e configurações padrão
@@ -36,8 +44,8 @@ api.interceptors.response.use(
   response => {
     return response;
   },
-  error => {
-    if (error.response?.status === 401) {
+  (error: AxiosError) => {
+    if (error.response?.status === 401 && !error.config?.skipAuthRedirect) {
       // Token expirado ou inválido
       localStorage.removeItem('auth_token');
       window.location.href = '/login';
