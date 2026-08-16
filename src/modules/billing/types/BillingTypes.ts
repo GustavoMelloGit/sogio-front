@@ -50,7 +50,11 @@ export const subscriptionSchema = z.object({
   has_platform_access: z.boolean(),
   status: accountStatusSchema,
   max_properties: z.number(),
-  blocked_reason: blockedReasonSchema.nullable(),
+  // Only present in the payload when has_platform_access is false — omitted
+  // entirely (not null) otherwise, so this must accept a missing key too.
+  blocked_reason: blockedReasonSchema
+    .nullish()
+    .transform(value => value ?? null),
 });
 export type Subscription = z.infer<typeof subscriptionSchema>;
 
