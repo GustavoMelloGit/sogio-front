@@ -13,10 +13,10 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'favicon.svg', 'apple-touch-icon.png'],
       manifest: {
-        name: 'StayHub',
-        short_name: 'StayHub',
+        name: 'Sogio',
+        short_name: 'Sogio',
         description:
-          'StayHub is a platform for managing your properties and stays.',
+          'Sogio is a platform for managing your properties and stays.',
         theme_color: '#000000',
         background_color: '#000000',
         display: 'standalone',
