@@ -70,6 +70,28 @@ const BillingSettingsView: FC = () => {
     );
   }, [searchParams, setSearchParams, refreshSubscription, t]);
 
+  // The Customer Portal's return_url carries no signal about what changed
+  // (plan swap, card update, cancellation) — just force a refetch so the
+  // 5-minute query staleTime doesn't show pre-portal data.
+  const hasHandledPortalReturnRef = useRef(false);
+
+  useEffect(() => {
+    if (hasHandledPortalReturnRef.current) return;
+    const portalResult = searchParams.get('portal');
+    if (!portalResult) return;
+    hasHandledPortalReturnRef.current = true;
+
+    void refreshSubscription();
+
+    setSearchParams(
+      params => {
+        params.delete('portal');
+        return params;
+      },
+      { replace: true }
+    );
+  }, [searchParams, setSearchParams, refreshSubscription]);
+
   const handleSelectPlan = (planCode: PlanCode): void => {
     createCheckoutSession(planCode, {
       onError: error => {
