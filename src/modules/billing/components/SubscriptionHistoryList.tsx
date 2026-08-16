@@ -42,6 +42,10 @@ export const SubscriptionHistoryList: FC = () => {
             totalPages: pagination?.total_pages ?? 1,
             onPageChange: page => addFilter('page', page),
           }}
+          emptyState={{
+            title: t('history.emptyTitle'),
+            description: t('history.emptyDescription'),
+          }}
           columns={[
             {
               header: t('history.columns.event'),

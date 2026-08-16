@@ -14,6 +14,7 @@ export const planSchema = z.object({
 });
 export type Plan = z.infer<typeof planSchema>;
 
+/** Status of a resolved subscription event — always tied to a real plan. */
 export const subscriptionStatusSchema = z.enum([
   'trialing',
   'active',
@@ -21,6 +22,21 @@ export const subscriptionStatusSchema = z.enum([
   'canceled',
 ]);
 export type SubscriptionStatus = z.infer<typeof subscriptionStatusSchema>;
+
+/**
+ * Account-level entitlement status — a superset of `SubscriptionStatus` that
+ * also covers accounts that never subscribed at all (`"none"`, paired with
+ * `blocked_reason: "no_subscription"`). Only ever returned by
+ * `/billing/subscription`, never by the history endpoint.
+ */
+export const accountStatusSchema = z.enum([
+  'none',
+  'trialing',
+  'active',
+  'past_due',
+  'canceled',
+]);
+export type AccountStatus = z.infer<typeof accountStatusSchema>;
 
 export const blockedReasonSchema = z.enum([
   'trial_expired',
@@ -32,7 +48,7 @@ export type BlockedReason = z.infer<typeof blockedReasonSchema>;
 
 export const subscriptionSchema = z.object({
   has_platform_access: z.boolean(),
-  status: subscriptionStatusSchema,
+  status: accountStatusSchema,
   max_properties: z.number(),
   blocked_reason: blockedReasonSchema.nullable(),
 });

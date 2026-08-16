@@ -104,6 +104,11 @@ const BillingSettingsView: FC = () => {
   const isLoading = isLoadingPlans || isLoadingSubscription || isLoadingHistory;
   const error = plansError ?? subscriptionError ?? historyError;
   const isManagingSubscription = isCreatingPortalSession;
+  // A Stripe customer only exists once the user has actually checked out —
+  // free-tier accounts and brand-new ("none") accounts have nothing to
+  // manage in the portal yet.
+  const canManageSubscription =
+    subscription?.status !== 'none' && latestEvent?.plan_code !== 'free';
 
   return (
     <Page.Container>
@@ -140,6 +145,7 @@ const BillingSettingsView: FC = () => {
             subscription={subscription}
             latestEvent={latestEvent}
             isManaging={isManagingSubscription}
+            canManageSubscription={canManageSubscription}
             onManageSubscription={handleManageSubscription}
           />
         )}
@@ -149,6 +155,7 @@ const BillingSettingsView: FC = () => {
             plans={plans}
             currentPlanCode={latestEvent?.plan_code}
             isProcessing={isCreatingCheckoutSession || isCreatingPortalSession}
+            canManageSubscription={canManageSubscription}
             onSelectPlan={handleSelectPlan}
             onManageSubscription={handleManageSubscription}
           />

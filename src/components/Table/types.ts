@@ -31,4 +31,9 @@ export type DataTableProps<T extends JsonDataTableRow> = {
   selectedRows?: string[];
   onSelectionChange?: (selectedIds: string[]) => void;
   pagination?: PaginationConfig;
+  /** Overrides the default "no stays found" empty-state copy. */
+  emptyState?: {
+    title: string;
+    description: string;
+  };
 };

@@ -21,7 +21,8 @@
       "active": "Ativo",
       "trialing": "Período de teste",
       "past_due": "Pagamento pendente",
-      "canceled": "Cancelado"
+      "canceled": "Cancelado",
+      "none": "Sem assinatura"
     },
     "blockedReason": {
       "trial_expired": "Seu período de teste do plano Pro expirou. Assine para continuar com acesso completo.",
@@ -56,6 +57,8 @@
   },
   "history": {
     "title": "Histórico da assinatura",
+    "emptyTitle": "Nenhum evento encontrado",
+    "emptyDescription": "Assim que sua assinatura tiver movimentações, elas aparecerão aqui.",
     "columns": {
       "event": "Evento",
       "plan": "Plano",

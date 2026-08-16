@@ -22,6 +22,7 @@ export function DataTableDesktop<T extends JsonDataTableRow>({
   enableRowSelection = false,
   selectedRows = [],
   onSelectionChange,
+  emptyState,
 }: DataTableProps<T>) {
   const { allSelected, isRowSelected, handleSelectAll, handleSelectRow } =
     useDataTableSelection({
@@ -106,9 +107,12 @@ export function DataTableDesktop<T extends JsonDataTableRow>({
                 role='status'
               >
                 <CalendarX className='size-8 text-muted-foreground' />
-                <p className='font-medium'>Nenhuma estadia encontrada</p>
+                <p className='font-medium'>
+                  {emptyState?.title ?? 'Nenhuma estadia encontrada'}
+                </p>
                 <p className='text-sm text-muted-foreground'>
-                  Tente ajustar o período de check-in.
+                  {emptyState?.description ??
+                    'Tente ajustar o período de check-in.'}
                 </p>
               </div>
             </TableCell>

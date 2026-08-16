@@ -11,32 +11,35 @@ import { Alert } from '@/components/Alert';
 import { useTranslation } from '@/i18n/useTranslation';
 import { INTL_LOCALES } from '@/i18n/locale-maps';
 import type {
+  AccountStatus,
   Subscription,
   SubscriptionHistoryEntry,
-  SubscriptionStatus,
 } from '../types/BillingTypes';
 
 type Props = {
   subscription: Subscription;
   latestEvent: SubscriptionHistoryEntry | undefined;
   isManaging: boolean;
+  canManageSubscription: boolean;
   onManageSubscription: () => void;
 };
 
 const STATUS_BADGE_VARIANT: Record<
-  SubscriptionStatus,
+  AccountStatus,
   'default' | 'secondary' | 'destructive' | 'outline'
 > = {
   active: 'default',
   trialing: 'secondary',
   past_due: 'destructive',
   canceled: 'outline',
+  none: 'outline',
 };
 
 export const CurrentPlanCard: FC<Props> = ({
   subscription,
   latestEvent,
   isManaging,
+  canManageSubscription,
   onManageSubscription,
 }) => {
   const { t, language } = useTranslation('billing');
@@ -46,8 +49,6 @@ export const CurrentPlanCard: FC<Props> = ({
       new Intl.DateTimeFormat(INTL_LOCALES[language], { dateStyle: 'long' }),
     [language]
   );
-
-  const canManageSubscription = latestEvent?.plan_code !== 'free';
 
   return (
     <Card>

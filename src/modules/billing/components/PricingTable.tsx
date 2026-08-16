@@ -7,6 +7,7 @@ type Props = {
   plans: Plan[];
   currentPlanCode: PlanCode | undefined;
   isProcessing: boolean;
+  canManageSubscription: boolean;
   onSelectPlan: (planCode: PlanCode) => void;
   onManageSubscription: () => void;
 };
@@ -15,6 +16,7 @@ export const PricingTable: FC<Props> = ({
   plans,
   currentPlanCode,
   isProcessing,
+  canManageSubscription,
   onSelectPlan,
   onManageSubscription,
 }) => {
@@ -38,6 +40,7 @@ export const PricingTable: FC<Props> = ({
             plan={plan}
             isCurrentPlan={plan.code === currentPlanCode}
             isProcessing={isProcessing}
+            canManageSubscription={canManageSubscription}
             onSelectPlan={() => onSelectPlan(plan.code)}
             onManageSubscription={onManageSubscription}
           />

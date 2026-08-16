@@ -16,6 +16,7 @@ export function DataTableMobile<T extends JsonDataTableRow>({
   enableRowSelection = false,
   selectedRows = [],
   onSelectionChange,
+  emptyState,
 }: DataTableProps<T>) {
   const headerColumn = columns.find(column => column.mobile?.isHeader);
   const restColumns = columns.filter(column => !column.mobile?.isHeader);
@@ -72,9 +73,11 @@ export function DataTableMobile<T extends JsonDataTableRow>({
         role='status'
       >
         <CalendarX className='size-8 text-muted-foreground' />
-        <p className='font-medium'>Nenhuma estadia encontrada</p>
+        <p className='font-medium'>
+          {emptyState?.title ?? 'Nenhuma estadia encontrada'}
+        </p>
         <p className='text-sm text-muted-foreground'>
-          Tente ajustar o período de check-in.
+          {emptyState?.description ?? 'Tente ajustar o período de check-in.'}
         </p>
       </div>
     );

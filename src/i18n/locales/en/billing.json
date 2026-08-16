@@ -21,7 +21,8 @@
       "active": "Active",
       "trialing": "Trial period",
       "past_due": "Payment past due",
-      "canceled": "Canceled"
+      "canceled": "Canceled",
+      "none": "No subscription"
     },
     "blockedReason": {
       "trial_expired": "Your Pro plan trial has ended. Subscribe to keep full access.",
@@ -56,6 +57,8 @@
   },
   "history": {
     "title": "Subscription history",
+    "emptyTitle": "No events yet",
+    "emptyDescription": "Once your subscription has activity, it will show up here.",
     "columns": {
       "event": "Event",
       "plan": "Plan",

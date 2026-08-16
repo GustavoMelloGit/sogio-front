@@ -19,6 +19,7 @@ type Props = {
   plan: Plan;
   isCurrentPlan: boolean;
   isProcessing: boolean;
+  canManageSubscription: boolean;
   onSelectPlan: () => void;
   onManageSubscription: () => void;
 };
@@ -27,6 +28,7 @@ export const PlanCard: FC<Props> = ({
   plan,
   isCurrentPlan,
   isProcessing,
+  canManageSubscription,
   onSelectPlan,
   onManageSubscription,
 }) => {
@@ -90,30 +92,32 @@ export const PlanCard: FC<Props> = ({
         </ul>
       </CardContent>
 
-      <CardFooter>
-        {isCurrentPlan ? (
-          <Button variant='outline' className='w-full' disabled>
-            {t('pricing.currentButton')}
-          </Button>
-        ) : isFree ? (
-          <Button
-            variant='outline'
-            className='w-full'
-            isLoading={isProcessing}
-            onClick={onManageSubscription}
-          >
-            {t('pricing.manageButton')}
-          </Button>
-        ) : (
-          <Button
-            className='w-full'
-            isLoading={isProcessing}
-            onClick={onSelectPlan}
-          >
-            {t('pricing.selectButton', { plan: plan.name })}
-          </Button>
-        )}
-      </CardFooter>
+      {(!isFree || isCurrentPlan || canManageSubscription) && (
+        <CardFooter>
+          {isCurrentPlan ? (
+            <Button variant='outline' className='w-full' disabled>
+              {t('pricing.currentButton')}
+            </Button>
+          ) : isFree ? (
+            <Button
+              variant='outline'
+              className='w-full'
+              isLoading={isProcessing}
+              onClick={onManageSubscription}
+            >
+              {t('pricing.manageButton')}
+            </Button>
+          ) : (
+            <Button
+              className='w-full'
+              isLoading={isProcessing}
+              onClick={onSelectPlan}
+            >
+              {t('pricing.selectButton', { plan: plan.name })}
+            </Button>
+          )}
+        </CardFooter>
+      )}
     </Card>
   );
 };
