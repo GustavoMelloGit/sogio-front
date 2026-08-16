@@ -1,7 +1,11 @@
 import api from '@/lib/api';
 import type {
   AuthResponse,
+  ChangePasswordRequest,
   LoginCredentials,
+  RequestPasswordResetRequest,
+  RequestPasswordResetResponse,
+  ResetPasswordRequest,
   SignupRequest,
   User,
 } from '../types/AuthTypes';
@@ -64,5 +68,36 @@ export class AuthService {
    */
   static isAuthenticated(): boolean {
     return !!localStorage.getItem('auth_token');
+  }
+
+  /**
+   * Altera a senha do usuário autenticado. Um 401 aqui significa "senha
+   * atual incorreta", não sessão expirada — `skipAuthRedirect` evita o
+   * logout forçado que o interceptor global dispara por padrão.
+   */
+  static async changePassword(data: ChangePasswordRequest): Promise<void> {
+    await api.post('/auth/change-password', data, {
+      skipAuthRedirect: true,
+    });
+  }
+
+  static async requestPasswordReset(
+    data: RequestPasswordResetRequest
+  ): Promise<RequestPasswordResetResponse> {
+    const response = await api.post<RequestPasswordResetResponse>(
+      '/auth/password-reset/request',
+      data
+    );
+    return response.data;
+  }
+
+  /**
+   * Confirma a redefinição de senha. Um 401 aqui significa token inválido,
+   * expirado ou já usado — não sessão expirada, ver `changePassword`.
+   */
+  static async resetPassword(data: ResetPasswordRequest): Promise<void> {
+    await api.post('/auth/password-reset/confirm', data, {
+      skipAuthRedirect: true,
+    });
   }
 }
