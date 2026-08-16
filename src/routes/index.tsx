@@ -16,6 +16,9 @@ import {
   LazyCreatePropertyView,
   LazyConnectAuthorizeView,
   LazyConnectedAppsView,
+  LazyForgotPasswordView,
+  LazyResetPasswordView,
+  LazyChangePasswordView,
 } from './lazyComponents';
 
 export const router = createBrowserRouter([
@@ -57,6 +60,10 @@ export const router = createBrowserRouter([
         path: ROUTES.connectedApps,
         element: <LazyConnectedAppsView />,
       },
+      {
+        path: ROUTES.changePassword,
+        element: <LazyChangePasswordView />,
+      },
     ],
   },
   {
@@ -72,6 +79,13 @@ export const router = createBrowserRouter([
     element: <LazyConnectAuthorizeView />,
   },
   {
+    // Sem guard de propósito, mesmo motivo de ROUTES.connectAuthorize acima:
+    // precisa funcionar com ou sem sessão ativa, e o PublicRoute redirecionaria
+    // usuários já logados para fora antes de conseguirem redefinir a senha.
+    path: ROUTES.resetPassword,
+    element: <LazyResetPasswordView />,
+  },
+  {
     path: ROUTES.login,
     element: (
       <PublicRoute>
@@ -84,6 +98,14 @@ export const router = createBrowserRouter([
     element: (
       <PublicRoute>
         <LazySignupView />
+      </PublicRoute>
+    ),
+  },
+  {
+    path: ROUTES.forgotPassword,
+    element: (
+      <PublicRoute>
+        <LazyForgotPasswordView />
       </PublicRoute>
     ),
   },

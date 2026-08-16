@@ -11,4 +11,7 @@ export const ROUTES = {
   createProperty: '/property/new',
   connectAuthorize: '/connect/authorize',
   connectedApps: '/settings/connected-apps',
+  forgotPassword: '/forgot-password',
+  resetPassword: '/reset-password',
+  changePassword: '/settings/change-password',
 } as const;
