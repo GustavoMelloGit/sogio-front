@@ -92,7 +92,7 @@ const ForgotPasswordView: FC = () => {
             <h1
               ref={headingRef}
               tabIndex={-1}
-              className='text-lg leading-none font-semibold outline-none'
+              className='text-lg leading-none font-semibold outline-none rounded-xs focus-visible:ring-ring/50 focus-visible:ring-[3px]'
             >
               {t('forgotPassword.successTitle')}
             </h1>
@@ -135,7 +135,7 @@ const ForgotPasswordView: FC = () => {
           <h1
             ref={headingRef}
             tabIndex={-1}
-            className='text-lg leading-none font-semibold outline-none'
+            className='text-lg leading-none font-semibold outline-none rounded-xs focus-visible:ring-ring/50 focus-visible:ring-[3px]'
           >
             {t('forgotPassword.title')}
           </h1>

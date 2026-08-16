@@ -111,7 +111,7 @@ const ResetPasswordView: FC = () => {
           <h1
             ref={headingRef}
             tabIndex={-1}
-            className='text-lg leading-none font-semibold outline-none'
+            className='text-lg leading-none font-semibold outline-none rounded-xs focus-visible:ring-ring/50 focus-visible:ring-[3px]'
           >
             {t('resetPassword.invalidLinkTitle')}
           </h1>
@@ -151,7 +151,7 @@ const ResetPasswordView: FC = () => {
           <h1
             ref={headingRef}
             tabIndex={-1}
-            className='text-lg leading-none font-semibold outline-none'
+            className='text-lg leading-none font-semibold outline-none rounded-xs focus-visible:ring-ring/50 focus-visible:ring-[3px]'
           >
             {t('resetPassword.errorTitle')}
           </h1>
@@ -191,7 +191,7 @@ const ResetPasswordView: FC = () => {
           <h1
             ref={headingRef}
             tabIndex={-1}
-            className='text-lg leading-none font-semibold outline-none'
+            className='text-lg leading-none font-semibold outline-none rounded-xs focus-visible:ring-ring/50 focus-visible:ring-[3px]'
           >
             {t('resetPassword.successTitle')}
           </h1>
@@ -226,7 +226,7 @@ const ResetPasswordView: FC = () => {
         <h1
           ref={headingRef}
           tabIndex={-1}
-          className='text-lg leading-none font-semibold outline-none'
+          className='text-lg leading-none font-semibold outline-none rounded-xs focus-visible:ring-ring/50 focus-visible:ring-[3px]'
         >
           {t('resetPassword.title')}
         </h1>
