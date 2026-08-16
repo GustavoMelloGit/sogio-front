@@ -25,8 +25,8 @@ import {
   LogOut,
   Moon,
   Plug,
+  ShieldCheck,
   Sun,
-  UserCircle,
 } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import type { FC } from 'react';
@@ -90,9 +90,11 @@ export const SidebarUser: FC = () => {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <UserCircle />
-                {t('sidebar.profile')}
+              <DropdownMenuItem asChild>
+                <Link to={ROUTES.changePassword}>
+                  <ShieldCheck aria-hidden='true' />
+                  {t('sidebar.security')}
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link to={ROUTES.connectedApps}>

@@ -42,3 +42,12 @@ export const LazyConnectAuthorizeView = lazy(
 export const LazyConnectedAppsView = lazy(
   () => import('@/modules/auth/view/ConnectedAppsView')
 );
+export const LazyForgotPasswordView = lazy(
+  () => import('@/modules/auth/view/ForgotPasswordView')
+);
+export const LazyResetPasswordView = lazy(
+  () => import('@/modules/auth/view/ResetPasswordView')
+);
+export const LazyChangePasswordView = lazy(
+  () => import('@/modules/auth/view/ChangePasswordView')
+);

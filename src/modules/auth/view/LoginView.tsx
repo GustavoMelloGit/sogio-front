@@ -157,7 +157,7 @@ const LoginView: React.FC = () => {
 
               <div className='text-right'>
                 <Link
-                  to='/forgot-password'
+                  to={ROUTES.forgotPassword}
                   className='text-sm text-blue-600 hover:text-blue-500'
                 >
                   {t('login.forgotPasswordLink')}
