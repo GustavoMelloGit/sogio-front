@@ -2,7 +2,7 @@ import axios, { AxiosError } from 'axios';
 import { env } from './env';
 
 /**
- * Configuração base do Axios para a aplicação StayHub
+ * Configuração base do Axios para a aplicação Sogio
  * Define interceptors, base URL e configurações padrão
  */
 const api = axios.create({

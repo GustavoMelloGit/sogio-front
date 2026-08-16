@@ -58,7 +58,7 @@ export const AppSidebar: FC = () => {
             <Building2 className='h-4 w-4' />
           </div>
           <div className='grid flex-1 text-left text-sm leading-tight'>
-            <span className='truncate font-semibold'>StayHub</span>
+            <span className='truncate font-semibold'>Sogio</span>
             <span className='truncate text-xs text-muted-foreground'>
               {t('sidebar.tagline')}
             </span>
