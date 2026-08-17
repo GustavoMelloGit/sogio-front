@@ -6,5 +6,10 @@
     "goToLogin": "Go to Login",
     "supportMessagePrefix": "If you believe this is an error, please contact",
     "supportLinkLabel": "support"
+  },
+  "appError": {
+    "title": "Something went wrong",
+    "description": "The app could not load this screen. This usually happens right after an update — go back to the dashboard to load the latest version.",
+    "backToDashboard": "Back to Dashboard"
   }
 }

@@ -10,9 +10,12 @@ import { router } from './routes/index.tsx';
 import { queryClient } from './lib/query-client';
 import { Toaster } from '@/components/ui/sonner';
 import { ThemeColorMeta } from '@/components/ThemeColorMeta';
+import { AppErrorBoundary } from '@/components/AppErrorBoundary';
 import { setupPwaAutoUpdate } from '@/lib/pwa';
+import { setupStaleChunkRecovery } from '@/lib/stale-chunk';
 
 setupPwaAutoUpdate();
+setupStaleChunkRecovery();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -24,7 +27,9 @@ createRoot(document.getElementById('root')!).render(
     >
       <ThemeColorMeta />
       <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
+        <AppErrorBoundary>
+          <RouterProvider router={router} />
+        </AppErrorBoundary>
         <Toaster />
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>

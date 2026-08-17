@@ -22,7 +22,6 @@
   "appUpdate": {
     "title": "Nova versão disponível",
     "description": "Recarregue para receber as últimas atualizações.",
-    "action": "Recarregar",
-    "dismiss": "Depois"
+    "action": "Recarregar"
   }
 }

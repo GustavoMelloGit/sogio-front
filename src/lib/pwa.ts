@@ -15,8 +15,8 @@ const UPDATE_TOAST_ID = 'pwa-update-available';
  * The browser only looks for a new service worker on page load, and an
  * installed PWA can stay open for days without ever reloading. The checks
  * below run while the app is open, when it comes back to the foreground and
- * when connectivity returns. Once a new version is ready, the user decides
- * when to reload so that a deploy never wipes out a form mid-fill.
+ * when connectivity returns. Once a new version is ready the user is prompted
+ * to reload, and the prompt stays put until they do.
  */
 export function setupPwaAutoUpdate() {
   if (import.meta.env.DEV) return;
@@ -28,13 +28,12 @@ export function setupPwaAutoUpdate() {
         id: UPDATE_TOAST_ID,
         description: i18n.t('appUpdate.description'),
         duration: Infinity,
+        // Not dismissible on purpose: the old build keeps 404ing on chunks
+        // it has not loaded yet, so updating is the only way forward.
+        dismissible: false,
         action: {
           label: i18n.t('appUpdate.action'),
           onClick: () => void updateSW(true),
-        },
-        cancel: {
-          label: i18n.t('appUpdate.dismiss'),
-          onClick: () => toast.dismiss(UPDATE_TOAST_ID),
         },
       });
     },
