@@ -49,13 +49,21 @@ const PropertyDetailView: FC = () => {
     );
   }
 
+  // The topbar stays mounted on every state: it holds the sidebar trigger,
+  // which on mobile is the only way to leave this page.
   if (error) {
     return (
-      <div className='container mx-auto'>
-        <Alert variant='destructive' message={t('propertyDetail.errorTitle')}>
-          {t('propertyDetail.errorMessage')}
-        </Alert>
-        <div className='mt-4'>
+      <Page.Container>
+        <Page.Topbar
+          nav={[
+            { label: t('propertyList.title'), to: ROUTES.home },
+            { label: t('propertyDetail.errorTitle') },
+          ]}
+        />
+        <Page.Content>
+          <Alert variant='destructive' message={t('propertyDetail.errorTitle')}>
+            {t('propertyDetail.errorMessage')}
+          </Alert>
           <Link
             to='/'
             className={buttonVariants({
@@ -66,21 +74,27 @@ const PropertyDetailView: FC = () => {
             <ArrowLeft className='w-4 h-4 mr-2' />
             {t('propertyDetail.backToHome')}
           </Link>
-        </div>
-      </div>
+        </Page.Content>
+      </Page.Container>
     );
   }
 
   if (!property) {
     return (
-      <div className='container mx-auto px-4 py-8'>
-        <Alert
-          variant='destructive'
-          message={t('propertyDetail.notFoundTitle')}
-        >
-          {t('propertyDetail.notFoundMessage')}
-        </Alert>
-        <div className='mt-4'>
+      <Page.Container>
+        <Page.Topbar
+          nav={[
+            { label: t('propertyList.title'), to: ROUTES.home },
+            { label: t('propertyDetail.notFoundTitle') },
+          ]}
+        />
+        <Page.Content>
+          <Alert
+            variant='destructive'
+            message={t('propertyDetail.notFoundTitle')}
+          >
+            {t('propertyDetail.notFoundMessage')}
+          </Alert>
           <Link
             to='/'
             className={buttonVariants({
@@ -91,8 +105,8 @@ const PropertyDetailView: FC = () => {
             <ArrowLeft className='w-4 h-4 mr-2' />
             {t('propertyDetail.backToHome')}
           </Link>
-        </div>
-      </div>
+        </Page.Content>
+      </Page.Container>
     );
   }
 
