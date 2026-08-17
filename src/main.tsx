@@ -10,6 +10,9 @@ import { router } from './routes/index.tsx';
 import { queryClient } from './lib/query-client';
 import { Toaster } from '@/components/ui/sonner';
 import { ThemeColorMeta } from '@/components/ThemeColorMeta';
+import { setupPwaAutoUpdate } from '@/lib/pwa';
+
+setupPwaAutoUpdate();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
