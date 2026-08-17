@@ -10,7 +10,7 @@ export default defineConfig({
     react(),
     tailwindcss(),
     VitePWA({
-      registerType: 'autoUpdate',
+      registerType: 'prompt',
       // The service worker is registered manually in src/lib/pwa.ts.
       injectRegister: null,
       includeAssets: ['favicon.ico', 'favicon.svg', 'apple-touch-icon.png'],
