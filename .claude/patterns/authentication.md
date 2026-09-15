@@ -1,14 +1,20 @@
 # Authentication
 
-The auth token lives in `localStorage` under the key `auth_token`. The HTTP interceptor attaches it to every request automatically. Use `useAuth()` to access the current user inside protected components.
+The session lives in an `httpOnly` cookie written by the API. The front never sees the secret: `document.cookie` cannot read it, and there is nothing in `localStorage`. Axios sends it automatically because the instance in `lib/api.ts` is created with `withCredentials: true`.
+
+Two layers decide who sees what:
+
+- **`src/proxy.ts`** runs on the server and only checks whether the cookie exists, redirecting before any HTML is sent — this is what keeps a logged-in visitor from seeing the landing page flash by. It never validates the session; the API does.
+- **`ProtectedRoute` / `PublicRoute`** run in the browser and rely on `useAuthData()`, which asks `/auth/me`. A 401 there means anonymous, not an error.
 
 ## Rules
 
 - Read the current user via `useAuth()` — it throws if the user is not logged in (safe inside `ProtectedRoute`)
 - Read user + loading state via `useAuthData()` — use this at the app boundary where the user may not yet be loaded
-- Never read `localStorage.getItem('auth_token')` directly in a component
-- Never store extra user data in `localStorage` — use the React Query cache via `useAuthData()`
-- Token persistence (save / remove) is handled exclusively in `AuthService`
+- Never try to read the session cookie from JavaScript — it is `httpOnly` on purpose
+- Never store the user or the session in `localStorage` — use the React Query cache via `useAuthData()`
+- Log out with `useLogout()`, which calls `POST /auth/sign-out` so the session dies on the server too
+- A request that treats 401 as a normal answer (asking who the user is, checking a reset token) must pass `skipAuthRedirect: true`, or the global interceptor will bounce the browser to `/login`
 
 ## Do
 
@@ -20,21 +26,26 @@ console.log(user.id, user.email);
 // At the app boundary where user may still be loading
 const { user, isLoading } = useAuthData();
 if (isLoading) return <Spinner />;
+
+// Logging out
+const { logout } = useLogout();
+await logout();
 ```
 
 ## Don't
 
 ```ts
-// Wrong — reading the token directly in a component
+// Wrong — the session is httpOnly; this is always null
 const token = localStorage.getItem('auth_token');
-const user = parseJwt(token);
 
 // Wrong — storing auth data outside React Query
 localStorage.setItem('user', JSON.stringify(userData));
 
-// Wrong — checking auth manually instead of relying on ProtectedRoute
+// Wrong — checking auth manually instead of relying on proxy.ts + ProtectedRoute
 const MyPage = () => {
-  const token = localStorage.getItem('auth_token');
-  if (!token) return <Navigate to='/login' />;
+  if (!document.cookie.includes('sogio_session')) redirect('/login');
 };
+
+// Wrong — clearing local state and calling it a logout; the session stays alive on the server
+queryClient.setQueryData(['auth'], null);
 ```

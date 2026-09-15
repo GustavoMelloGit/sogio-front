@@ -14,11 +14,14 @@ import {
  * Fornece dados do usuário e estado de autenticação
  */
 export const useAuthData = () => {
+  // Sem checagem síncrona antes de perguntar: o cookie da sessão é
+  // `httpOnly`, então o navegador não consegue dizer se existe. Quem
+  // responde é a API, e um 401 aqui significa visitante anônimo.
   const { data: authData, isLoading } = useQuery({
     queryKey: ['auth'],
     queryFn: () => AuthService.getAuthData(),
     staleTime: 5 * 60 * 1000, // 5 minutos
-    enabled: AuthService.isAuthenticated(),
+    retry: false,
   });
 
   return {
@@ -39,7 +42,6 @@ export const useSignin = () => {
     mutationFn: (credentials: LoginCredentials) =>
       AuthService.login(credentials),
     onSuccess: (data: AuthResponse) => {
-      AuthService.saveAuthData(data);
       queryClient.setQueryData(['auth'], data.user);
     },
   });
@@ -61,7 +63,6 @@ export const useSignup = () => {
   const signupMutation = useMutation({
     mutationFn: (credentials: SignupRequest) => AuthService.signup(credentials),
     onSuccess: (data: AuthResponse) => {
-      AuthService.saveAuthData(data);
       queryClient.setQueryData(['auth'], data.user);
     },
   });
@@ -74,24 +75,31 @@ export const useSignup = () => {
 };
 
 /**
- * Hook para realizar logout
- * Fornece função de logout que invalida todas as queries
+ * Hook para realizar logout.
+ *
+ * Pede à API para encerrar a sessão — é ela quem apaga o cookie — e só então
+ * limpa a cache. A falha da chamada não impede a limpeza local: se a rede
+ * caiu, sair da tela ainda é o que a pessoa pediu, e a sessão morre sozinha
+ * na expiração.
  */
 export const useLogout = () => {
   const queryClient = useQueryClient();
 
-  const logout = () => {
-    AuthService.logout();
-    queryClient.setQueryData(['auth'], null);
-    queryClient.invalidateQueries();
+  const logout = async () => {
+    try {
+      await AuthService.signOut();
+    } finally {
+      queryClient.setQueryData(['auth'], null);
+      await queryClient.invalidateQueries();
+    }
   };
 
   return { logout };
 };
 
 /**
- * Hook para alterar a senha do usuário autenticado. Não mexe na sessão nem
- * na cache de auth — a troca não afeta o token nem os dados do usuário.
+ * Hook para alterar a senha do usuário autenticado. A sessão atual sobrevive
+ * à troca — a API encerra as outras —, então não há cache a invalidar aqui.
  */
 export const useChangePassword = () => {
   const mutation = useMutation({

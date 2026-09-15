@@ -46,38 +46,24 @@ export class AuthService {
   }
 
   /**
-   * Realiza logout do usuário
-   * Remove token do localStorage
+   * Encerra a sessão no servidor. Antes o logout só apagava o
+   * `localStorage`, e o token continuava valendo para quem o tivesse copiado.
    */
-  static logout(): void {
-    localStorage.removeItem('auth_token');
-    localStorage.removeItem('user_data');
+  static async signOut(): Promise<void> {
+    await api.post('/auth/sign-out', undefined, { skipAuthRedirect: true });
   }
 
   /**
-   * Salva dados de autenticação no localStorage
-   * @param authData - Dados de autenticação (usuário e token)
-   */
-  static saveAuthData(authData: AuthResponse): void {
-    localStorage.setItem('auth_token', authData.token);
-    localStorage.setItem('user_data', JSON.stringify(authData.user));
-  }
-
-  /**
-   * Recupera dados de autenticação do localStorage
-   * @returns Dados de autenticação ou null se não encontrados
+   * Usuário da sessão atual, resolvido pela API a partir do cookie.
    */
   static async getAuthData(): Promise<User | null> {
-    const response = await api.get<User>('/auth/me');
+    // `skipAuthRedirect`: aqui o 401 é a resposta esperada para quem não tem
+    // sessão, e não sessão expirada. Sem isso, a tela de login se
+    // redirecionaria para si mesma em laço ao perguntar quem é o usuário.
+    const response = await api.get<User>('/auth/me', {
+      skipAuthRedirect: true,
+    });
     return response.data;
-  }
-
-  /**
-   * Verifica se o usuário está autenticado
-   * @returns true se autenticado, false caso contrário
-   */
-  static isAuthenticated(): boolean {
-    return !!localStorage.getItem('auth_token');
   }
 
   /**

@@ -16,6 +16,12 @@ const envSchema = z.object({
    * `<head>` do HTML estático pela Metadata API do layout raiz.
    */
   NEXT_PUBLIC_GSC_VERIFICATION: z.string().trim().optional(),
+  /**
+   * Nome do cookie de sessão gravado pela API. O front não lê o valor — é
+   * `httpOnly` —, só verifica a presença no `proxy.ts` para decidir
+   * redirecionamento. Precisa bater com `SESSION_COOKIE_NAME` da API.
+   */
+  NEXT_PUBLIC_SESSION_COOKIE_NAME: z.string().trim().default('sogio_session'),
 });
 
 /**
@@ -34,6 +40,8 @@ function validateEnv(): Env {
       NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
       NEXT_PUBLIC_CLARITY_ID: process.env.NEXT_PUBLIC_CLARITY_ID,
       NEXT_PUBLIC_GSC_VERIFICATION: process.env.NEXT_PUBLIC_GSC_VERIFICATION,
+      NEXT_PUBLIC_SESSION_COOKIE_NAME:
+        process.env.NEXT_PUBLIC_SESSION_COOKIE_NAME,
     });
   } catch (error) {
     if (error instanceof z.ZodError) {
