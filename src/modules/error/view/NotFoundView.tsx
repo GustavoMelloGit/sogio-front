@@ -1,4 +1,6 @@
-import { Link } from 'react-router-dom';
+'use client';
+
+import Link from 'next/link';
 import { buttonVariants } from '@/components/ui/button';
 import { ROUTES } from '@/routes/routes';
 import { useTranslation } from '@/i18n/useTranslation';
@@ -20,7 +22,7 @@ export const NotFoundView: FC = () => {
 
         <div className='space-y-4'>
           <Link
-            to={ROUTES.home}
+            href={ROUTES.home}
             className={buttonVariants({
               variant: 'outline',
               className: 'w-full',
@@ -31,7 +33,7 @@ export const NotFoundView: FC = () => {
           </Link>
 
           <Link
-            to={ROUTES.login}
+            href={ROUTES.login}
             className={buttonVariants({
               variant: 'outline',
               className: 'w-full',

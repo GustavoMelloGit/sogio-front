@@ -1,10 +1,13 @@
+'use client';
+
 import { type FC, type ReactNode } from 'react';
 import { useTranslation } from '@/i18n/useTranslation';
 import { useUserProperties } from '../service/PropertyService.hooks';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Alert } from '@/components/Alert';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Link, useNavigate } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { ROUTES } from '@/routes/routes';
 import { Page } from '@/components/layout/Page';
 import { Plus } from 'lucide-react';
@@ -12,7 +15,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 const PropertyListView: FC = () => {
   const { t } = useTranslation(['property', 'common']);
-  const navigate = useNavigate();
+  const router = useRouter();
   const { properties, isLoading, error } = useUserProperties();
 
   /**
@@ -63,7 +66,7 @@ const PropertyListView: FC = () => {
           <p className='text-gray-500 mb-6'>
             {t('propertyList.emptyState.description')}
           </p>
-          <Button onClick={() => navigate(ROUTES.createProperty)}>
+          <Button onClick={() => router.push(ROUTES.createProperty)}>
             {t('propertyList.emptyState.cta')}
           </Button>
         </div>
@@ -85,7 +88,7 @@ const PropertyListView: FC = () => {
               <CardContent className='pt-2 px-4 space-y-4'>
                 <CardTitle>{property.name}</CardTitle>
                 <Link
-                  to={ROUTES.property(property.id)}
+                  href={ROUTES.property(property.id)}
                   className={buttonVariants({
                     variant: 'default',
                     className: 'w-full',
@@ -113,7 +116,7 @@ const PropertyListView: FC = () => {
         title={t('propertyList.title')}
         description={t('propertyList.description')}
         actions={
-          <Button onClick={() => navigate(ROUTES.createProperty)}>
+          <Button onClick={() => router.push(ROUTES.createProperty)}>
             <Plus className='w-4 h-4' />
             {t('propertyList.newPropertyButton')}
           </Button>

@@ -1,3 +1,5 @@
+'use client';
+
 import {
   useEffect,
   useMemo,
@@ -6,7 +8,8 @@ import {
   type FC,
   type PropsWithChildren,
 } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -61,7 +64,7 @@ const useFocusHeadingOnChange = (dependency: unknown) => {
 
 const ResetPasswordView: FC = () => {
   const { t } = useTranslation('auth');
-  const [searchParams] = useSearchParams();
+  const searchParams = useSearchParams();
   const token = searchParams.get('token');
   const [submitState, setSubmitState] = useState<SubmitState>('form');
   const headingRef = useFocusHeadingOnChange(submitState);
@@ -124,7 +127,7 @@ const ResetPasswordView: FC = () => {
           />
 
           <Link
-            to={ROUTES.forgotPassword}
+            href={ROUTES.forgotPassword}
             className={buttonVariants({ className: 'w-full' })}
           >
             {t('resetPassword.requestNewLinkButton')}
@@ -132,7 +135,7 @@ const ResetPasswordView: FC = () => {
 
           <div className='text-center'>
             <Link
-              to={ROUTES.login}
+              href={ROUTES.login}
               className='text-sm text-blue-600 hover:text-blue-500'
             >
               {t('resetPassword.backToLoginLink')}
@@ -164,7 +167,7 @@ const ResetPasswordView: FC = () => {
           />
 
           <Link
-            to={ROUTES.forgotPassword}
+            href={ROUTES.forgotPassword}
             className={buttonVariants({ className: 'w-full' })}
           >
             {t('resetPassword.requestNewLinkButton')}
@@ -172,7 +175,7 @@ const ResetPasswordView: FC = () => {
 
           <div className='text-center'>
             <Link
-              to={ROUTES.login}
+              href={ROUTES.login}
               className='text-sm text-blue-600 hover:text-blue-500'
             >
               {t('resetPassword.backToLoginLink')}
@@ -202,7 +205,7 @@ const ResetPasswordView: FC = () => {
           </p>
 
           <Link
-            to={ROUTES.login}
+            href={ROUTES.login}
             className={buttonVariants({ className: 'w-full' })}
           >
             {t('resetPassword.goToLoginButton')}
@@ -210,7 +213,7 @@ const ResetPasswordView: FC = () => {
 
           <p className='text-xs text-muted-foreground'>
             {t('resetPassword.connectedAppsHint')}{' '}
-            <Link to={ROUTES.connectedApps} className='underline'>
+            <Link href={ROUTES.connectedApps} className='underline'>
               {t('resetPassword.connectedAppsLink')}
             </Link>
           </p>

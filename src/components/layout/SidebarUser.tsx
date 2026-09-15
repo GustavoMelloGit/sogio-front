@@ -31,7 +31,7 @@ import {
 } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import type { FC } from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { useTranslation } from '@/i18n/useTranslation';
 
 export const SidebarUser: FC = () => {
@@ -92,19 +92,19 @@ export const SidebarUser: FC = () => {
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem asChild>
-                <Link to={ROUTES.changePassword}>
+                <Link href={ROUTES.changePassword}>
                   <ShieldCheck aria-hidden='true' />
                   {t('sidebar.security')}
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link to={ROUTES.connectedApps}>
+                <Link href={ROUTES.connectedApps}>
                   <Plug />
                   {t('sidebar.connectedApps')}
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link to={ROUTES.billingSettings}>
+                <Link href={ROUTES.billingSettings}>
                   <CreditCard />
                   {t('sidebar.billing')}
                 </Link>

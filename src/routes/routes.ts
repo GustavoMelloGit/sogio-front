@@ -32,3 +32,13 @@ export const ROUTES = {
   forgotPassword: '/forgot-password',
   resetPassword: '/reset-password',
 } as const;
+
+/** Query param que leva ao login o caminho para onde voltar depois dele. */
+export const RETURN_PARAM = 'from';
+
+/**
+ * Destino depois do login. Só aceita caminho relativo ao próprio site: um
+ * `?from=//outro.site` ou `?from=https://...` viraria redirecionamento aberto.
+ */
+export const returnPath = (from: string | null | undefined): string =>
+  from && /^\/(?![/\\])/.test(from) ? from : ROUTES.home;

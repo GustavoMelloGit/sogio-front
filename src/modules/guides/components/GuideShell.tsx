@@ -1,5 +1,7 @@
+'use client';
+
 import { useEffect, type ReactNode } from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { Moon, Sun } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ROUTES } from '@/routes/routes';
@@ -41,7 +43,7 @@ export const GuideShell = ({ children }: { children: ReactNode }) => {
       <header className='fixed inset-x-0 top-0 z-50 px-4 py-3 md:px-6 md:py-4'>
         <div className='lp-glass mx-auto flex w-full max-w-6xl items-center gap-3 rounded-full py-2 pr-2 pl-4 md:pl-6'>
           <Link
-            to={ROUTES.landing}
+            href={ROUTES.landing}
             className='text-lp-text mr-auto text-xl font-bold tracking-tight md:text-2xl'
           >
             Sogio
@@ -86,13 +88,13 @@ export const GuideShell = ({ children }: { children: ReactNode }) => {
           </p>
           <div className='flex flex-wrap gap-x-6 gap-y-2'>
             <Link
-              to={ROUTES.guides}
+              href={ROUTES.guides}
               className='text-lp-muted hover:text-lp-text inline-flex min-h-11 items-center text-base transition-colors'
             >
               Todos os guias
             </Link>
             <Link
-              to={ROUTES.landing}
+              href={ROUTES.landing}
               className='text-lp-muted hover:text-lp-text inline-flex min-h-11 items-center text-base transition-colors'
             >
               Página inicial

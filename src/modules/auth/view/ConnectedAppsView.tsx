@@ -1,3 +1,5 @@
+'use client';
+
 import type { FC } from 'react';
 import { Page } from '@/components/layout/Page';
 import { Alert } from '@/components/Alert';

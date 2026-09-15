@@ -3,10 +3,9 @@
  * Tudo passa por aqui para que exista um único ponto que decide se animar é
  * permitido.
  *
- * O script de pré-renderização (`scripts/prerender.mjs`) roda o navegador com
- * `prefers-reduced-motion: reduce`, então esta mesma checagem faz o HTML
- * estático sair com todo o conteúdo em seu estado final — que é o que os
- * buscadores e os crawlers de IA leem.
+ * No servidor esta checagem é sempre falsa, então o HTML estático sai com todo
+ * o conteúdo em seu estado final — que é o que os buscadores e os crawlers de
+ * IA leem. Chame só depois de hidratar, nunca no render.
  */
 export const canAnimate = (): boolean => {
   if (typeof window === 'undefined') return false;

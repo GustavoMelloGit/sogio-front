@@ -13,7 +13,7 @@ All HTTP requests go through the Axios instance in `lib/api.ts`. Never create a 
 
 ```ts
 // lib/api.ts (read-only reference — do not duplicate this)
-const api = axios.create({ baseURL: env.VITE_API_URL, timeout: 10_000 });
+const api = axios.create({ baseURL: env.NEXT_PUBLIC_API_URL, timeout: 10_000 });
 
 // Request interceptor — attaches token automatically
 api.interceptors.request.use(config => {
@@ -59,6 +59,6 @@ const myApi = axios.create({ baseURL: '...' });
 
 // Wrong — manually handling 401 in a component
 if (error.response?.status === 401) {
-  navigate('/login');
+  router.push('/login');
 }
 ```

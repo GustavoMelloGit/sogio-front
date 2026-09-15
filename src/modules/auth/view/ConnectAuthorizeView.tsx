@@ -1,3 +1,5 @@
+'use client';
+
 import {
   useEffect,
   useRef,
@@ -5,7 +7,8 @@ import {
   type FC,
   type PropsWithChildren,
 } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
 import {
   Card,
@@ -84,7 +87,7 @@ const UpgradeRequiredCard: FC<{
     </CardHeader>
     <CardContent>
       <Link
-        to={ROUTES.billingSettings}
+        href={ROUTES.billingSettings}
         className={buttonVariants({ size: 'lg', className: 'w-full' })}
       >
         {t('connectAuthorize.upgradeRequiredButton')}
@@ -108,17 +111,16 @@ const LoadingCard: FC = () => (
 );
 
 /**
- * Tela de consentimento OAuth. Não usa `ProtectedRoute`: `ProtectedRoute`/
- * `LoginView` hoje só restauram `location.state.from.pathname` no retorno do
- * login, nunca `.search` — envolver esta rota nele perderia `?request_id=`
- * sempre que o usuário precisasse logar durante o fluxo. Em vez disso, a
- * própria tela trata "não autenticado" sem navegar para lugar nenhum (ver
+ * Tela de consentimento OAuth. Não usa `ProtectedRoute`: mandar o usuário
+ * para `/login` no meio do fluxo arrisca perder `?request_id=` e tira a pessoa
+ * da tela de consentimento. Em vez disso, a própria tela trata "não
+ * autenticado" sem navegar para lugar nenhum (ver
  * `InlineSigninForm`), o que também evita depender do redirect global do
  * axios em 401 para esta rota.
  */
 const ConnectAuthorizeView: FC = () => {
   const { t } = useTranslation('auth');
-  const [searchParams] = useSearchParams();
+  const searchParams = useSearchParams();
   const requestId = searchParams.get('request_id');
   const queryClient = useQueryClient();
 

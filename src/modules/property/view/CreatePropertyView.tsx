@@ -1,5 +1,7 @@
+'use client';
+
 import { type FC, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import z from 'zod';
@@ -43,14 +45,14 @@ type FormData = z.infer<ReturnType<typeof createFormSchema>>;
 
 const CreatePropertyView: FC = () => {
   const { t } = useTranslation(['property']);
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const formSchema = useMemo(() => createFormSchema(t), [t]);
 
   const { mutate, isLoading, error } = useCreateProperty({
     onSuccess: property => {
       queryClient.invalidateQueries({ queryKey: ['properties'] });
-      navigate(ROUTES.property(property.id));
+      router.push(ROUTES.property(property.id));
     },
   });
 
@@ -377,7 +379,7 @@ const CreatePropertyView: FC = () => {
                 <Button
                   type='button'
                   variant='outline'
-                  onClick={() => navigate(ROUTES.home)}
+                  onClick={() => router.push(ROUTES.home)}
                   className='flex-1'
                 >
                   {t('createProperty.cancel')}

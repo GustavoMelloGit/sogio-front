@@ -8,23 +8,23 @@ When this persona is active, you implement what was designed — you do not make
 
 ## Tech Stack
 
-| Concern       | Tool                                          |
-| ------------- | --------------------------------------------- |
-| Framework     | React 19 + TypeScript                         |
-| Build         | Vite                                          |
-| Routing       | React Router v7                               |
-| Server state  | TanStack React Query v5                       |
-| Client state  | Zustand                                       |
-| Styling       | Tailwind CSS v4 (utility-first, mobile-first) |
-| Components    | Radix UI primitives via shadcn/ui wrappers    |
-| Variants      | Class Variance Authority (CVA)                |
-| Class merging | `cn()` = clsx + tailwind-merge                |
-| Forms         | React Hook Form + Zod resolvers               |
-| Icons         | lucide-react                                  |
-| Notifications | sonner (Toaster)                              |
-| Charts        | recharts                                      |
-| Dark mode     | next-themes                                   |
-| Animations    | tw-animate-css                                |
+| Concern       | Tool                                                   |
+| ------------- | ------------------------------------------------------ |
+| Framework     | Next.js 16 (App Router) + React 19 + TS                |
+| Build         | Next.js (Turbopack)                                    |
+| Routing       | File-based, `src/app/`; `next/link`, `next/navigation` |
+| Server state  | TanStack React Query v5                                |
+| Client state  | Zustand                                                |
+| Styling       | Tailwind CSS v4 (utility-first, mobile-first)          |
+| Components    | Radix UI primitives via shadcn/ui wrappers             |
+| Variants      | Class Variance Authority (CVA)                         |
+| Class merging | `cn()` = clsx + tailwind-merge                         |
+| Forms         | React Hook Form + Zod resolvers                        |
+| Icons         | lucide-react                                           |
+| Notifications | sonner (Toaster)                                       |
+| Charts        | recharts                                               |
+| Dark mode     | next-themes                                            |
+| Animations    | tw-animate-css                                         |
 
 ---
 
@@ -48,7 +48,7 @@ Always use existing components from `src/components/ui/` before building anythin
 | `Tabs`           | Radix Tabs with active state                                                                                      |
 | `Table`          | `Table`, `TableHeader`, `TableBody`, `TableRow`, `TableHead`, `TableCell`, `TableCaption`                         |
 | `Pagination`     | Prev/next + page numbers                                                                                          |
-| `Breadcrumb`     | React Router-integrated breadcrumb                                                                                |
+| `Breadcrumb`     | `next/link`-integrated breadcrumb                                                                                 |
 | `Avatar`         | Image with initials fallback                                                                                      |
 | `Tooltip`        | Zero-delay `TooltipProvider` wrapping                                                                             |
 | `Skeleton`       | Animate-pulse loader blocks                                                                                       |
@@ -90,7 +90,7 @@ src/modules/<module>/
     <module>Service.ts          # static async API methods
     <module>Service.hooks.ts    # useQuery / useMutation hooks
   view/
-    <Module>View.tsx            # top-level page component (lazy-loaded)
+    <Module>View.tsx            # page component, rendered by `src/app/**/page.tsx`
   components/
     <feature>/
       <Feature>.tsx

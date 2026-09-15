@@ -1,7 +1,9 @@
+'use client';
+
 import React from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
+import { redirect, usePathname, useSearchParams } from 'next/navigation';
 import { useAuthData } from '@/modules/auth/service/AuthService.hooks';
-import { ROUTES } from '@/routes/routes';
+import { RETURN_PARAM, ROUTES } from '@/routes/routes';
 import { AuthLoadingSpinner } from './AuthLoadingSpinner';
 
 interface ProtectedRouteProps {
@@ -14,16 +16,21 @@ interface ProtectedRouteProps {
  */
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const { isAuthenticated, isLoading } = useAuthData();
-  const location = useLocation();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   // Mostra loading enquanto verifica autenticação
   if (isLoading) {
     return <AuthLoadingSpinner />;
   }
 
-  // Se não estiver autenticado, redireciona para login
+  // Se não estiver autenticado, redireciona para login levando o caminho atual
   if (!isAuthenticated) {
-    return <Navigate to={ROUTES.login} state={{ from: location }} replace />;
+    const search = searchParams.toString();
+    const from = search ? `${pathname}?${search}` : pathname;
+    redirect(
+      `${ROUTES.login}?${new URLSearchParams({ [RETURN_PARAM]: from })}`
+    );
   }
 
   // Se autenticado, renderiza o conteúdo protegido

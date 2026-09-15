@@ -36,7 +36,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { toClipboard } from '@/lib/utils';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { useNamespacedFilters } from '@/hooks/useNamespacedFilters';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useTranslation } from '@/i18n/useTranslation';
@@ -285,7 +285,7 @@ export const PropertyStaysList: FC<Props> = ({ propertyId }) => {
               render: row => (
                 <div className='flex gap-2'>
                   <Link
-                    to={ROUTES.stayDetail(propertyId, row.id)}
+                    href={ROUTES.stayDetail(propertyId, row.id)}
                     className={buttonVariants({
                       variant: 'outline',
                       size: 'icon',

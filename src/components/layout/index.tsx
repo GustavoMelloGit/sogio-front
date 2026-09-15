@@ -1,3 +1,5 @@
+'use client';
+
 import { Suspense, type FC, type PropsWithChildren } from 'react';
 import '@/i18n/appNamespaces';
 import { SidebarProvider } from '../ui/sidebar';

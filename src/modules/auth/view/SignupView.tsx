@@ -1,6 +1,9 @@
+'use client';
+
 import type React from 'react';
-import { useNavigate, Link, useLocation } from 'react-router-dom';
-import { ROUTES } from '@/routes/routes';
+import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { RETURN_PARAM, ROUTES, returnPath } from '@/routes/routes';
 import {
   Card,
   CardContent,
@@ -17,12 +20,11 @@ import { SignupForm } from '../components/SignupForm';
  */
 const SignupView: React.FC = () => {
   const { t } = useTranslation('auth');
-  const navigate = useNavigate();
-  const location = useLocation();
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   const handleSuccess = (): void => {
-    const from = location.state?.from?.pathname || ROUTES.home;
-    navigate(from, { replace: true });
+    router.replace(returnPath(searchParams.get(RETURN_PARAM)));
   };
 
   return (
@@ -44,7 +46,7 @@ const SignupView: React.FC = () => {
             <span className='text-sm text-muted-foreground'>
               {t('signup.alreadyHaveAccountText')}{' '}
               <Link
-                to={ROUTES.login}
+                href={ROUTES.login}
                 className='font-medium text-blue-600 hover:text-blue-500'
               >
                 {t('signup.loginLink')}
@@ -54,11 +56,11 @@ const SignupView: React.FC = () => {
 
           <div className='text-xs text-muted-foreground'>
             {t('signup.termsText')}{' '}
-            <Link to='/terms' className='text-blue-600 hover:text-blue-500'>
+            <Link href='/terms' className='text-blue-600 hover:text-blue-500'>
               {t('signup.termsLink')}
             </Link>{' '}
             {t('signup.andConnector')}{' '}
-            <Link to='/privacy' className='text-blue-600 hover:text-blue-500'>
+            <Link href='/privacy' className='text-blue-600 hover:text-blue-500'>
               {t('signup.privacyLink')}
             </Link>
             .

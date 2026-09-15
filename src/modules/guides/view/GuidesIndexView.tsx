@@ -1,18 +1,10 @@
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { ROUTES } from '@/routes/routes';
-import { GUIDES_INDEX, GUIDES_INDEX_BREADCRUMB } from '@/seo/buildGuideHead';
+import { GUIDES_INDEX } from '@/seo/guideMetadata';
 import { GUIDES } from '../service/guides';
 import { GuideShell } from '../components/GuideShell';
-import { useGuideSeo } from '../seo/useGuideSeo';
 
 const GuidesIndexView = () => {
-  useGuideSeo({
-    title: GUIDES_INDEX.title,
-    description: GUIDES_INDEX.description,
-    path: ROUTES.guides,
-    breadcrumb: GUIDES_INDEX_BREADCRUMB,
-  });
-
   return (
     <GuideShell>
       <div className='mx-auto w-full max-w-4xl px-5 pt-28 pb-12 md:px-8 md:pt-36 md:pb-16'>
@@ -28,7 +20,7 @@ const GuidesIndexView = () => {
           {GUIDES.map(guide => (
             <li key={guide.slug}>
               <Link
-                to={ROUTES.guide(guide.slug)}
+                href={ROUTES.guide(guide.slug)}
                 className='border-lp-border bg-lp-surface hover:border-lp-brand block rounded-2xl border p-6 transition-colors md:p-7'
               >
                 <h2 className='text-lp-text text-xl font-semibold md:text-2xl'>

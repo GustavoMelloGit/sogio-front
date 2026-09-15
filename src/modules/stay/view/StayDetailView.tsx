@@ -1,5 +1,8 @@
+'use client';
+
 import { useState, type FC, type ReactNode } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import Link from 'next/link';
+import { useParams, useRouter } from 'next/navigation';
 import { useTranslation } from '@/i18n/useTranslation';
 import { INTL_LOCALES } from '@/i18n/locale-maps';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -100,7 +103,7 @@ export const StayDetailView: FC = () => {
     property_id: string;
   }>();
   const [selectedStay, setSelectedStay] = useState<Stay | null>(null);
-  const navigate = useNavigate();
+  const router = useRouter();
   const { data: stay, isLoading, error } = useGetStay(stay_id || '');
   const { mutate: cancelStay, isPending: isCancelingStay } = useCancelStay({
     onSuccess: () => {
@@ -108,7 +111,7 @@ export const StayDetailView: FC = () => {
       queryClient.invalidateQueries({ queryKey: ['stayWithTenant'] });
       queryClient.invalidateQueries({ queryKey: ['propertyStays'] });
       queryClient.invalidateQueries({ queryKey: ['finance-movements'] });
-      navigate(ROUTES.property(property_id || ''), { replace: true });
+      router.replace(ROUTES.property(property_id || ''));
     },
     onError: () => {
       toast.error(t('stayDetail.toasts.cancelError'));
@@ -201,7 +204,7 @@ export const StayDetailView: FC = () => {
           </Alert>
           <div className='mt-4'>
             <Link
-              to={ROUTES.home}
+              href={ROUTES.home}
               className={buttonVariants({
                 variant: 'outline',
                 className: 'w-full',

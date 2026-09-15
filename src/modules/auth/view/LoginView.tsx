@@ -1,5 +1,8 @@
+'use client';
+
 import React, { useMemo } from 'react';
-import { useNavigate, Link, useLocation } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -15,7 +18,7 @@ import {
 } from '@/components/ui/form';
 import { useSignin } from '@/modules/auth/service/AuthService.hooks';
 import { Alert } from '@/components/Alert';
-import { ROUTES } from '@/routes/routes';
+import { RETURN_PARAM, ROUTES, returnPath } from '@/routes/routes';
 import {
   Card,
   CardContent,
@@ -36,8 +39,8 @@ type LoginFormData = {
  */
 const LoginView: React.FC = () => {
   const { t } = useTranslation('auth');
-  const navigate = useNavigate();
-  const location = useLocation();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const { signin, isSigninLoading, signinError } = useSignin();
 
   const loginSchema = useMemo(
@@ -65,8 +68,7 @@ const LoginView: React.FC = () => {
   const onSubmit = (data: LoginFormData): void => {
     signin(data, {
       onSuccess: () => {
-        const from = location.state?.from?.pathname || ROUTES.home;
-        navigate(from, { replace: true });
+        router.replace(returnPath(searchParams.get(RETURN_PARAM)));
       },
       onError: error => {
         console.error(t('login.consoleErrorPrefix'), error);
@@ -147,7 +149,7 @@ const LoginView: React.FC = () => {
                 <span className='text-sm text-muted-foreground'>
                   {t('login.noAccountText')}{' '}
                   <Link
-                    to='/signup'
+                    href='/signup'
                     className='font-medium text-blue-600 hover:text-blue-500'
                   >
                     {t('login.signupLink')}
@@ -157,7 +159,7 @@ const LoginView: React.FC = () => {
 
               <div className='text-right'>
                 <Link
-                  to={ROUTES.forgotPassword}
+                  href={ROUTES.forgotPassword}
                   className='text-sm text-blue-600 hover:text-blue-500'
                 >
                   {t('login.forgotPasswordLink')}

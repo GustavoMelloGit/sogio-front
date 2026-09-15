@@ -1,5 +1,5 @@
 import { Moon, Sun } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { ROUTES } from '@/routes/routes';
 import { useTranslation } from '@/i18n/useTranslation';
@@ -43,7 +43,7 @@ export const LandingHeader = ({
           Magie. O `lp-glass` traz o desfoque e o brilho especular. */}
       <div className='lp-glass mx-auto flex w-full max-w-6xl items-center gap-3 rounded-full py-2 pr-2 pl-4 md:pl-6'>
         <Link
-          to={ROUTES.landing}
+          href={ROUTES.landing}
           className='text-lp-text text-xl font-bold tracking-tight md:text-2xl'
         >
           Sogio
