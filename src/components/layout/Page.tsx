@@ -27,8 +27,15 @@ const Container: FC<ComponentProps<'main'>> = ({
 };
 
 type BaseNav = { label: string };
-type LinkNav = BaseNav & ComponentProps<typeof BreadcrumbLink> & { to: string };
+type LinkNav = BaseNav &
+  Omit<ComponentProps<typeof BreadcrumbLink>, 'href'> & { to: string };
 type PageNav = BaseNav & ComponentProps<typeof BreadcrumbPage> & { to?: never };
+
+const NavLink: FC<LinkNav> = ({ label, to, ...props }) => (
+  <BreadcrumbLink {...props} href={to}>
+    {label}
+  </BreadcrumbLink>
+);
 
 type TopbarProps = ComponentProps<'nav'> & {
   nav?: Array<LinkNav | PageNav>;
@@ -54,7 +61,7 @@ const Topbar: FC<TopbarProps> = ({ children, className, nav, ...props }) => {
                 <BreadcrumbList className='md:hidden'>
                   <BreadcrumbItem>
                     <BreadcrumbLink
-                      to={parent.to}
+                      href={parent.to}
                       className='flex items-center gap-1 truncate max-w-[200px]'
                     >
                       <ChevronLeft
@@ -74,7 +81,7 @@ const Topbar: FC<TopbarProps> = ({ children, className, nav, ...props }) => {
               <Fragment key={item.label}>
                 <BreadcrumbItem>
                   {item.to ? (
-                    <BreadcrumbLink {...item}>{item.label}</BreadcrumbLink>
+                    <NavLink {...item} />
                   ) : (
                     <BreadcrumbPage {...item}>{item.label}</BreadcrumbPage>
                   )}

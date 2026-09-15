@@ -1,47 +1,23 @@
-import { useMemo } from 'react';
-import { Link, Navigate, useParams } from 'react-router-dom';
+import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { ROUTES } from '@/routes/routes';
 import { LandingCta } from '@/modules/landing/components/LandingCta';
-import { GUIDES_INDEX_BREADCRUMB, guideBreadcrumb } from '@/seo/buildGuideHead';
-import { findGuide, GUIDES } from '../service/guides';
+import { GUIDES } from '../service/guides';
+import type { Guide } from '../types/Guide';
 import { GuideShell } from '../components/GuideShell';
-import { useGuideSeo } from '../seo/useGuideSeo';
 
-const GuideView = () => {
-  const { slug } = useParams<{ slug: string }>();
-  const guide = findGuide(slug);
+interface GuideViewProps {
+  guide: Guide;
+}
 
-  const breadcrumb = useMemo(
-    () =>
-      guide
-        ? guideBreadcrumb(guide.slug, guide.title)
-        : GUIDES_INDEX_BREADCRUMB,
-    [guide]
-  );
-
-  const article = useMemo(
-    () => (guide ? { updatedAt: guide.updatedAt } : undefined),
-    [guide]
-  );
-
-  useGuideSeo({
-    title: guide?.title ?? 'Guia não encontrado',
-    description: guide?.description ?? '',
-    path: guide ? ROUTES.guide(guide.slug) : ROUTES.guides,
-    article,
-    breadcrumb,
-  });
-
-  if (!guide) return <Navigate to={ROUTES.guides} replace />;
-
+const GuideView = ({ guide }: GuideViewProps) => {
   const outros = GUIDES.filter(item => item.slug !== guide.slug).slice(0, 3);
 
   return (
     <GuideShell>
       <article className='mx-auto w-full max-w-3xl px-5 pt-28 pb-12 md:px-8 md:pt-36 md:pb-16'>
         <Link
-          to={ROUTES.guides}
+          href={ROUTES.guides}
           className='text-lp-muted hover:text-lp-text inline-flex min-h-11 items-center gap-2 text-base transition-colors'
         >
           <ArrowLeft className='size-4' aria-hidden />
@@ -101,7 +77,7 @@ const GuideView = () => {
               {outros.map(item => (
                 <li key={item.slug}>
                   <Link
-                    to={ROUTES.guide(item.slug)}
+                    href={ROUTES.guide(item.slug)}
                     className='border-lp-border bg-lp-surface hover:border-lp-brand block rounded-2xl border p-5 transition-colors'
                   >
                     <span className='text-lp-text block text-lg font-semibold'>

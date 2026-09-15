@@ -18,10 +18,5 @@
   },
   "actions": {
     "viewAll": "Ver todas"
-  },
-  "appUpdate": {
-    "title": "Nova versão disponível",
-    "description": "Recarregue para receber as últimas atualizações.",
-    "action": "Recarregar"
   }
 }

@@ -45,7 +45,7 @@ export function buildUrlWithParams(
   baseUrl: string,
   filters?: Record<string, unknown>
 ): string {
-  const url = new URL(baseUrl, env.VITE_API_URL); // URL base temporária para parsing
+  const url = new URL(baseUrl, env.NEXT_PUBLIC_API_URL); // URL base temporária para parsing
 
   if (filters) {
     const queryParams = objectToQueryParams(filters);

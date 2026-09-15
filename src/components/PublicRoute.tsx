@@ -1,7 +1,9 @@
+'use client';
+
 import React from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
+import { redirect, useSearchParams } from 'next/navigation';
 import { useAuthData } from '@/modules/auth/service/AuthService.hooks';
-import { ROUTES } from '@/routes/routes';
+import { RETURN_PARAM, returnPath } from '@/routes/routes';
 import { AuthLoadingSpinner } from './AuthLoadingSpinner';
 
 interface PublicRouteProps {
@@ -14,7 +16,7 @@ interface PublicRouteProps {
  */
 export const PublicRoute: React.FC<PublicRouteProps> = ({ children }) => {
   const { isAuthenticated, isLoading } = useAuthData();
-  const location = useLocation();
+  const searchParams = useSearchParams();
 
   // Mostra loading enquanto verifica autenticação
   if (isLoading) {
@@ -23,8 +25,7 @@ export const PublicRoute: React.FC<PublicRouteProps> = ({ children }) => {
 
   // Se estiver autenticado, redireciona para a página inicial ou para onde estava tentando ir
   if (isAuthenticated) {
-    const from = location.state?.from?.pathname || ROUTES.home;
-    return <Navigate to={from} replace />;
+    redirect(returnPath(searchParams.get(RETURN_PARAM)));
   }
 
   // Se não autenticado, renderiza o conteúdo público

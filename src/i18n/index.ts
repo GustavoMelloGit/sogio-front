@@ -34,26 +34,27 @@ export const resources = {
   },
 } as const;
 
-i18n
-  .use(LanguageDetector)
-  .use(initReactI18next)
-  .init({
-    resources,
-    fallbackLng: DEFAULT_LANGUAGE,
-    supportedLngs: SUPPORTED_LANGUAGES,
-    defaultNS,
-    detection: {
-      order: ['localStorage', 'navigator'],
-      caches: ['localStorage'],
-    },
-    interpolation: {
-      escapeValue: false,
-    },
-  });
+// O detector lê `localStorage` e `navigator`, que só existem no navegador. No
+// servidor o idioma é sempre o padrão; as páginas públicas em outro idioma
+// fixam o seu com `I18nPageProvider`.
+if (typeof window !== 'undefined') i18n.use(LanguageDetector);
 
-document.documentElement.lang = i18n.language;
-i18n.on('languageChanged', lng => {
-  document.documentElement.lang = lng;
+i18n.use(initReactI18next).init({
+  resources,
+  lng: typeof window === 'undefined' ? DEFAULT_LANGUAGE : undefined,
+  // Os recursos já vêm no bundle. Síncrono, o render no servidor sai traduzido
+  // em vez de mostrar as chaves cruas.
+  initAsync: false,
+  fallbackLng: DEFAULT_LANGUAGE,
+  supportedLngs: SUPPORTED_LANGUAGES,
+  defaultNS,
+  detection: {
+    order: ['localStorage', 'navigator'],
+    caches: ['localStorage'],
+  },
+  interpolation: {
+    escapeValue: false,
+  },
 });
 
 export default i18n;

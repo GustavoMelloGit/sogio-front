@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { useTranslation } from '@/i18n/useTranslation';
 import type { Language } from '@/i18n/language';
 import { ROUTES } from '@/routes/routes';
@@ -25,13 +25,13 @@ export const LandingFooter = ({
 
         <div className='flex flex-wrap items-center gap-x-6 gap-y-3'>
           <Link
-            to={ROUTES.guides}
+            href={ROUTES.guides}
             className='text-lp-muted hover:text-lp-text inline-flex min-h-11 items-center text-base transition-colors'
           >
             {t('footer.guides')}
           </Link>
           <Link
-            to={ROUTES.login}
+            href={ROUTES.login}
             className='text-lp-muted hover:text-lp-text inline-flex min-h-11 items-center text-base transition-colors'
           >
             {t('footer.login')}

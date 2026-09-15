@@ -13,10 +13,10 @@ let injected = false;
 /**
  * Só o domínio de produção conta.
  *
- * Compara com o host de `VITE_SITE_URL` em vez de olhar apenas
- * `import.meta.env.PROD`, porque um build de produção também é o que roda em
- * `npm run preview`, nos previews da Vercel e no navegador que pré-renderiza
- * a página. Nenhum desses é gente de verdade, e todos sujariam as métricas.
+ * Compara com o host de `NEXT_PUBLIC_SITE_URL` em vez de olhar apenas
+ * `NODE_ENV === 'production'`, porque um build de produção também é o que
+ * roda em `npm start` e nos previews da Vercel. Nenhum desses é gente de
+ * verdade, e todos sujariam as métricas.
  *
  * O `www.` é ignorado dos dois lados: o mesmo site atendido com e sem o
  * prefixo continua sendo produção.
@@ -27,7 +27,7 @@ const isProductionHost = (): boolean => {
   try {
     return (
       semWww(window.location.hostname) ===
-      semWww(new URL(env.VITE_SITE_URL).hostname)
+      semWww(new URL(env.NEXT_PUBLIC_SITE_URL).hostname)
     );
   } catch {
     return false;
@@ -35,8 +35,8 @@ const isProductionHost = (): boolean => {
 };
 
 /**
- * Carrega o Microsoft Clarity. Exige `VITE_CLARITY_ID` definida e o domínio de
- * produção: desenvolvimento, preview e pré-renderização ficam de fora para não
+ * Carrega o Microsoft Clarity. Exige `NEXT_PUBLIC_CLARITY_ID` definida e o
+ * domínio de produção: desenvolvimento e preview ficam de fora para não
  * poluir os dados com sessões que não são de usuários.
  */
 export const setupClarity = (): void => {
@@ -44,7 +44,7 @@ export const setupClarity = (): void => {
   if (typeof document === 'undefined') return;
   if (!isProductionHost()) return;
 
-  const projectId = env.VITE_CLARITY_ID;
+  const projectId = env.NEXT_PUBLIC_CLARITY_ID;
   if (!projectId) return;
 
   injected = true;

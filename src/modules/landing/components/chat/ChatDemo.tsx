@@ -18,16 +18,19 @@ interface ChatDemoProps {
 
 export const ChatDemo = ({ onWatched }: ChatDemoProps) => {
   const { t } = useTranslation('landing');
-  const [animated] = useState(canAnimate);
+  // Começa estática, com a conversa inteira: é o que o HTML do servidor mostra
+  // e o que buscadores e crawlers de IA leem. Só depois de hidratar, e se o
+  // navegador permitir, a animação assume.
+  const [animated, setAnimated] = useState(false);
+
+  useEffect(() => {
+    if (canAnimate()) setAnimated(true);
+  }, []);
 
   const acts = useMemo(() => buildDemoActs(t), [t]);
   const messages = useMemo(() => flattenActs(acts), [acts]);
 
-  // Começa com a primeira mensagem já visível: a caixa da demonstração nunca
-  // deve aparecer vazia, nem para quem não pode animar, nem no HTML estático.
-  const [visible, setVisible] = useState(() =>
-    animated ? 1 : flattenActs(buildDemoActs(t)).length
-  );
+  const [visible, setVisible] = useState(messages.length);
   const [typing, setTyping] = useState(false);
   const [runId, setRunId] = useState(0);
 

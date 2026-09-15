@@ -1,5 +1,7 @@
-import { useEffect, useRef, type FC } from 'react';
-import { useSearchParams } from 'react-router-dom';
+'use client';
+
+import { useCallback, useEffect, useRef, type FC } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { isAxiosError } from 'axios';
 import { toast } from 'sonner';
 import { Page } from '@/components/layout/Page';
@@ -22,7 +24,19 @@ import type { PlanCode } from '../types/BillingTypes';
 
 const BillingSettingsView: FC = () => {
   const { t } = useTranslation('billing');
-  const [searchParams, setSearchParams] = useSearchParams();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const removeSearchParam = useCallback(
+    (key: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.delete(key);
+      const search = params.toString();
+      router.replace(search ? `${pathname}?${search}` : pathname);
+    },
+    [searchParams, pathname, router]
+  );
 
   const { plans, isLoading: isLoadingPlans, error: plansError } = usePlans();
   const {
@@ -61,14 +75,8 @@ const BillingSettingsView: FC = () => {
       toast.info(t('checkout.canceledToast'));
     }
 
-    setSearchParams(
-      params => {
-        params.delete('checkout');
-        return params;
-      },
-      { replace: true }
-    );
-  }, [searchParams, setSearchParams, refreshSubscription, t]);
+    removeSearchParam('checkout');
+  }, [searchParams, removeSearchParam, refreshSubscription, t]);
 
   // The Customer Portal's return_url carries no signal about what changed
   // (plan swap, card update, cancellation) — just force a refetch so the
@@ -83,14 +91,8 @@ const BillingSettingsView: FC = () => {
 
     void refreshSubscription();
 
-    setSearchParams(
-      params => {
-        params.delete('portal');
-        return params;
-      },
-      { replace: true }
-    );
-  }, [searchParams, setSearchParams, refreshSubscription]);
+    removeSearchParam('portal');
+  }, [searchParams, removeSearchParam, refreshSubscription]);
 
   const handleSelectPlan = (planCode: PlanCode): void => {
     createCheckoutSession(planCode, {

@@ -1,3 +1,5 @@
+'use client';
+
 import type { FC } from 'react';
 import { TriangleAlert } from 'lucide-react';
 import { Button } from '@/components/ui/button';

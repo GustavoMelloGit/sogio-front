@@ -1,3 +1,5 @@
+'use client';
+
 import { type FC } from 'react';
 import { Separator } from '@/components/ui/separator';
 import {
@@ -9,7 +11,7 @@ import {
   Wrench,
 } from 'lucide-react';
 import { useGetPublicStay } from '../service/StayService.hooks';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'next/navigation';
 import { useTranslation } from '@/i18n/useTranslation';
 // Rota pública, fora do `AppLayout`: registra o namespace `stay` por conta
 // própria, senão a tela renderiza as chaves cruas.

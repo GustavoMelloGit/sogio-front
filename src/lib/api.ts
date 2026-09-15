@@ -14,7 +14,7 @@ declare module 'axios' {
  * Define interceptors, base URL e configurações padrão
  */
 const api = axios.create({
-  baseURL: env.VITE_API_URL,
+  baseURL: env.NEXT_PUBLIC_API_URL,
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',

@@ -1,5 +1,8 @@
+'use client';
+
 import type { FC } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
 import { useTranslation } from '@/i18n/useTranslation';
 import { useProperty } from '../service/PropertyService.hooks';
 import { Button, buttonVariants } from '@/components/ui/button';
@@ -65,7 +68,7 @@ const PropertyDetailView: FC = () => {
             {t('propertyDetail.errorMessage')}
           </Alert>
           <Link
-            to={ROUTES.home}
+            href={ROUTES.home}
             className={buttonVariants({
               variant: 'outline',
               className: 'w-full',
@@ -96,7 +99,7 @@ const PropertyDetailView: FC = () => {
             {t('propertyDetail.notFoundMessage')}
           </Alert>
           <Link
-            to={ROUTES.home}
+            href={ROUTES.home}
             className={buttonVariants({
               variant: 'outline',
               className: 'w-full',

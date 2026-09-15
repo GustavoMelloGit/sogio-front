@@ -282,8 +282,7 @@
    * custava ~35 KB comprimidos para isso. `both` no fill-mode faz o elemento
    * respeitar o estado inicial durante o atraso.
    *
-   * Sob `prefers-reduced-motion` a animação some e sobra o estado final, que
-   * é o mesmo estado que o HTML pré-renderizado do build precisa ter. */
+   * Sob `prefers-reduced-motion` a animação some e sobra o estado final. */
   @keyframes lp-rise {
     from {
       opacity: 0;

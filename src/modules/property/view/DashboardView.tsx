@@ -1,3 +1,5 @@
+'use client';
+
 import { type FC, type ElementType, useState } from 'react';
 import { format, parseISO } from 'date-fns';
 import { useTranslation } from '@/i18n/useTranslation';
@@ -16,7 +18,7 @@ import {
   MapPin,
   CalendarIcon,
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
@@ -223,7 +225,7 @@ const DashboardView: FC = () => {
                 : (overview?.upcoming_stays ?? []).map(stay => (
                     <Link
                       key={stay.id}
-                      to={ROUTES.property(stay.property_id)}
+                      href={ROUTES.property(stay.property_id)}
                       className='flex items-center gap-3 rounded-lg border border-border/40 bg-muted/20 p-3 text-sm transition-all duration-150 hover:border-border/70 hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
                       aria-label={t('upcomingStays.viewStayAriaLabel', {
                         property: stay.property_name,
@@ -266,7 +268,7 @@ const DashboardView: FC = () => {
                 {t('yourProperties.title')}
               </CardTitle>
               <Link
-                to={ROUTES.properties}
+                href={ROUTES.properties}
                 className={buttonVariants({ variant: 'ghost', size: 'sm' })}
               >
                 {t('common:actions.viewAll')}
@@ -289,7 +291,7 @@ const DashboardView: FC = () => {
                 : properties.map((p, i) => (
                     <Link
                       key={p.id}
-                      to={ROUTES.property(p.id)}
+                      href={ROUTES.property(p.id)}
                       className='flex items-center gap-3 rounded-lg border border-border/40 bg-muted/20 p-3 text-sm transition-all duration-150 hover:border-border/70 hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
                       aria-label={t('yourProperties.viewDetailsAriaLabel', {
                         name: p.name,

@@ -1,5 +1,7 @@
+'use client';
+
 import { useMemo, type FC } from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { isAxiosError } from 'axios';
@@ -134,7 +136,7 @@ const ChangePasswordView: FC = () => {
                         </FormControl>
                         <FormMessage />
                         <Link
-                          to={ROUTES.forgotPassword}
+                          href={ROUTES.forgotPassword}
                           className='inline-block text-sm text-blue-600 hover:text-blue-500'
                         >
                           {t('changePassword.forgotCurrentPasswordLink')}

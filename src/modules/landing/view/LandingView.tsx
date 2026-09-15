@@ -1,11 +1,14 @@
+'use client';
+
 import { useCallback, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useTranslation } from '@/i18n/useTranslation';
+import { useRouter } from 'next/navigation';
+import i18n from '@/i18n';
+import { I18nPageProvider } from '@/i18n/I18nPageProvider';
 import type { Language } from '@/i18n/language';
 import { ROUTES } from '@/routes/routes';
 import { setupClarity } from '@/lib/clarity';
+import { LandingRoute } from '@/components/LandingRoute';
 import { useLandingTheme } from '../lib/useLandingTheme';
-import { useLandingSeo } from '../seo/useLandingSeo';
 import { LandingHeader } from '../components/LandingHeader';
 import { HeroSection } from '../components/HeroSection';
 import { DemoSection } from '../components/DemoSection';
@@ -22,12 +25,13 @@ interface LandingViewProps {
 }
 
 const LandingView = ({ pageLanguage }: LandingViewProps) => {
-  const { language, changeLanguage } = useTranslation('landing');
   const { theme, toggleTheme } = useLandingTheme();
-  const navigate = useNavigate();
+  const router = useRouter();
 
   // A URL manda no idioma, sem exceção: é o que o `hreflang` e o `canonical`
   // prometem, e é a única regra que vale igual para gente e para rastreador.
+  // O conteúdo da página já sai no idioma dela por `I18nPageProvider`; aqui a
+  // preferência global acompanha, para que login e app abram no mesmo idioma.
   //
   // Havia aqui um redirecionamento de `/` para `/en` quando o navegador estava
   // em inglês. O Googlebot renderiza com locale en-US, então ele caía nesse
@@ -36,8 +40,8 @@ const LandingView = ({ pageLanguage }: LandingViewProps) => {
   // é justamente o que a documentação do Google desaconselha. Quem chega com o
   // navegador em outro idioma troca pelo seletor do cabeçalho.
   useEffect(() => {
-    if (language !== pageLanguage) changeLanguage(pageLanguage);
-  }, [language, pageLanguage, changeLanguage]);
+    if (i18n.language !== pageLanguage) void i18n.changeLanguage(pageLanguage);
+  }, [pageLanguage]);
 
   useEffect(() => {
     setupClarity();
@@ -71,41 +75,42 @@ const LandingView = ({ pageLanguage }: LandingViewProps) => {
     };
   }, [theme]);
 
-  useLandingSeo(pageLanguage);
-
   const selectLanguage = useCallback(
     (next: Language) => {
       if (next === pageLanguage) return;
-      changeLanguage(next);
-      navigate(next === 'en' ? ROUTES.landingEn : ROUTES.landing);
+      void i18n.changeLanguage(next);
+      router.push(next === 'en' ? ROUTES.landingEn : ROUTES.landing);
     },
-    [pageLanguage, changeLanguage, navigate]
+    [pageLanguage, router]
   );
 
   return (
-    <div className='landing min-h-screen' data-lp-theme={theme}>
-      <LandingHeader
-        theme={theme}
-        onToggleTheme={toggleTheme}
-        language={pageLanguage}
-        onSelectLanguage={selectLanguage}
-      />
+    <I18nPageProvider language={pageLanguage}>
+      <div className='landing min-h-screen' data-lp-theme={theme}>
+        <LandingRoute />
+        <LandingHeader
+          theme={theme}
+          onToggleTheme={toggleTheme}
+          language={pageLanguage}
+          onSelectLanguage={selectLanguage}
+        />
 
-      <main id='conteudo'>
-        <HeroSection />
-        <DemoSection />
-        <HowItWorksSection />
-        <AnswersSection />
-        <FounderSection />
-        <FaqSection />
-        <FinalCtaSection />
-      </main>
+        <main id='conteudo'>
+          <HeroSection />
+          <DemoSection />
+          <HowItWorksSection />
+          <AnswersSection />
+          <FounderSection />
+          <FaqSection />
+          <FinalCtaSection />
+        </main>
 
-      <LandingFooter
-        language={pageLanguage}
-        onSelectLanguage={selectLanguage}
-      />
-    </div>
+        <LandingFooter
+          language={pageLanguage}
+          onSelectLanguage={selectLanguage}
+        />
+      </div>
+    </I18nPageProvider>
   );
 };
 

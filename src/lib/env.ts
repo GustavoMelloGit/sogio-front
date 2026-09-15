@@ -2,19 +2,20 @@ import { z } from 'zod';
 
 /**
  * Schema de validação para variáveis de ambiente
- * Define apenas a variável VITE_API_URL necessária
+ * `NEXT_PUBLIC_*` é embutida no bundle do cliente no build; cada variável
+ * precisa ser lida por nome literal em `process.env` para isso acontecer.
  */
 const envSchema = z.object({
-  VITE_API_URL: z.url().default('http://localhost:3030'),
+  NEXT_PUBLIC_API_URL: z.url().default('http://localhost:3030'),
   /** URL pública do site, usada nos canonical/hreflang e no sitemap. */
-  VITE_SITE_URL: z.url().default('https://www.sogio.app'),
+  NEXT_PUBLIC_SITE_URL: z.url().default('https://www.sogio.app'),
   /** Project ID do Microsoft Clarity. Vazio desliga o analytics. */
-  VITE_CLARITY_ID: z.string().trim().optional(),
+  NEXT_PUBLIC_CLARITY_ID: z.string().trim().optional(),
   /**
-   * Token do Google Search Console. Só o conteúdo, sem a tag: a meta é
-   * escrita no `index.html` durante o build e entra no HTML pré-renderizado.
+   * Token do Google Search Console. Só o conteúdo, sem a tag: a meta sai no
+   * `<head>` do HTML estático pela Metadata API do layout raiz.
    */
-  VITE_GSC_VERIFICATION: z.string().trim().optional(),
+  NEXT_PUBLIC_GSC_VERIFICATION: z.string().trim().optional(),
 });
 
 /**
@@ -29,10 +30,10 @@ export type Env = z.infer<typeof envSchema>;
 function validateEnv(): Env {
   try {
     return envSchema.parse({
-      VITE_API_URL: import.meta.env.VITE_API_URL,
-      VITE_SITE_URL: import.meta.env.VITE_SITE_URL,
-      VITE_CLARITY_ID: import.meta.env.VITE_CLARITY_ID,
-      VITE_GSC_VERIFICATION: import.meta.env.VITE_GSC_VERIFICATION,
+      NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+      NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
+      NEXT_PUBLIC_CLARITY_ID: process.env.NEXT_PUBLIC_CLARITY_ID,
+      NEXT_PUBLIC_GSC_VERIFICATION: process.env.NEXT_PUBLIC_GSC_VERIFICATION,
     });
   } catch (error) {
     if (error instanceof z.ZodError) {
@@ -42,7 +43,7 @@ function validateEnv(): Env {
 
       throw new Error(
         `❌ Variáveis de ambiente inválidas:\n${errorMessages.join('\n')}\n\n` +
-          'Verifique o arquivo .env e certifique-se de que VITE_API_URL está definida.'
+          'Verifique o arquivo .env e certifique-se de que NEXT_PUBLIC_API_URL está definida.'
       );
     }
     throw error;

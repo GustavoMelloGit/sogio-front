@@ -1,5 +1,6 @@
 import type { FC } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 import { LayoutDashboard, Building2, RefreshCw } from 'lucide-react';
 import {
   Sidebar,
@@ -38,7 +39,8 @@ const navigationItems: NavItem[] = [
     url: ROUTES.properties,
     icon: Building2,
     isActive: pathname =>
-      pathname === ROUTES.properties || pathname.startsWith('/property/'),
+      pathname === ROUTES.properties ||
+      pathname.startsWith(`${ROUTES.home}/property/`),
   },
   {
     titleKey: 'sidebar.nav.reconcileStays',
@@ -49,8 +51,8 @@ const navigationItems: NavItem[] = [
 ];
 
 export const AppSidebar: FC = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
+  const pathname = usePathname();
+  const router = useRouter();
   const { t } = useTranslation();
   const { isOnFreePlan } = useIsOnFreePlan();
 
@@ -82,9 +84,9 @@ export const AppSidebar: FC = () => {
                   <SidebarMenuItem key={item.url}>
                     <SidebarMenuButton
                       asChild
-                      isActive={item.isActive(location.pathname)}
+                      isActive={item.isActive(pathname)}
                     >
-                      <Link to={item.url}>
+                      <Link href={item.url}>
                         <Icon className='h-4 w-4' />
                         <span>{t(item.titleKey)}</span>
                       </Link>
@@ -111,7 +113,7 @@ export const AppSidebar: FC = () => {
             autoAnimate
             followMouse
             className='w-full'
-            onClick={() => navigate(ROUTES.billingSettings)}
+            onClick={() => router.push(ROUTES.billingSettings)}
           >
             {t('sidebar.activatePro')}
           </SpecularButton>

@@ -5,15 +5,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Commands
 
 ```bash
-npm run dev          # Start development server (Vite)
+npm run dev          # Start development server (Next.js)
 npm run build        # Type-check then build for production
+npm run start        # Serve the production build locally
 npm run lint         # ESLint + TypeScript type checking
 npm run lint:fix     # ESLint with auto-fix
 npm run format       # Format with Prettier
-npm run preview      # Preview production build locally
+npm test             # Vitest
 ```
-
-No test framework is configured in this project.
 
 ## Architecture
 
@@ -25,13 +24,15 @@ No test framework is configured in this project.
   - `components/` — Module-specific UI components
   - `types/` — TypeScript types and Zod schemas
 - `components/` — Shared UI: `ui/` (Radix UI primitives), `layout/`, `ProtectedRoute`, `PublicRoute`
-- `routes/` — Router setup with lazy-loaded components; route constants in `routes.ts`
+- `app/` — Next.js App Router. Thin `page.tsx`/`layout.tsx` files that render module views. Two root layouts, `(pt-br)` and `(en)`, so `<html lang>` matches the URL. Landing and guides are statically rendered Server Components with `generateMetadata`/JSON-LD from `seo/`. Everything under `(pt-br)/(spa)` (product, auth, guest links) renders client-only through `SpaShell`, since it depends on `localStorage`
+- `routes/` — Route constants in `routes.ts`
+- `seo/` — Metadata and JSON-LD builders for public pages
 - `hooks/` — Shared custom hooks (`useAuth`, `useFilters`, `useDisclosure`)
 - `lib/` — Axios instance (`api.ts`), React Query config (`query-client.ts`), env validation (`env.ts`), utilities
 
 ## Environment
 
-Requires `VITE_API_URL` in `.env` (default: `http://localhost:3030`). Validated at startup via Zod in `lib/env.ts`.
+Requires `NEXT_PUBLIC_API_URL` in `.env` (default: `http://localhost:3030`). Also `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_CLARITY_ID`, `NEXT_PUBLIC_GSC_VERIFICATION`. Validated via Zod in `lib/env.ts`; `NEXT_PUBLIC_*` values are inlined at build time.
 
 ## Personas
 
@@ -69,3 +70,13 @@ Pattern files live in `.claude/patterns/`. Examples of when to load them:
 Rules are **always active** — internalize them and apply them to every task without being reminded. Rule files live in `.claude/rules/`; read them all at the start of each session.
 
 Current rules: `commit.md`, `linting.md`, `mobile-first.md`.
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->

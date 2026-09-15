@@ -1,5 +1,7 @@
+'use client';
+
 import { useEffect, useMemo, useRef, useState, type FC } from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -116,7 +118,7 @@ const ForgotPasswordView: FC = () => {
 
             <div className='text-center'>
               <Link
-                to={ROUTES.login}
+                href={ROUTES.login}
                 className='text-sm text-blue-600 hover:text-blue-500'
               >
                 {t('forgotPassword.backToLoginLink')}
@@ -185,7 +187,7 @@ const ForgotPasswordView: FC = () => {
 
               <div className='text-center'>
                 <Link
-                  to={ROUTES.login}
+                  href={ROUTES.login}
                   className='text-sm text-blue-600 hover:text-blue-500'
                 >
                   {t('forgotPassword.backToLoginLink')}

@@ -1,9 +1,8 @@
 /**
  * A deploy replaces every hashed chunk, so a tab still running the previous
- * build gets a 404 when it lazy-loads a route it had not visited yet. The SPA
- * rewrite answers that 404 with `index.html`, and the browser refuses to run
- * HTML as a module — the "MIME type of text/html" error the user sees. A full
- * reload picks up the new build and clears it.
+ * build gets a 404 when it loads a route it had not visited yet — the
+ * `ChunkLoadError` the user sees. A full reload picks up the new build and
+ * clears it.
  */
 const STALE_CHUNK_MESSAGES = [
   'failed to fetch dynamically imported module',
@@ -72,14 +71,4 @@ function canAttemptReload(): boolean {
     // way to detect a loop, showing the error screen is the safe fallback.
     return false;
   }
-}
-
-/**
- * Vite reports a failed chunk preload before React ever renders it, which is
- * the earliest point a stale build can be recovered from.
- */
-export function setupStaleChunkRecovery(): void {
-  window.addEventListener('vite:preloadError', () => {
-    reloadForStaleChunk();
-  });
 }
