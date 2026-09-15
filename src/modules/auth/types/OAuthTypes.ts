@@ -12,6 +12,7 @@ export const pendingAuthorizationRequestSchema = z.object({
   redirect_host: z.string(),
   scope_description: z.string(),
   has_existing_consent: z.boolean(),
+  can_connect: z.boolean().default(true),
 });
 
 export type PendingAuthorizationRequest = z.infer<

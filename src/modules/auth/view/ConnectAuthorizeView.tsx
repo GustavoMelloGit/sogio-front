@@ -5,7 +5,7 @@ import {
   type FC,
   type PropsWithChildren,
 } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import {
   Card,
@@ -14,10 +14,11 @@ import {
   CardHeader,
 } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Spinner } from '@/components/ui/spinner';
 import { Alert } from '@/components/Alert';
+import { ROUTES } from '@/routes/routes';
 import { useTranslation } from '@/i18n/useTranslation';
 import type { TranslateFn } from '@/i18n/useTranslation';
 import { useAuthData } from '../service/AuthService.hooks';
@@ -62,6 +63,32 @@ const ErrorCard: FC<{ title: string; message: string }> = ({
     </CardHeader>
     <CardContent>
       <Alert role='alert' variant='destructive' message={message} />
+    </CardContent>
+  </PageShell>
+);
+
+const UpgradeRequiredCard: FC<{
+  name: string;
+  verified: boolean;
+  t: TranslateFn;
+}> = ({ name, verified, t }) => (
+  <PageShell>
+    <CardHeader className='space-y-3'>
+      <h1 className='text-lg leading-none font-semibold'>
+        {t('connectAuthorize.upgradeRequiredTitle')}
+      </h1>
+      <AppIdentity name={name} verified={verified} t={t} />
+      <CardDescription>
+        {t('connectAuthorize.upgradeRequiredDescription')}
+      </CardDescription>
+    </CardHeader>
+    <CardContent>
+      <Link
+        to={ROUTES.billingSettings}
+        className={buttonVariants({ size: 'lg', className: 'w-full' })}
+      >
+        {t('connectAuthorize.upgradeRequiredButton')}
+      </Link>
     </CardContent>
   </PageShell>
 );
@@ -116,7 +143,10 @@ const ConnectAuthorizeView: FC = () => {
   const hasAutoApprovedRef = useRef(false);
 
   const shouldAutoApprove =
-    !!request?.has_existing_consent && isAuthenticated && !autoApproveFailed;
+    !!request?.has_existing_consent &&
+    !!request?.can_connect &&
+    isAuthenticated &&
+    !autoApproveFailed;
 
   // Atalho de reconexão: quando o backend já reconhece um consentimento
   // válido para este usuário/app, a decisão é enviada automaticamente, sem
@@ -291,6 +321,16 @@ const ConnectAuthorizeView: FC = () => {
 
   if (decisionNotFound) {
     return <ErrorCard title={invalidLinkTitle} message={expiredLinkMessage} />;
+  }
+
+  if (!request.can_connect) {
+    return (
+      <UpgradeRequiredCard
+        name={request.app_display_name}
+        verified={request.app_display_name_verified}
+        t={t}
+      />
+    );
   }
 
   return (
