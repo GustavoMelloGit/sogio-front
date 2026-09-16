@@ -206,13 +206,16 @@ export const SpecularButton: FC<SpecularButtonProps> = ({
     const fx = fxRef.current;
     if (!btn || !fx) return;
 
-    const dpr = window.devicePixelRatio || 1;
-    const renderer = new Renderer({
+    const canvas = document.createElement('canvas');
+    const contextAttributes = {
       alpha: true,
       premultipliedAlpha: true,
       antialias: true,
-      dpr,
-    });
+    };
+    if (!canvas.getContext('webgl2', contextAttributes)) return;
+
+    const dpr = window.devicePixelRatio || 1;
+    const renderer = new Renderer({ canvas, ...contextAttributes, dpr });
     const gl = renderer.gl;
     gl.clearColor(0, 0, 0, 0);
     gl.enable(gl.BLEND);
