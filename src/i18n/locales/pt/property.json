@@ -33,13 +33,18 @@
   "createProperty": {
     "breadcrumb": "Nova Propriedade",
     "title": "Nova Propriedade",
-    "description": "Só o básico: nome, quantos hóspedes ela recebe e o endereço.",
+    "description": "Nome, quantos hóspedes ela recebe, fotos e endereço.",
     "errorTitle": "Erro",
     "aboutTitle": "Sobre a propriedade",
     "nameLabel": "Nome",
     "namePlaceholder": "Ex.: Apê da praia",
     "capacityLabel": "Máximo de hóspedes",
     "capacityPlaceholder": "Ex.: 4",
+    "imagesTitle": "Imagens",
+    "imageUrlLabel": "URL da imagem {{index}}",
+    "imageUrlPlaceholder": "https://...",
+    "addImage": "Adicionar imagem",
+    "removeImage": "Remover imagem {{index}}",
     "addressTitle": "Endereço",
     "zipCodeLabel": "CEP",
     "zipCodePlaceholder": "00000-000",
@@ -61,7 +66,9 @@
     "cancel": "Cancelar",
     "submit": "Cadastrar propriedade",
     "validation": {
-      "capacityMin": "Informe pelo menos 1 hóspede"
+      "capacityMin": "Informe pelo menos 1 hóspede",
+      "imageUrlRequired": "URL é obrigatória",
+      "imagesMinOne": "Pelo menos uma imagem é obrigatória"
     }
   },
   "reconcileStaysView": {

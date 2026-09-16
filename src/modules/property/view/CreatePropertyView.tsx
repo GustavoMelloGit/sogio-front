@@ -11,12 +11,14 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
   type FieldPathByValue,
+  useFieldArray,
   useForm,
   useFormContext,
 } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { withMask } from 'use-mask-input';
 import z from 'zod';
+import { Plus, Trash2 } from 'lucide-react';
 import { useTranslation } from '@/i18n/useTranslation';
 import type { TranslateFn } from '@/i18n/useTranslation';
 import { Page } from '@/components/layout/Page';
@@ -49,10 +51,19 @@ const ZIP_CODE_FILLED_FIELDS = [
 ] as const;
 
 const createFormSchema = (t: TranslateFn) =>
-  createPropertyRequestSchema.omit({ images: true }).extend({
+  createPropertyRequestSchema.extend({
     capacity: z.string().refine(v => Number(v) >= 1, {
       message: t('createProperty.validation.capacityMin'),
     }),
+    images: z
+      .array(
+        z.object({
+          url: z
+            .string()
+            .min(1, t('createProperty.validation.imageUrlRequired')),
+        })
+      )
+      .min(1, t('createProperty.validation.imagesMinOne')),
   });
 
 type FormData = z.infer<ReturnType<typeof createFormSchema>>;
@@ -133,6 +144,7 @@ const CreatePropertyView: FC = () => {
     defaultValues: {
       name: '',
       capacity: '1',
+      images: [{ url: '' }],
       address: {
         street: '',
         number: '',
@@ -144,6 +156,11 @@ const CreatePropertyView: FC = () => {
         country: ADDRESS_COUNTRY,
       },
     },
+  });
+
+  const images = useFieldArray({
+    control: form.control,
+    name: 'images',
   });
 
   const fillAddress = (address: ZipCodeAddress): void => {
@@ -181,7 +198,7 @@ const CreatePropertyView: FC = () => {
     mutate({
       ...data,
       capacity: Number(data.capacity),
-      images: [],
+      images: data.images.map(image => image.url),
     });
   };
 
@@ -228,6 +245,60 @@ const CreatePropertyView: FC = () => {
                 inputMode='numeric'
                 className='col-span-6 sm:col-span-2 xl:col-span-3'
               />
+            </FormSection>
+
+            <FormSection title={t('createProperty.imagesTitle')}>
+              {images.fields.map((image, index) => (
+                <FormField
+                  key={image.id}
+                  control={form.control}
+                  name={`images.${index}.url`}
+                  render={({ field }) => (
+                    <FormItem className='col-span-6 xl:col-span-12'>
+                      <FormLabel>
+                        {t('createProperty.imageUrlLabel', {
+                          index: index + 1,
+                        })}
+                      </FormLabel>
+                      <div className='flex gap-2'>
+                        <FormControl>
+                          <Input
+                            inputMode='url'
+                            placeholder={t(
+                              'createProperty.imageUrlPlaceholder'
+                            )}
+                            {...field}
+                          />
+                        </FormControl>
+                        {images.fields.length > 1 && (
+                          <Button
+                            type='button'
+                            variant='outline'
+                            size='icon'
+                            aria-label={t('createProperty.removeImage', {
+                              index: index + 1,
+                            })}
+                            onClick={() => images.remove(index)}
+                          >
+                            <Trash2 aria-hidden='true' />
+                          </Button>
+                        )}
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              ))}
+              <Button
+                type='button'
+                variant='outline'
+                size='sm'
+                className='col-span-6 justify-self-start xl:col-span-12'
+                onClick={() => images.append({ url: '' })}
+              >
+                <Plus aria-hidden='true' />
+                {t('createProperty.addImage')}
+              </Button>
             </FormSection>
 
             <FormSection title={t('createProperty.addressTitle')}>
