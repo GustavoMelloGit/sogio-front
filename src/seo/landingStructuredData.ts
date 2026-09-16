@@ -1,5 +1,6 @@
 import type { TranslateFn } from '@/i18n/useTranslation';
 import type { Language } from '@/i18n/language';
+import { ROUTES } from '@/routes/routes';
 
 export const FAQ_ITEM_KEYS = [
   'item1',
@@ -9,6 +10,7 @@ export const FAQ_ITEM_KEYS = [
   'item5',
   'item6',
   'item7',
+  'item8',
 ] as const;
 
 /**
@@ -97,19 +99,17 @@ export const buildStructuredData = (
         '@type': 'Audience',
         audienceType: t('meta.audience'),
       },
-      // `PreOrder` porque a versão conversacional ainda não abriu. O preço
-      // declarado é o normal; o de fundador é condição de lançamento e vive na
-      // copy, não no schema. `MON` é o código UN/CEFACT de mês, que diz que a
-      // cobrança é recorrente sem depender do idioma da página.
+      // `MON` é o código UN/CEFACT de mês, que diz que a cobrança é recorrente
+      // sem depender do idioma da página.
       offers: {
         '@type': 'Offer',
-        price: '35.00',
+        price: '25.00',
         priceCurrency: 'BRL',
-        availability: 'https://schema.org/PreOrder',
-        url: `${pageUrl}#lista`,
+        availability: 'https://schema.org/InStock',
+        url: `${siteUrl}${ROUTES.signup}`,
         priceSpecification: {
           '@type': 'UnitPriceSpecification',
-          price: '35.00',
+          price: '25.00',
           priceCurrency: 'BRL',
           unitCode: 'MON',
         },

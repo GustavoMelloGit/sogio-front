@@ -13,7 +13,7 @@ import { LandingCta } from '@/modules/landing/components/LandingCta';
  *
  * Reaproveita os tokens `--lp-*` e a preferência de tema da landing, mas tem
  * cabeçalho próprio: guias existem só em português, então o seletor de idioma
- * não faz sentido aqui, e o CTA aponta de volta para a lista de espera.
+ * não faz sentido aqui, e o CTA leva ao cadastro.
  */
 export const GuideShell = ({ children }: { children: ReactNode }) => {
   const { theme, toggleTheme } = useLandingTheme();
@@ -70,7 +70,7 @@ export const GuideShell = ({ children }: { children: ReactNode }) => {
           </button>
 
           <LandingCta
-            href={`${ROUTES.landing}#lista`}
+            href={ROUTES.signup}
             size='compact'
             className='hidden md:inline-flex'
           >

@@ -19,6 +19,7 @@ interface LandingHeaderProps {
 const NAV_ITEMS = [
   { href: '#como-funciona', key: 'nav.howItWorks' },
   { href: '#respostas', key: 'nav.answers' },
+  { href: '#planos', key: 'nav.plans' },
   { href: '#duvidas', key: 'nav.faq' },
 ] as const;
 
@@ -89,7 +90,7 @@ export const LandingHeader = ({
           </button>
 
           <LandingCta
-            href='#lista'
+            href={ROUTES.signup}
             size='compact'
             className='ml-1 hidden md:inline-flex'
             onClick={() => trackEvent('cta_click_header')}

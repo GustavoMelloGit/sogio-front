@@ -56,14 +56,11 @@ const GuideView = ({ guide }: GuideViewProps) => {
             Pare de refazer essa conta na mão
           </h2>
           <p className='text-lp-muted mt-3 text-base md:text-lg'>
-            Sogio lança receitas e despesas a partir de um áudio ou da foto de
-            uma nota, e responde quanto cada imóvel deu de lucro. As 50
-            primeiras pessoas pagam R$ 25 por mês no primeiro ano.
+            Mande um áudio ou a foto da nota no WhatsApp: Sogio lança a receita
+            ou a despesa e responde quanto cada imóvel deu de lucro. Teste o
+            plano Pro por 14 dias grátis.
           </p>
-          <LandingCta
-            href={`${ROUTES.landing}#lista`}
-            className='mt-6 w-full sm:w-auto'
-          >
+          <LandingCta href={ROUTES.signup} className='mt-6 w-full sm:w-auto'>
             Quero largar a planilha
           </LandingCta>
         </aside>

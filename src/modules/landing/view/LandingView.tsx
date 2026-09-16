@@ -13,7 +13,7 @@ import { HeroSection } from '../components/HeroSection';
 import { DemoSection } from '../components/DemoSection';
 import { HowItWorksSection } from '../components/HowItWorksSection';
 import { AnswersSection } from '../components/AnswersSection';
-import { FounderSection } from '../components/FounderSection';
+import { PlansSection } from '../components/PlansSection';
 import { FaqSection } from '../components/FaqSection';
 import { FinalCtaSection } from '../components/FinalCtaSection';
 import { LandingFooter } from '../components/LandingFooter';
@@ -98,7 +98,7 @@ const LandingView = ({ pageLanguage }: LandingViewProps) => {
           <DemoSection />
           <HowItWorksSection />
           <AnswersSection />
-          <FounderSection />
+          <PlansSection />
           <FaqSection />
           <FinalCtaSection />
         </main>

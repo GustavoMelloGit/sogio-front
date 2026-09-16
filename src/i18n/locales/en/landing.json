@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "Sogio: manage your short-term rentals by chatting",
-    "description": "No spreadsheet, no software to learn: send a voice note and Sogio logs the booking, files the expenses and tells you what the property earned.",
+    "description": "No spreadsheet, no software to learn: send a voice note on WhatsApp and Sogio logs the booking, files the expenses and tells you what the property earned.",
     "category": "Short-term rental management",
     "audience": "Owners and managers of short-term rental properties"
   },
@@ -12,15 +12,16 @@
     "faq": "Questions",
     "login": "Log in",
     "cta": "Drop the spreadsheet",
-    "languageGroup": "Language"
+    "languageGroup": "Language",
+    "plans": "Plans"
   },
   "hero": {
-    "badge": "In the works · 50 pioneer seats",
+    "badge": "Live on WhatsApp · 14 days free",
     "titleLine1": "What if the spreadsheet",
     "titleLine2": "listened to you?",
     "subtitle": "Send a voice note instead. Sogio logs it, files it, and tells you what the property earned this month.",
     "cta": "I want to drop the spreadsheet",
-    "ctaTrigger": "Takes 20 seconds. You join the first 50 and we'll tell you when it opens."
+    "ctaTrigger": "Create your account in a minute and try Pro free for 14 days."
   },
   "demo": {
     "eyebrow": "What it actually looks like",
@@ -80,52 +81,39 @@
     "item5": "How much am I still owed this month?",
     "item6": "How much did I pay in platform fees this year?"
   },
-  "founder": {
-    "eyebrow": "Pioneer terms",
-    "title": "The first 50 people pay R$ 25 in the first year",
-    "body": "Conversational Sogio is still being built. Joining now means helping shape how it works and paying R$ 25 a month for the first 12 months, against the R$ 35 regular price.",
-    "priceValue": "R$ 25",
-    "pricePeriod": "/month",
-    "priceRegularLabel": "Regular price",
-    "priceRegularValue": "R$ 35/month",
-    "benefit1": "R$ 25 a month for the first 12 months",
-    "benefit2": "15 days free before the first charge",
-    "benefit3": "Access before it opens to everyone",
-    "benefit4": "A direct line to the people building it",
-    "seatsLabel": "pioneer seats",
-    "seatsValue": "50",
-    "disclaimer": "Nothing is charged now. You join the list, we tell you when it opens, and the terms are confirmed at launch."
-  },
-  "form": {
-    "title": "I want to drop the spreadsheet",
-    "nameLabel": "Your name",
-    "namePlaceholder": "What should we call you?",
-    "whatsappLabel": "Your WhatsApp",
-    "whatsappPlaceholder": "(11) 90000-0000",
-    "countLabel": "How many properties do you look after?",
-    "count1": "1",
-    "count2to3": "2 to 3",
-    "count4to10": "4 to 10",
-    "count10plus": "10 or more",
-    "submit": "I want to drop the spreadsheet",
-    "submitting": "Sending…",
-    "trigger": "Takes 20 seconds. You join the first 50 and we'll tell you when it opens.",
-    "privacy": "We use your WhatsApp only to tell you when it opens.",
-    "successTitle": "Done. You're on the list.",
-    "successBody": "We'll message you on WhatsApp as soon as conversational Sogio opens. No spam, promise.",
-    "errors": {
-      "invalidName": "Write your name, even just the first one.",
-      "invalidWhatsapp": "Enter your WhatsApp with area code, digits only.",
-      "invalidCount": "Pick one of the ranges above.",
-      "generic": "We couldn't send that right now. Try again in a moment."
-    }
+  "plans": {
+    "eyebrow": "Plans",
+    "title": "Start today. No list, no waiting.",
+    "subtitle": "Create your account in a minute and send your first message today.",
+    "free": {
+      "name": "Free",
+      "description": "For keeping one property organised in the dashboard.",
+      "price": "R$ 0",
+      "period": "/month",
+      "feature1": "1 property",
+      "feature2": "Bookings, income and expenses in the web dashboard",
+      "cta": "Create a free account"
+    },
+    "pro": {
+      "name": "Pro",
+      "badge": "14 days free",
+      "description": "For dropping the spreadsheet and handling everything by chat.",
+      "price": "R$ 25",
+      "period": "/month",
+      "feature1": "Sogio on WhatsApp: voice note, receipt photo or question",
+      "feature2": "Up to 10 properties",
+      "feature3": "Report exports",
+      "feature4": "Bulk import of your history",
+      "cta": "I want to drop the spreadsheet"
+    },
+    "disclaimer": "Monthly subscription. Cancel whenever you want, from the dashboard."
   },
   "faq": {
     "eyebrow": "Questions",
     "title": "Frequently asked",
     "item1": {
-      "question": "Does Sogio already work over WhatsApp?",
-      "answer": "Not yet. The Sogio dashboard is live and in use, and the conversational version is being built. That's why there's a waiting list instead of a sign-up button."
+      "question": "How do I start using it on WhatsApp?",
+      "answer": "Create your account, turn on the Pro plan (the first 14 days are free) and send Sogio a message on WhatsApp. It replies with a link to sign in and authorise your account. After that, you just talk."
     },
     "item2": {
       "question": "What if it misunderstands me?",
@@ -137,24 +125,28 @@
     },
     "item4": {
       "question": "Do I need to install anything or be good with technology?",
-      "answer": "No. If you send messages and voice notes on WhatsApp, you already know enough, and there's no new screen to learn. The Sogio dashboard still works for people who like seeing everything on a screen, but it's optional."
+      "answer": "No. Sogio works in the WhatsApp you already use: if you send messages and voice notes, you know enough. The web dashboard is still there for people who like seeing everything on a screen, but it's optional."
     },
     "item5": {
       "question": "What if everything is already in a spreadsheet?",
-      "answer": "Send the spreadsheet in the conversation and Sogio imports the history. You don't start from scratch."
+      "answer": "You don't need to migrate anything to start: just log things from today on. If you want to bring your history, the Pro plan imports bookings, income and expenses in bulk."
     },
     "item6": {
       "question": "Is it useful if I only have one property?",
-      "answer": "Yes. Sogio is built for people looking after 1 to 15 short-term rentals, from a single beach flat to a small portfolio."
+      "answer": "Yes. The Free plan covers one property in the dashboard, and Pro goes up to 10 properties, from a single beach flat to a small portfolio."
     },
     "item7": {
       "question": "Does it work with Airbnb and Booking?",
       "answer": "Yes. You can log bookings from any platform or from direct rentals and reconcile everything in one place."
+    },
+    "item8": {
+      "question": "How much does it cost?",
+      "answer": "Creating an account is free and covers one property in the dashboard. Pro, which includes Sogio on WhatsApp and up to 10 properties, costs R$ 25 a month, with 14 days free to try it. You can cancel whenever you want, from the dashboard."
     }
   },
   "finalCta": {
     "title": "Start with the simplest thing: sending a message.",
-    "subtitle": "Join the first 50 and pay R$ 25 a month in the first year.",
+    "subtitle": "Create your account now and try Pro free for 14 days.",
     "cta": "I want to drop the spreadsheet"
   },
   "footer": {
