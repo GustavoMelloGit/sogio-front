@@ -126,20 +126,6 @@ export const useCreateCheckoutSession = () => {
   };
 };
 
-export const useChooseFreePlan = () => {
-  const queryClient = useQueryClient();
-  const { mutate: chooseFreePlan, isPending: isChoosingFreePlan } = useMutation(
-    {
-      mutationFn: () => BillingService.chooseFreePlan(),
-      onSuccess: () =>
-        queryClient.invalidateQueries({
-          queryKey: billingQueryKeys.subscription,
-        }),
-    }
-  );
-  return { chooseFreePlan, isChoosingFreePlan };
-};
-
 export const useCreatePortalSession = () => {
   const {
     mutate: createPortalSession,

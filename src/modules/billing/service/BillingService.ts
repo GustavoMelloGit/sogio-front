@@ -63,10 +63,6 @@ export class BillingService {
     return checkoutSessionSchema.parse(response.data);
   }
 
-  static async chooseFreePlan(): Promise<void> {
-    await api.post('/billing/subscription/free-plan');
-  }
-
   static async createPortalSession(): Promise<PortalSession> {
     const response = await api.post('/billing/portal-session');
     return portalSessionSchema.parse(response.data);
