@@ -26,6 +26,7 @@ const envSchema = z.object({
    * ali o valor é `__Secure-sogio_session`. Localmente, sem o prefixo.
    */
   NEXT_PUBLIC_SESSION_COOKIE_NAME: z.string().trim().default('sogio_session'),
+  NEXT_PUBLIC_BUILD_ID: z.string().trim().default('development'),
 });
 
 /**
@@ -46,6 +47,7 @@ function validateEnv(): Env {
       NEXT_PUBLIC_GSC_VERIFICATION: process.env.NEXT_PUBLIC_GSC_VERIFICATION,
       NEXT_PUBLIC_SESSION_COOKIE_NAME:
         process.env.NEXT_PUBLIC_SESSION_COOKIE_NAME,
+      NEXT_PUBLIC_BUILD_ID: process.env.NEXT_PUBLIC_BUILD_ID,
     });
   } catch (error) {
     if (error instanceof z.ZodError) {

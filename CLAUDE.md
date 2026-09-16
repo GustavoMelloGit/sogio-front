@@ -27,6 +27,7 @@ npm test             # Vitest
 - `app/` — Next.js App Router. Thin `page.tsx`/`layout.tsx` files that render module views. Two root layouts, `(pt-br)` and `(en)`, so `<html lang>` matches the URL. Landing and guides are statically rendered Server Components with `generateMetadata`/JSON-LD from `seo/`. Everything under `(pt-br)/(spa)` (product, auth, guest links) renders client-only through `SpaShell`, since it depends on `localStorage`
 - `routes/` — Route constants in `routes.ts`
 - `seo/` — Metadata and JSON-LD builders for public pages
+- `app/api/version` — Static route handler that echoes `NEXT_PUBLIC_BUILD_ID` (set in `next.config.ts` from `VERCEL_DEPLOYMENT_ID`, inlined at build on both sides). `components/AppUpdateToast.tsx`, mounted in `SpaShell`, polls it while the app is open and offers a reload toast when the deployed build differs from the running one — an installed PWA has no address bar to refresh, and there is no service worker since the Vite migration (`public/sw.js` only unregisters the old Workbox one)
 - `proxy.ts` — Server-side gate (Next 16's renamed middleware): checks only whether the session cookie exists and redirects, so a logged-in visitor never sees the landing page and `/app/**` never renders for an anonymous one
 - `hooks/` — Shared custom hooks (`useAuth`, `useFilters`, `useDisclosure`)
 - `lib/` — Axios instance (`api.ts`), React Query config (`query-client.ts`), env validation (`env.ts`), utilities

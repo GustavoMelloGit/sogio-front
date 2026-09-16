@@ -18,5 +18,10 @@
   },
   "actions": {
     "viewAll": "Ver todas"
+  },
+  "appUpdate": {
+    "title": "Nova versão disponível",
+    "description": "Recarregue para continuar usando Sogio.",
+    "action": "Recarregar"
   }
 }
