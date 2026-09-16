@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { env } from '@/lib/env';
-import { RETURN_PARAM, ROUTES } from '@/routes/routes';
+import { GUEST_ONLY_PATHS, RETURN_PARAM, ROUTES } from '@/routes/routes';
 
 /**
  * Decide no servidor quem vê o quê, lendo o cookie da sessão.
@@ -14,18 +14,11 @@ import { RETURN_PARAM, ROUTES } from '@/routes/routes';
  * chegam ao navegador na tela certa, em vez de montar uma e trocar depois de
  * hidratar.
  */
-const PUBLIC_ONLY_PATHS = new Set<string>([
-  ROUTES.landing,
-  ROUTES.landingEn,
-  ROUTES.login,
-  ROUTES.signup,
-]);
-
 export function proxy(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
   const hasSession = request.cookies.has(env.NEXT_PUBLIC_SESSION_COOKIE_NAME);
 
-  if (hasSession && PUBLIC_ONLY_PATHS.has(pathname)) {
+  if (hasSession && GUEST_ONLY_PATHS.includes(pathname)) {
     return NextResponse.redirect(new URL(ROUTES.home, request.url));
   }
 
@@ -39,6 +32,12 @@ export function proxy(request: NextRequest) {
   return NextResponse.next();
 }
 
+/**
+ * Literal por exigência do Next, que lê este campo em tempo de build e não
+ * consegue avaliar `ROUTES`. Precisa acompanhar `GUEST_ONLY_PATHS` e o
+ * prefixo do produto — o teste em `src/routes/routes.test.ts` falha se
+ * divergirem.
+ */
 export const config = {
   matcher: ['/', '/en', '/login', '/signup', '/app/:path*'],
 };
