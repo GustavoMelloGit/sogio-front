@@ -59,8 +59,7 @@ const getInitials = (name: string): string =>
     .toUpperCase();
 
 const SOURCE_LABEL_KEYS: Record<string, string> = {
-  INTERNAL: 'stayDetail.sourceLabels.internal',
-  DIRECT: 'stayDetail.sourceLabels.internal',
+  DIRECT: 'stayDetail.sourceLabels.direct',
   AIRBNB: 'stayDetail.sourceLabels.airbnb',
   BOOKING: 'stayDetail.sourceLabels.booking',
 };

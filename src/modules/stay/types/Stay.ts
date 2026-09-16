@@ -32,15 +32,11 @@ export type WithTenant<T> = T & {
   tenant: Tenant;
 };
 
-/**
- * Reserva feita direto com o anfitrião, sem plataforma. A API aceita
- * qualquer rótulo em `source`, e estes dois são os que ela mesma emite para
- * esse caso: `INTERNAL` pelo painel e `DIRECT` pelo assistente.
- */
-const DIRECT_SOURCES = new Set(['INTERNAL', 'DIRECT']);
+/** Reserva feita direto com o anfitrião, sem plataforma. */
+export const DIRECT_SOURCE = 'DIRECT';
 
 export const isDirectSource = (source: string): boolean =>
-  DIRECT_SOURCES.has(source.toUpperCase());
+  source.toUpperCase() === DIRECT_SOURCE;
 
 export const sourcePlatformSchema = z.enum(['BOOKING', 'AIRBNB']);
 export type SourcePlatform = z.infer<typeof sourcePlatformSchema>;

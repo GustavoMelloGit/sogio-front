@@ -13,6 +13,7 @@ import { Currency } from '@/lib/currency';
 import { DateUtils } from '@/lib/date';
 import { toast } from 'sonner';
 import { useTranslation } from '@/i18n/useTranslation';
+import { DIRECT_SOURCE } from '@/modules/stay/types/Stay';
 import { useBookStay } from '../service/PropertyService.hooks';
 import { CHECK_IN_HOUR, CHECK_OUT_HOUR } from '../types/Property';
 import { BookStayForm, type BookStayFormData } from './BookStayForm';
@@ -65,7 +66,7 @@ export const AddStay: FC<Props> = ({ propertyId, isOpen, onClose }) => {
       guests: Number(data.guests),
       property: propertyId,
       price: Currency.toCents(Number(data.price)),
-      source: 'DIRECT',
+      source: DIRECT_SOURCE,
     });
   };
 

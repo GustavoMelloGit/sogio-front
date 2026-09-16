@@ -14,15 +14,15 @@ const stay = {
 
 describe('staySchema', () => {
   it('aceita qualquer rótulo de origem, porque a API guarda texto livre', () => {
-    for (const source of ['INTERNAL', 'DIRECT', 'AIRBNB', 'TEMPORADA_LIVRE']) {
+    for (const source of ['DIRECT', 'AIRBNB', 'TEMPORADA_LIVRE']) {
       expect(staySchema.parse({ ...stay, source }).source).toBe(source);
     }
   });
 });
 
 describe('isDirectSource', () => {
-  it('reconhece os rótulos que a API usa para reserva sem plataforma', () => {
-    expect(isDirectSource('INTERNAL')).toBe(true);
+  it('reconhece a reserva sem plataforma', () => {
+    expect(isDirectSource('DIRECT')).toBe(true);
     expect(isDirectSource('direct')).toBe(true);
   });
 
