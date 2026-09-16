@@ -7,6 +7,7 @@ import {
   type ReactNode,
 } from 'react';
 import i18n from '@/i18n';
+import { AppUpdateToast } from '@/components/AppUpdateToast';
 
 const subscribe = () => () => {};
 
@@ -47,5 +48,10 @@ export const SpaShell = ({ children }: { children: ReactNode }) => {
 
   if (!isClient) return null;
 
-  return <Suspense fallback={null}>{children}</Suspense>;
+  return (
+    <>
+      <AppUpdateToast />
+      <Suspense fallback={null}>{children}</Suspense>
+    </>
+  );
 };

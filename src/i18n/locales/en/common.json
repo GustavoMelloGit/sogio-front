@@ -18,5 +18,11 @@
   },
   "actions": {
     "viewAll": "View all"
+  },
+  "appUpdate": {
+    "title": "New version available",
+    "description": "Reload to get the latest updates.",
+    "action": "Reload",
+    "dismiss": "Later"
   }
 }
