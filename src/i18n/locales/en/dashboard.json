@@ -9,10 +9,15 @@
   },
   "upcomingStays": {
     "title": "Upcoming stays",
-    "viewStayAriaLabel": "View stay at {{property}} for {{tenant}}"
+    "viewStayAriaLabel": "View stay at {{property}} for {{tenant}}",
+    "emptyWithoutProperty": "Stays show up here once you add your first property.",
+    "empty": "No upcoming stays.",
+    "newStay": "New stay"
   },
   "yourProperties": {
     "title": "Your properties",
-    "viewDetailsAriaLabel": "View details for {{name}}"
+    "viewDetailsAriaLabel": "View details for {{name}}",
+    "empty": "You haven't added a property yet.",
+    "createProperty": "Add property"
   }
 }
