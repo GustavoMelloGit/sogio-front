@@ -32,9 +32,11 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { Spinner } from '@/components/ui/spinner';
 import { Alert } from '@/components/Alert';
 import { ROUTES } from '@/routes/routes';
 import { ZipCode } from '@/lib/zip-code';
+import { cn } from '@/lib/utils';
 import { createPropertyRequestSchema } from '../types/Property';
 import { useCreateProperty } from '../service/PropertyService.hooks';
 import { useZipCodeLookup } from '../service/AddressService.hooks';
@@ -48,6 +50,8 @@ const ZIP_CODE_FILLED_FIELDS = [
   'city',
   'state',
 ] as const;
+
+type ZipCodeFilledField = (typeof ZIP_CODE_FILLED_FIELDS)[number];
 
 const createFormSchema = (t: TranslateFn) =>
   createPropertyRequestSchema.extend({
@@ -70,12 +74,14 @@ type FormData = z.infer<ReturnType<typeof createFormSchema>>;
 type TextFieldProps = Omit<ComponentProps<typeof Input>, 'name'> & {
   name: FieldPathByValue<FormData, string | undefined>;
   label: string;
+  isLoading?: boolean;
 };
 
 const TextField: FC<TextFieldProps> = ({
   name,
   label,
   className,
+  isLoading = false,
   ...inputProps
 }) => {
   const { control } = useFormContext<FormData>();
@@ -87,9 +93,25 @@ const TextField: FC<TextFieldProps> = ({
       render={({ field }) => (
         <FormItem className={className}>
           <FormLabel>{label}</FormLabel>
-          <FormControl>
-            <Input {...inputProps} {...field} />
-          </FormControl>
+          <div className='relative'>
+            <FormControl>
+              <Input
+                {...field}
+                {...inputProps}
+                readOnly={isLoading || inputProps.readOnly}
+                aria-busy={isLoading}
+                className={cn(isLoading && 'pr-9')}
+              />
+            </FormControl>
+            {isLoading && (
+              <span
+                aria-hidden='true'
+                className='absolute inset-y-0 right-3 flex items-center text-muted-foreground'
+              >
+                <Spinner size='sm' />
+              </span>
+            )}
+          </div>
           <FormMessage />
         </FormItem>
       )}
@@ -130,8 +152,13 @@ const CreatePropertyView: FC = () => {
     },
   });
 
-  const { lookUpZipCode, resetZipCodeLookup, lookedUpZipCode } =
-    useZipCodeLookup();
+  const {
+    lookUpZipCode,
+    resetZipCodeLookup,
+    lookedUpZipCode,
+    zipCodeAddress,
+    isLookingUp,
+  } = useZipCodeLookup();
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -157,6 +184,15 @@ const CreatePropertyView: FC = () => {
     name: 'images',
   });
 
+  const isFilledByZipCode = (key: ZipCodeFilledField): boolean =>
+    Boolean(zipCodeAddress?.[key]);
+
+  const clearZipCodeFilledFields = (): void => {
+    for (const key of ZIP_CODE_FILLED_FIELDS) {
+      if (isFilledByZipCode(key)) form.setValue(`address.${key}`, '');
+    }
+  };
+
   const fillAddress = (address: ZipCodeAddress): void => {
     for (const key of ZIP_CODE_FILLED_FIELDS) {
       if (address[key]) {
@@ -167,13 +203,16 @@ const CreatePropertyView: FC = () => {
   };
 
   const handleZipCodeChange = (zipCode: string): void => {
-    if (!ZipCode.isComplete(zipCode)) {
+    const digits = ZipCode.digits(zipCode);
+    const isComplete = ZipCode.isComplete(zipCode);
+    if (isComplete && digits === lookedUpZipCode) return;
+
+    clearZipCodeFilledFields();
+
+    if (!isComplete) {
       resetZipCodeLookup();
       return;
     }
-
-    const digits = ZipCode.digits(zipCode);
-    if (digits === lookedUpZipCode) return;
 
     lookUpZipCode(digits, {
       onSuccess: address => {
@@ -313,6 +352,8 @@ const CreatePropertyView: FC = () => {
               />
               <TextField
                 name='address.street'
+                isLoading={isLookingUp}
+                disabled={isFilledByZipCode('street')}
                 label={t('createProperty.streetLabel')}
                 placeholder={t('createProperty.streetPlaceholder')}
                 className='col-span-6 sm:col-span-4 xl:col-span-7'
@@ -331,18 +372,24 @@ const CreatePropertyView: FC = () => {
               />
               <TextField
                 name='address.neighborhood'
+                isLoading={isLookingUp}
+                disabled={isFilledByZipCode('neighborhood')}
                 label={t('createProperty.neighborhoodLabel')}
                 placeholder={t('createProperty.neighborhoodPlaceholder')}
                 className='col-span-6 sm:col-span-3 xl:col-span-4'
               />
               <TextField
                 name='address.city'
+                isLoading={isLookingUp}
+                disabled={isFilledByZipCode('city')}
                 label={t('createProperty.cityLabel')}
                 placeholder={t('createProperty.cityPlaceholder')}
                 className='col-span-4 xl:col-span-3'
               />
               <TextField
                 name='address.state'
+                isLoading={isLookingUp}
+                disabled={isFilledByZipCode('state')}
                 label={t('createProperty.stateLabel')}
                 placeholder={t('createProperty.statePlaceholder')}
                 className='col-span-2'
