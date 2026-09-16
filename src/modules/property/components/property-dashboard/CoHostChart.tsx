@@ -6,7 +6,7 @@ import {
 } from '@/components/ui/chart';
 import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts';
 import { Currency } from '@/lib/currency';
-import type { Stay } from '@/modules/stay/types/Stay';
+import { isDirectSource, type Stay } from '@/modules/stay/types/Stay';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useTranslation } from '@/i18n/useTranslation';
 import { INTL_LOCALES } from '@/i18n/locale-maps';
@@ -81,8 +81,9 @@ function calculateCohostPayment(stay: Stay): number {
   const INTERNAL_COMMISSION = 0.1;
   const EXTERNAL_COMMISSION = 0.12;
   const CLEANING_FEE = 150_00; // R$ 150,00;
-  const commission =
-    stay.source === 'INTERNAL' ? INTERNAL_COMMISSION : EXTERNAL_COMMISSION;
+  const commission = isDirectSource(stay.source)
+    ? INTERNAL_COMMISSION
+    : EXTERNAL_COMMISSION;
   const priceInCents = stay.price;
 
   return (priceInCents - CLEANING_FEE) * commission;
