@@ -28,7 +28,7 @@
     "copyEntranceCodeAriaLabel": "Copiar código de entrada",
     "bookingSourceLabel": "Origem da reserva",
     "sourceLabels": {
-      "internal": "Reserva direta",
+      "direct": "Reserva direta",
       "airbnb": "Airbnb",
       "booking": "Booking.com"
     },

@@ -3,7 +3,7 @@
 import { useState, type FC, type ReactNode } from 'react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
-import { useTranslation } from '@/i18n/useTranslation';
+import { useTranslation, type TranslateFn } from '@/i18n/useTranslation';
 import { INTL_LOCALES } from '@/i18n/locale-maps';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button, buttonVariants } from '@/components/ui/button';
@@ -58,10 +58,17 @@ const getInitials = (name: string): string =>
     .join('')
     .toUpperCase();
 
-const SOURCE_LABEL_KEYS: Record<Stay['source'], string> = {
-  INTERNAL: 'stayDetail.sourceLabels.internal',
+const SOURCE_LABEL_KEYS: Record<string, string> = {
+  DIRECT: 'stayDetail.sourceLabels.direct',
   AIRBNB: 'stayDetail.sourceLabels.airbnb',
   BOOKING: 'stayDetail.sourceLabels.booking',
+};
+
+/** Rótulo desconhecido aparece cru: é melhor que esconder a origem. */
+const sourceLabel = (source: string, t: TranslateFn): string => {
+  const key = SOURCE_LABEL_KEYS[source.toUpperCase()];
+
+  return key ? t(key) : source;
 };
 
 type MetricCardProps = {
@@ -352,7 +359,7 @@ export const StayDetailView: FC = () => {
                   {t('stayDetail.bookingSourceLabel')}
                 </p>
                 <p className='text-sm font-medium'>
-                  {t(SOURCE_LABEL_KEYS[stay.source])}
+                  {sourceLabel(stay.source, t)}
                 </p>
               </div>
             </CardContent>
