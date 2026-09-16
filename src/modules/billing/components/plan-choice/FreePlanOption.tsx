@@ -14,7 +14,6 @@ import { PlanFeatureList } from '../PlanFeatureList';
 
 type Props = {
   plan: Plan;
-  isChoosing: boolean;
   isDisabled: boolean;
   onChoose: () => void;
   className?: string;
@@ -22,7 +21,6 @@ type Props = {
 
 export const FreePlanOption: FC<Props> = ({
   plan,
-  isChoosing,
   isDisabled,
   onChoose,
   className,
@@ -57,7 +55,6 @@ export const FreePlanOption: FC<Props> = ({
             variant='outline'
             size='lg'
             className='h-11 w-full'
-            isLoading={isChoosing}
             disabled={isDisabled}
             onClick={onChoose}
           >

@@ -103,8 +103,7 @@
     "free": {
       "description": "Para organizar um imóvel pelo painel, lançando tudo à mão.",
       "cta": "Continuar no plano grátis",
-      "note": "Você pode ativar o Pro depois, em Assinatura.",
-      "error": "Não foi possível continuar no plano grátis. Tente novamente."
+      "note": "Você pode ativar o Pro depois, em Assinatura."
     }
   }
 }

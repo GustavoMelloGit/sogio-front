@@ -103,8 +103,7 @@
     "free": {
       "description": "Organize one property from the dashboard, logging everything by hand.",
       "cta": "Continue on the free plan",
-      "note": "You can activate Pro later, under Billing.",
-      "error": "Could not continue on the free plan. Please try again."
+      "note": "You can activate Pro later, under Billing."
     }
   }
 }

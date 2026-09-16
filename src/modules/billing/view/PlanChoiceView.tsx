@@ -12,7 +12,6 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { ROUTES } from '@/routes/routes';
 import { useTranslation } from '@/i18n/useTranslation';
 import {
-  useChooseFreePlan,
   useCreateCheckoutSession,
   usePlans,
   useRefreshSubscription,
@@ -33,12 +32,10 @@ const PlanChoiceView: FC = () => {
   } = usePlans();
   const { createCheckoutSession, isCreatingCheckoutSession } =
     useCreateCheckoutSession();
-  const { chooseFreePlan, isChoosingFreePlan } = useChooseFreePlan();
   const refreshSubscription = useRefreshSubscription();
 
   const proPlan = plans.find(plan => plan.code === 'pro');
   const freePlan = plans.find(plan => plan.code === 'free');
-  const isSubmitting = isCreatingCheckoutSession || isChoosingFreePlan;
 
   const handleStartCheckout = (): void => {
     createCheckoutSession(
@@ -60,16 +57,7 @@ const PlanChoiceView: FC = () => {
   };
 
   const handleChooseFree = (): void => {
-    chooseFreePlan(undefined, {
-      onSuccess: () => {
-        router.replace(ROUTES.home);
-      },
-      onError: error => {
-        toast.error(
-          error instanceof Error ? error.message : t('planChoice.free.error')
-        );
-      },
-    });
+    router.replace(ROUTES.home);
   };
 
   return (
@@ -130,7 +118,7 @@ const PlanChoiceView: FC = () => {
               plan={proPlan}
               className='md:col-span-3'
               isStartingCheckout={isCreatingCheckoutSession}
-              isDisabled={isSubmitting}
+              isDisabled={isCreatingCheckoutSession}
               onStartCheckout={handleStartCheckout}
             />
           )}
@@ -138,8 +126,7 @@ const PlanChoiceView: FC = () => {
             <FreePlanOption
               plan={freePlan}
               className='md:col-span-2'
-              isChoosing={isChoosingFreePlan}
-              isDisabled={isSubmitting}
+              isDisabled={isCreatingCheckoutSession}
               onChoose={handleChooseFree}
             />
           )}
