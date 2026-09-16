@@ -95,17 +95,20 @@ const BillingSettingsView: FC = () => {
   }, [searchParams, removeSearchParam, refreshSubscription]);
 
   const handleSelectPlan = (planCode: PlanCode): void => {
-    createCheckoutSession(planCode, {
-      onError: error => {
-        if (isAxiosError(error) && error.response?.status === 409) {
-          toast.error(t('checkoutAlreadySubscribedError'));
-          return;
-        }
-        toast.error(
-          error instanceof Error ? error.message : t('checkoutErrorFallback')
-        );
-      },
-    });
+    createCheckoutSession(
+      { planCode, returnTo: 'billing' },
+      {
+        onError: error => {
+          if (isAxiosError(error) && error.response?.status === 409) {
+            toast.error(t('checkoutAlreadySubscribedError'));
+            return;
+          }
+          toast.error(
+            error instanceof Error ? error.message : t('checkoutErrorFallback')
+          );
+        },
+      }
+    );
   };
 
   const handleManageSubscription = (): void => {

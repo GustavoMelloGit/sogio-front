@@ -73,5 +73,47 @@
       "canceled": "Subscription canceled",
       "renewed": "Subscription renewed"
     }
+  },
+  "planChoice": {
+    "logout": "Log out",
+    "steps": {
+      "label": "Sign-up steps",
+      "done": "Completed:",
+      "account": "Account created",
+      "plan": "Choose a plan"
+    },
+    "title": "Choose how to start",
+    "subtitle": "Your account is ready. Just pick a plan — you can switch whenever you want.",
+    "loadError": "Could not load the plans.",
+    "retry": "Try again",
+    "recommendedBadge": "Recommended",
+    "monthlyPrice": "{{price}}/month",
+    "pro": {
+      "description": "Ditch the spreadsheet and handle everything by chatting.",
+      "trialHeadline_one": "{{count}} day free",
+      "trialHeadline_other": "{{count}} days free",
+      "priceAfterTrial": "Then {{price}}/month.",
+      "trialCta_one": "Start {{count}}-day free trial",
+      "trialCta_other": "Start {{count}}-day free trial",
+      "subscribeCta": "Subscribe to {{plan}}",
+      "trialReassurance": "You add your card in the next step and only pay after the trial. Cancel anytime from the dashboard.",
+      "reassurance": "Secure payment through Stripe. Cancel anytime from the dashboard."
+    },
+    "free": {
+      "description": "Organize one property from the dashboard, logging everything by hand.",
+      "cta": "Continue on the free plan",
+      "note": "You can activate Pro later, under Billing.",
+      "error": "Could not continue on the free plan. Please try again."
+    },
+    "checkout": {
+      "successToast": "All set! Pro is now active on your account.",
+      "canceledToast": "Checkout canceled. Your plans are still here.",
+      "confirmingTitle": "Confirming your subscription…",
+      "confirmingDescription": "This usually takes just a few seconds.",
+      "delayedTitle": "Confirmation is taking a while",
+      "delayedDescription": "If you completed the payment, it will arrive shortly. Check again in a moment.",
+      "checkAgain": "Check again",
+      "backToPlans": "Back to plans"
+    }
   }
 }

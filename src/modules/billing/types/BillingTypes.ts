@@ -58,6 +58,7 @@ export const subscriptionSchema = z.object({
   has_platform_access: z.boolean(),
   status: accountStatusSchema,
   capabilities: planCapabilitiesSchema,
+  needs_plan_choice: z.boolean().default(false),
   // Only present in the payload when has_platform_access is false — omitted
   // entirely (not null) otherwise, so this must accept a missing key too.
   blocked_reason: blockedReasonSchema
@@ -91,6 +92,8 @@ export const subscriptionHistoryEntrySchema = z.object({
 export type SubscriptionHistoryEntry = z.infer<
   typeof subscriptionHistoryEntrySchema
 >;
+
+export type CheckoutReturnTo = 'billing' | 'onboarding';
 
 export const checkoutSessionSchema = z.object({ url: z.string() });
 export type CheckoutSession = z.infer<typeof checkoutSessionSchema>;

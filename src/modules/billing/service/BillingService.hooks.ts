@@ -1,7 +1,9 @@
 import { useCallback } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { BillingService } from './BillingService';
-import type { PlanCode } from '../types/BillingTypes';
+import type { CheckoutReturnTo, PlanCode } from '../types/BillingTypes';
+
+const PLAN_CHOICE_POLL_INTERVAL_MS = 2000;
 
 export const billingQueryKeys = {
   plans: ['billing', 'plans'] as const,
@@ -14,26 +16,34 @@ export const usePlans = () => {
   const {
     data: plans = [],
     isPending: isLoading,
+    isFetching,
     error,
+    refetch,
   } = useQuery({
     queryKey: billingQueryKeys.plans,
     queryFn: () => BillingService.listPlans(),
     staleTime: 5 * 60 * 1000,
   });
-  return { plans, isLoading, error };
+  return { plans, isLoading, isFetching, error, refetch };
 };
 
-export const useSubscription = () => {
+export const useSubscription = ({ pollUntilPlanChosen = false } = {}) => {
   const {
     data: subscription,
     isPending: isLoading,
+    isFetching,
     error,
+    refetch,
   } = useQuery({
     queryKey: billingQueryKeys.subscription,
     queryFn: () => BillingService.getSubscription(),
     staleTime: 5 * 60 * 1000,
+    refetchInterval: query =>
+      pollUntilPlanChosen && query.state.data?.needs_plan_choice
+        ? PLAN_CHOICE_POLL_INTERVAL_MS
+        : false,
   });
-  return { subscription, isLoading, error };
+  return { subscription, isLoading, isFetching, error, refetch };
 };
 
 export const useSubscriptionHistory = (page: number) => {
@@ -106,8 +116,13 @@ export const useCreateCheckoutSession = () => {
     isPending: isCreatingCheckoutSession,
     error: checkoutSessionError,
   } = useMutation({
-    mutationFn: (planCode: PlanCode) =>
-      BillingService.createCheckoutSession(planCode),
+    mutationFn: ({
+      planCode,
+      returnTo,
+    }: {
+      planCode: PlanCode;
+      returnTo: CheckoutReturnTo;
+    }) => BillingService.createCheckoutSession(planCode, returnTo),
     onSuccess: ({ url }) => {
       window.location.href = url;
     },
@@ -117,6 +132,20 @@ export const useCreateCheckoutSession = () => {
     isCreatingCheckoutSession,
     checkoutSessionError,
   };
+};
+
+export const useChooseFreePlan = () => {
+  const queryClient = useQueryClient();
+  const { mutate: chooseFreePlan, isPending: isChoosingFreePlan } = useMutation(
+    {
+      mutationFn: () => BillingService.chooseFreePlan(),
+      onSuccess: () =>
+        queryClient.invalidateQueries({
+          queryKey: billingQueryKeys.subscription,
+        }),
+    }
+  );
+  return { chooseFreePlan, isChoosingFreePlan };
 };
 
 export const useCreatePortalSession = () => {
