@@ -91,9 +91,9 @@ const PlanChoiceView: FC = () => {
       </div>
 
       {isLoadingPlans && (
-        <div className='grid grid-cols-1 gap-4 md:grid-cols-5 md:gap-6'>
-          <Skeleton className='h-[30rem] md:col-span-3' />
-          <Skeleton className='h-96 md:col-span-2' />
+        <div className='grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6'>
+          <Skeleton className='h-[30rem]' />
+          <Skeleton className='h-[30rem]' />
         </div>
       )}
 
@@ -112,22 +112,20 @@ const PlanChoiceView: FC = () => {
       )}
 
       {!isLoadingPlans && !plansError && (
-        <div className='grid grid-cols-1 gap-4 md:grid-cols-5 md:items-start md:gap-6'>
-          {proPlan && (
-            <ProPlanOption
-              plan={proPlan}
-              className='md:col-span-3'
-              isStartingCheckout={isCreatingCheckoutSession}
-              isDisabled={isCreatingCheckoutSession}
-              onStartCheckout={handleStartCheckout}
-            />
-          )}
+        <div className='grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6'>
           {freePlan && (
             <FreePlanOption
               plan={freePlan}
-              className='md:col-span-2'
               isDisabled={isCreatingCheckoutSession}
               onChoose={handleChooseFree}
+            />
+          )}
+          {proPlan && (
+            <ProPlanOption
+              plan={proPlan}
+              isStartingCheckout={isCreatingCheckoutSession}
+              isDisabled={isCreatingCheckoutSession}
+              onStartCheckout={handleStartCheckout}
             />
           )}
         </div>

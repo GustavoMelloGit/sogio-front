@@ -37,7 +37,7 @@ export const ProPlanOption: FC<Props> = ({
 
   return (
     <section aria-labelledby={headingId} className={className}>
-      <Card className='border-primary ring-primary shadow-lg ring-1'>
+      <Card className='border-primary ring-primary h-full shadow-lg ring-1'>
         <CardHeader className='gap-3'>
           <div className='flex flex-wrap items-center justify-between gap-2'>
             <h2 id={headingId} className='text-xl font-bold'>

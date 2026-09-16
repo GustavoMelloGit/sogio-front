@@ -33,7 +33,7 @@ export const FreePlanOption: FC<Props> = ({
 
   return (
     <section aria-labelledby={headingId} className={className}>
-      <Card className='bg-muted/40 shadow-none'>
+      <Card className='bg-muted/40 h-full shadow-none'>
         <CardHeader className='gap-3'>
           <h2 id={headingId} className='text-lg font-semibold'>
             {plan.name}
