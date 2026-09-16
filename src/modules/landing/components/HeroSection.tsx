@@ -2,6 +2,7 @@ import type { CSSProperties } from 'react';
 import { Play } from 'lucide-react';
 import { useTranslation } from '@/i18n/useTranslation';
 import { trackEvent } from '@/lib/clarity';
+import { ROUTES } from '@/routes/routes';
 import { LandingCta } from './LandingCta';
 
 const WAVEFORM = [26, 58, 40, 82, 50, 92, 36, 68, 96, 54, 32, 76, 44, 88, 34];
@@ -63,7 +64,7 @@ export const HeroSection = () => {
             style={{ '--lp-delay': '420ms' } as CSSProperties}
           >
             <LandingCta
-              href='#lista'
+              href={ROUTES.signup}
               size='large'
               className='w-full sm:w-auto'
               onClick={() => trackEvent('cta_click_hero')}

@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "Sogio: cuide dos seus imóveis de temporada conversando",
-    "description": "Sem planilha e sem aprender sistema novo: mande um áudio e Sogio lança a reserva, organiza as despesas e diz quanto o imóvel deu de lucro.",
+    "description": "Sem planilha e sem aprender sistema novo: mande um áudio no WhatsApp e Sogio lança a reserva, organiza as despesas e diz quanto o imóvel deu de lucro.",
     "category": "Gestão de aluguel por temporada",
     "audience": "Proprietários e administradores de imóveis de aluguel por temporada"
   },
@@ -12,15 +12,16 @@
     "faq": "Dúvidas",
     "login": "Entrar",
     "cta": "Largar a planilha",
-    "languageGroup": "Idioma"
+    "languageGroup": "Idioma",
+    "plans": "Planos"
   },
   "hero": {
-    "badge": "Em construção · 50 vagas de pioneiro",
+    "badge": "Já no WhatsApp · 14 dias grátis",
     "titleLine1": "E se a planilha",
     "titleLine2": "te ouvisse?",
     "subtitle": "Manda um áudio. Sogio lança, organiza e te diz quanto o imóvel deu de lucro esse mês.",
     "cta": "Quero largar a planilha",
-    "ctaTrigger": "Leva 20 segundos. Você entra na lista dos 50 e a gente avisa quando abrir."
+    "ctaTrigger": "Crie sua conta em 1 minuto e teste o Pro por 14 dias grátis."
   },
   "demo": {
     "eyebrow": "Como é na prática",
@@ -80,52 +81,39 @@
     "item5": "Quanto eu tenho a receber ainda esse mês?",
     "item6": "Quanto paguei de taxa de plataforma no ano?"
   },
-  "founder": {
-    "eyebrow": "Condição de pioneiro",
-    "title": "As 50 primeiras pessoas pagam R$ 25 no primeiro ano",
-    "body": "Sogio conversacional ainda está sendo construído. Quem entra agora ajuda a definir como ele vai funcionar e paga R$ 25 por mês nos 12 primeiros meses, contra os R$ 35 do preço normal.",
-    "priceValue": "R$ 25",
-    "pricePeriod": "/mês",
-    "priceRegularLabel": "Preço normal",
-    "priceRegularValue": "R$ 35/mês",
-    "benefit1": "R$ 25 por mês nos 12 primeiros meses",
-    "benefit2": "15 dias grátis antes da primeira cobrança",
-    "benefit3": "Acesso antes da abertura ao público",
-    "benefit4": "Linha direta com quem está construindo",
-    "seatsLabel": "vagas de pioneiro",
-    "seatsValue": "50",
-    "disclaimer": "Nada é cobrado agora. Você entra na lista, a gente avisa quando abrir, e as condições são confirmadas na abertura."
-  },
-  "form": {
-    "title": "Quero largar a planilha",
-    "nameLabel": "Seu nome",
-    "namePlaceholder": "Como podemos te chamar?",
-    "whatsappLabel": "Seu WhatsApp",
-    "whatsappPlaceholder": "(11) 90000-0000",
-    "countLabel": "Quantos imóveis você cuida?",
-    "count1": "1",
-    "count2to3": "2 a 3",
-    "count4to10": "4 a 10",
-    "count10plus": "10 ou mais",
-    "submit": "Quero largar a planilha",
-    "submitting": "Enviando…",
-    "trigger": "Leva 20 segundos. Você entra na lista dos 50 e a gente avisa quando abrir.",
-    "privacy": "Usamos seu WhatsApp só para avisar da abertura.",
-    "successTitle": "Pronto, você está na lista.",
-    "successBody": "A gente chama você no WhatsApp assim que Sogio conversacional abrir. Sem spam, prometido.",
-    "errors": {
-      "invalidName": "Escreva seu nome, mesmo que só o primeiro.",
-      "invalidWhatsapp": "Digite o WhatsApp com DDD, só números.",
-      "invalidCount": "Escolha uma das faixas acima.",
-      "generic": "Não conseguimos enviar agora. Tente de novo em instantes."
-    }
+  "plans": {
+    "eyebrow": "Planos",
+    "title": "Comece hoje. Sem lista, sem espera.",
+    "subtitle": "Crie a conta em um minuto e mande a primeira mensagem ainda hoje.",
+    "free": {
+      "name": "Grátis",
+      "description": "Para organizar um imóvel pelo painel.",
+      "price": "R$ 0",
+      "period": "/mês",
+      "feature1": "1 imóvel",
+      "feature2": "Reservas, receitas e despesas no painel web",
+      "cta": "Criar conta grátis"
+    },
+    "pro": {
+      "name": "Pro",
+      "badge": "14 dias grátis",
+      "description": "Para largar a planilha e cuidar de tudo conversando.",
+      "price": "R$ 25",
+      "period": "/mês",
+      "feature1": "Sogio no WhatsApp: áudio, foto da nota ou pergunta",
+      "feature2": "Até 10 imóveis",
+      "feature3": "Exportação de relatórios",
+      "feature4": "Importação do histórico em lote",
+      "cta": "Quero largar a planilha"
+    },
+    "disclaimer": "Assinatura mensal. Você cancela quando quiser, pelo próprio painel."
   },
   "faq": {
     "eyebrow": "Dúvidas",
     "title": "Perguntas frequentes",
     "item1": {
-      "question": "Sogio já funciona por WhatsApp hoje?",
-      "answer": "Ainda não. O painel Sogio está no ar e em uso, e a versão conversacional está em construção. Por isso existe uma lista de espera em vez de um botão de cadastro."
+      "question": "Como começo a usar pelo WhatsApp?",
+      "answer": "Crie sua conta, ative o plano Pro (os 14 primeiros dias são grátis) e mande uma mensagem para o Sogio no WhatsApp. Ele responde com um link para você entrar na sua conta e autorizar. Depois disso é só conversar."
     },
     "item2": {
       "question": "E se ele entender errado o que eu falei?",
@@ -137,24 +125,28 @@
     },
     "item4": {
       "question": "Preciso instalar algo ou saber mexer em tecnologia?",
-      "answer": "Não. Se você manda mensagem e áudio no WhatsApp, já sabe o suficiente, e não existe tela nova para aprender. O painel Sogio continua funcionando para quem gosta de ver tudo numa tela, mas ele é opcional."
+      "answer": "Não. Sogio funciona no WhatsApp que você já usa: se você manda mensagem e áudio, já sabe o suficiente. O painel web continua disponível para quem gosta de ver tudo numa tela, mas ele é opcional."
     },
     "item5": {
       "question": "E se eu já tenho tudo numa planilha?",
-      "answer": "Você manda a planilha na própria conversa e Sogio importa o histórico. Não precisa recomeçar do zero."
+      "answer": "Você não precisa migrar nada para começar: é só registrar a partir de hoje. Se quiser trazer o histórico, o plano Pro importa reservas, receitas e despesas em lote."
     },
     "item6": {
       "question": "Serve para quem tem só um imóvel?",
-      "answer": "Serve. Sogio é feito para quem cuida de 1 a 15 imóveis de temporada, de um apartamento na praia a um pequeno portfólio."
+      "answer": "Serve. O plano Grátis cobre um imóvel no painel, e o Pro vai até 10 imóveis, de um apartamento na praia a um pequeno portfólio."
     },
     "item7": {
       "question": "Funciona com Airbnb e Booking?",
       "answer": "Sim. Você registra reservas de qualquer plataforma ou de aluguel direto e concilia tudo no mesmo lugar."
+    },
+    "item8": {
+      "question": "Quanto custa?",
+      "answer": "Criar a conta é grátis e cobre um imóvel no painel. O Pro, que inclui Sogio no WhatsApp e até 10 imóveis, custa R$ 25 por mês, com 14 dias grátis para testar. Você cancela quando quiser, pelo próprio painel."
     }
   },
   "finalCta": {
     "title": "Comece pelo mais simples: mandar uma mensagem.",
-    "subtitle": "Entre na lista dos 50 primeiros e pague R$ 25 por mês no primeiro ano.",
+    "subtitle": "Crie sua conta agora e teste o Pro por 14 dias grátis.",
     "cta": "Quero largar a planilha"
   },
   "footer": {

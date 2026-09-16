@@ -14,16 +14,17 @@ export function GET() {
 
 > Gestão de imóveis de aluguel por temporada por conversa. O anfitrião manda um áudio, uma foto da nota ou uma pergunta, e Sogio lança a receita, arquiva a despesa e responde quanto cada imóvel deu de lucro, sem planilha e sem aprender um sistema novo.
 
-Para quem: pessoas que cuidam de 1 a 15 imóveis de temporada (Airbnb, Booking ou aluguel direto), incluindo quem não tem familiaridade com software de gestão.
+Para quem: pessoas que cuidam de 1 a 10 imóveis de temporada (Airbnb, Booking ou aluguel direto), incluindo quem não tem familiaridade com software de gestão.
 
-Estado atual: o painel web Sogio está em produção. A versão conversacional está em construção e entra por lista de espera.
+Estado atual: Sogio está em produção e aberto a qualquer pessoa. A conversa acontece no WhatsApp, e o painel web mostra tudo numa tela para quem preferir.
 
-Preço: R$ 35 por mês quando abrir ao público. As 50 primeiras pessoas da lista pagam R$ 25 por mês nos 12 primeiros meses. Os primeiros 15 dias são gratuitos nos dois casos.
+Preço: o plano Grátis cobre 1 imóvel no painel web. O plano Pro custa R$ 25 por mês, inclui Sogio no WhatsApp, até 10 imóveis, exportação de relatórios e importação em lote, e tem 14 dias grátis. A assinatura é mensal e pode ser cancelada pelo painel.
 
 ## Páginas
 
 - [Landing page (pt-BR)](${SITE_URL}/): proposta, demonstração da conversa, objeções e perguntas frequentes.
 - [Landing page (en)](${SITE_URL}${ROUTES.landingEn}): a mesma página em inglês.
+- [Criar conta](${SITE_URL}${ROUTES.signup}): cadastro no Sogio.
 - [Entrar no painel](${SITE_URL}${ROUTES.login}): acesso ao produto para quem já é cliente.
 - [Guias](${SITE_URL}${ROUTES.guides}): conteúdo aberto sobre gestão de aluguel por temporada.
 ${guias}

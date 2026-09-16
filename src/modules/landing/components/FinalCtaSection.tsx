@@ -1,5 +1,6 @@
 import { useTranslation } from '@/i18n/useTranslation';
 import { trackEvent } from '@/lib/clarity';
+import { ROUTES } from '@/routes/routes';
 import { LandingCta } from './LandingCta';
 
 export const FinalCtaSection = () => {
@@ -19,14 +20,13 @@ export const FinalCtaSection = () => {
           {t('finalCta.subtitle')}
         </p>
         <LandingCta
-          href='#lista'
+          href={ROUTES.signup}
           size='large'
           className='mt-9 w-full sm:w-auto'
           onClick={() => trackEvent('cta_click_final')}
         >
           {t('finalCta.cta')}
         </LandingCta>
-        <p className='text-lp-muted mt-3 text-base'>{t('form.trigger')}</p>
       </div>
     </section>
   );
