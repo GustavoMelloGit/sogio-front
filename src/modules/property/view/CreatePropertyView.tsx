@@ -26,7 +26,6 @@ import { Button, buttonVariants } from '@/components/ui/button';
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -131,13 +130,8 @@ const CreatePropertyView: FC = () => {
     },
   });
 
-  const {
-    lookUpZipCode,
-    resetZipCodeLookup,
-    lookedUpZipCode,
-    isLookingUp,
-    hasLookupFailed,
-  } = useZipCodeLookup();
+  const { lookUpZipCode, resetZipCodeLookup, lookedUpZipCode } =
+    useZipCodeLookup();
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -186,12 +180,6 @@ const CreatePropertyView: FC = () => {
         if (address) fillAddress(address);
       },
     });
-  };
-
-  const zipCodeStatus = (): string => {
-    if (isLookingUp) return t('createProperty.zipCodeLookingUp');
-    if (hasLookupFailed) return t('createProperty.zipCodeNotFound');
-    return t('createProperty.zipCodeHint');
   };
 
   const handleSubmit = (data: FormData): void => {
@@ -319,9 +307,6 @@ const CreatePropertyView: FC = () => {
                         }}
                       />
                     </FormControl>
-                    <FormDescription aria-live='polite'>
-                      {zipCodeStatus()}
-                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
