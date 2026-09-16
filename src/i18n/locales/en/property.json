@@ -11,7 +11,9 @@
       "title": "Add your first property",
       "description": "It's where Sogio keeps your bookings, income and expenses organized.",
       "cta": "Add property"
-    }
+    },
+    "actionsAriaLabel": "Actions for {{name}}",
+    "delete": "Delete property"
   },
   "propertyDetail": {
     "loadingBreadcrumb": "Loading...",
@@ -28,8 +30,7 @@
     "tabs": {
       "stays": "Stays",
       "movements": "Movements"
-    },
-    "delete": "Delete"
+    }
   },
   "createProperty": {
     "breadcrumb": "New Property",

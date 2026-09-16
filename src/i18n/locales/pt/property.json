@@ -11,7 +11,9 @@
       "title": "Cadastre sua primeira propriedade",
       "description": "É nela que o Sogio organiza as reservas, as receitas e as despesas.",
       "cta": "Cadastrar propriedade"
-    }
+    },
+    "actionsAriaLabel": "Ações de {{name}}",
+    "delete": "Remover propriedade"
   },
   "propertyDetail": {
     "loadingBreadcrumb": "Carregando...",
@@ -28,8 +30,7 @@
     "tabs": {
       "stays": "Estadias",
       "movements": "Movimentações"
-    },
-    "delete": "Remover"
+    }
   },
   "createProperty": {
     "breadcrumb": "Nova Propriedade",

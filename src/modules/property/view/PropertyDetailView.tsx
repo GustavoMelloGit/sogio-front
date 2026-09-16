@@ -7,11 +7,10 @@ import { useTranslation } from '@/i18n/useTranslation';
 import { useProperty } from '../service/PropertyService.hooks';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Alert } from '@/components/Alert';
-import { ArrowLeft, Link as LinkIcon, Trash2 } from 'lucide-react';
+import { ArrowLeft, Link as LinkIcon } from 'lucide-react';
 import { PropertyStaysList } from '../components/PropertyStaysList';
 import ExternalBookingModal from '../components/ExternalBookingModal';
 import EditPropertyModal from '../components/EditPropertyModal';
-import { DeletePropertyDialog } from '../components/DeletePropertyDialog';
 import { Page } from '@/components/layout/Page';
 import { ROUTES } from '@/routes/routes';
 import { useDisclosure } from '@/hooks/useDisclosure';
@@ -29,11 +28,6 @@ const PropertyDetailView: FC = () => {
     isOpen: isEditOpen,
     open: openEdit,
     close: closeEdit,
-  } = useDisclosure();
-  const {
-    isOpen: isDeleteOpen,
-    open: openDelete,
-    close: closeDelete,
   } = useDisclosure();
 
   if (isLoading) {
@@ -131,20 +125,12 @@ const PropertyDetailView: FC = () => {
         title={property.name}
         description={t('propertyDetail.description')}
         actions={
-          <div className='flex flex-wrap gap-2'>
+          <div className='flex gap-2'>
             <Button variant='outline' onClick={open}>
               <LinkIcon className='w-4 h-4 mr-2' />
               {t('propertyDetail.addLink')}
             </Button>
             <Button onClick={openEdit}>{t('propertyDetail.edit')}</Button>
-            <Button
-              variant='outline'
-              className='text-destructive hover:text-destructive'
-              onClick={openDelete}
-            >
-              <Trash2 aria-hidden='true' />
-              {t('propertyDetail.delete')}
-            </Button>
           </div>
         }
       />
@@ -178,12 +164,6 @@ const PropertyDetailView: FC = () => {
         property={property}
         isOpen={isEditOpen}
         onClose={closeEdit}
-      />
-
-      <DeletePropertyDialog
-        property={property}
-        isOpen={isDeleteOpen}
-        onClose={closeDelete}
       />
     </Page.Container>
   );

@@ -1,5 +1,4 @@
 import { useRef, type FC } from 'react';
-import { useRouter } from 'next/navigation';
 import { isAxiosError } from 'axios';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
@@ -13,7 +12,6 @@ import {
 } from '@/components/ui/dialog';
 import { Alert } from '@/components/Alert';
 import { useTranslation } from '@/i18n/useTranslation';
-import { ROUTES } from '@/routes/routes';
 import { useDeleteProperty } from '../service/PropertyService.hooks';
 import type { Property } from '../types/Property';
 
@@ -29,7 +27,6 @@ export const DeletePropertyDialog: FC<DeletePropertyDialogProps> = ({
   onClose,
 }) => {
   const { t } = useTranslation('property');
-  const router = useRouter();
   const cancelButtonRef = useRef<HTMLButtonElement>(null);
   const { deleteProperty, isDeleting, error, reset } = useDeleteProperty();
 
@@ -50,7 +47,7 @@ export const DeletePropertyDialog: FC<DeletePropertyDialogProps> = ({
               })
             : t('deleteProperty.success', { name: property.name })
         );
-        router.replace(ROUTES.properties);
+        onClose();
       },
     });
   };

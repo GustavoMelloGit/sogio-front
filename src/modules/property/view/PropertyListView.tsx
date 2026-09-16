@@ -13,6 +13,7 @@ import { Page } from '@/components/layout/Page';
 import { Plus } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { PropertyListEmptyState } from '../components/PropertyListEmptyState';
+import { PropertyCardActions } from '../components/PropertyCardActions';
 
 const PropertyListView: FC = () => {
   const { t } = useTranslation(['property', 'common']);
@@ -52,7 +53,11 @@ const PropertyListView: FC = () => {
       <div className='grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-2'>
         {properties.map(property => {
           return (
-            <Card className='pt-0 gap-0' key={property.id}>
+            <Card className='group relative pt-0 gap-0' key={property.id}>
+              <PropertyCardActions
+                property={property}
+                className='absolute right-2 top-2 z-10 pointer-fine:opacity-0 pointer-fine:group-focus-within:opacity-100 pointer-fine:group-hover:opacity-100 pointer-fine:data-[state=open]:opacity-100'
+              />
               <CardHeader className='p-0 rounded-[inherit]'>
                 <img
                   src='/apartment.webp'
