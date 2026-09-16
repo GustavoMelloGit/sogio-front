@@ -1,6 +1,7 @@
 import {
   useMutation,
   useQuery,
+  useQueryClient,
   type UseMutationOptions,
 } from '@tanstack/react-query';
 import { PropertyService } from './PropertyService';
@@ -192,5 +193,29 @@ export const useUpdateProperty = (
     isLoading,
     error,
     mutate,
+  };
+};
+
+export const useDeleteProperty = () => {
+  const queryClient = useQueryClient();
+
+  const { mutate, isPending, error, reset } = useMutation({
+    mutationFn: (propertyId: string) =>
+      PropertyService.deleteProperty(propertyId),
+    onSuccess: (_, propertyId) => {
+      queryClient.invalidateQueries({
+        queryKey: ['property', propertyId],
+        refetchType: 'none',
+      });
+      queryClient.invalidateQueries({ queryKey: ['properties'] });
+      queryClient.invalidateQueries({ queryKey: ['dashboard-overview'] });
+    },
+  });
+
+  return {
+    deleteProperty: mutate,
+    isDeleting: isPending,
+    error,
+    reset,
   };
 };

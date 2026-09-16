@@ -1,8 +1,10 @@
 import api from '@/lib/api';
 import { buildUrlWithParams } from '@/lib/utils';
 import {
+  deletePropertyResponseSchema,
   propertySchema,
   type BookStayRequest,
+  type DeletePropertyResponse,
   type CreatePropertyRequest,
   type Property,
   type ExternalBookingRequest,
@@ -135,5 +137,14 @@ export class PropertyService {
       updateData
     );
     return propertySchema.parse(response.data);
+  }
+
+  static async deleteProperty(
+    propertyId: string
+  ): Promise<DeletePropertyResponse> {
+    const response = await api.delete<DeletePropertyResponse>(
+      `/property/${propertyId}`
+    );
+    return deletePropertyResponseSchema.parse(response.data);
   }
 }

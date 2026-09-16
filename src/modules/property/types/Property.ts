@@ -80,3 +80,11 @@ export type CreatePropertyRequest = z.infer<typeof createPropertyRequestSchema>;
 
 export const CHECK_IN_HOUR = 15;
 export const CHECK_OUT_HOUR = 9;
+
+export const deletePropertyResponseSchema = z.object({
+  canceled_stays: z.number().int().nonnegative(),
+});
+
+export type DeletePropertyResponse = z.infer<
+  typeof deletePropertyResponseSchema
+>;

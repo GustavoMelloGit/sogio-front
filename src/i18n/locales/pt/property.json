@@ -28,7 +28,8 @@
     "tabs": {
       "stays": "Estadias",
       "movements": "Movimentações"
-    }
+    },
+    "delete": "Remover"
   },
   "createProperty": {
     "breadcrumb": "Nova Propriedade",
@@ -238,5 +239,15 @@
       "totalAmountLabel": "Valor total das estadias",
       "medianAmountLabel": "Valor médio das estadias (mediana)"
     }
+  },
+  "deleteProperty": {
+    "title": "Remover {{name}}?",
+    "description": "As estadias futuras dessa propriedade serão canceladas e a receita delas, estornada. Não dá para desfazer.",
+    "cancel": "Cancelar",
+    "confirm": "Remover propriedade",
+    "guestCheckedIn": "Tem um hóspede hospedado agora. Você pode remover a propriedade quando essa estadia terminar.",
+    "success": "{{name}} foi removida.",
+    "successWithCanceledStays_one": "{{name}} foi removida e {{count}} estadia futura foi cancelada.",
+    "successWithCanceledStays_other": "{{name}} foi removida e {{count}} estadias futuras foram canceladas."
   }
 }

@@ -28,7 +28,8 @@
     "tabs": {
       "stays": "Stays",
       "movements": "Movements"
-    }
+    },
+    "delete": "Delete"
   },
   "createProperty": {
     "breadcrumb": "New Property",
@@ -238,5 +239,15 @@
       "totalAmountLabel": "Total stays value",
       "medianAmountLabel": "Average stay value (median)"
     }
+  },
+  "deleteProperty": {
+    "title": "Delete {{name}}?",
+    "description": "This property's future stays will be canceled and their revenue reversed. This can't be undone.",
+    "cancel": "Cancel",
+    "confirm": "Delete property",
+    "guestCheckedIn": "A guest is checked in right now. You can delete the property once that stay ends.",
+    "success": "{{name}} was deleted.",
+    "successWithCanceledStays_one": "{{name}} was deleted and {{count}} future stay was canceled.",
+    "successWithCanceledStays_other": "{{name}} was deleted and {{count}} future stays were canceled."
   }
 }
