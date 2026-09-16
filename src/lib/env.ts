@@ -19,7 +19,11 @@ const envSchema = z.object({
   /**
    * Nome do cookie de sessão gravado pela API. O front não lê o valor — é
    * `httpOnly` —, só verifica a presença no `proxy.ts` para decidir
-   * redirecionamento. Precisa bater com `SESSION_COOKIE_NAME` da API.
+   * redirecionamento.
+   *
+   * Precisa bater com o nome que a API emite: em produção ela prefixa com
+   * `__Secure-` (defesa contra um subdomínio sobrescrever a sessão), então
+   * ali o valor é `__Secure-sogio_session`. Localmente, sem o prefixo.
    */
   NEXT_PUBLIC_SESSION_COOKIE_NAME: z.string().trim().default('sogio_session'),
 });
