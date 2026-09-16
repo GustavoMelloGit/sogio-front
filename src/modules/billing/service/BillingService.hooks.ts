@@ -3,8 +3,6 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { BillingService } from './BillingService';
 import type { CheckoutReturnTo, PlanCode } from '../types/BillingTypes';
 
-const PLAN_CHOICE_POLL_INTERVAL_MS = 2000;
-
 export const billingQueryKeys = {
   plans: ['billing', 'plans'] as const,
   subscription: ['billing', 'subscription'] as const,
@@ -27,23 +25,17 @@ export const usePlans = () => {
   return { plans, isLoading, isFetching, error, refetch };
 };
 
-export const useSubscription = ({ pollUntilPlanChosen = false } = {}) => {
+export const useSubscription = () => {
   const {
     data: subscription,
     isPending: isLoading,
-    isFetching,
     error,
-    refetch,
   } = useQuery({
     queryKey: billingQueryKeys.subscription,
     queryFn: () => BillingService.getSubscription(),
     staleTime: 5 * 60 * 1000,
-    refetchInterval: query =>
-      pollUntilPlanChosen && query.state.data?.needs_plan_choice
-        ? PLAN_CHOICE_POLL_INTERVAL_MS
-        : false,
   });
-  return { subscription, isLoading, isFetching, error, refetch };
+  return { subscription, isLoading, error };
 };
 
 export const useSubscriptionHistory = (page: number) => {

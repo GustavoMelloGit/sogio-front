@@ -58,7 +58,6 @@ export const subscriptionSchema = z.object({
   has_platform_access: z.boolean(),
   status: accountStatusSchema,
   capabilities: planCapabilitiesSchema,
-  needs_plan_choice: z.boolean().default(false),
   // Only present in the payload when has_platform_access is false — omitted
   // entirely (not null) otherwise, so this must accept a missing key too.
   blocked_reason: blockedReasonSchema

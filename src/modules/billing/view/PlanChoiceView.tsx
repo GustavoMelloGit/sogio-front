@@ -1,12 +1,15 @@
 'use client';
 
+import '@/i18n/appNamespaces';
 import type { FC } from 'react';
+import { useRouter } from 'next/navigation';
 import { isAxiosError } from 'axios';
 import { toast } from 'sonner';
 import { Check, ChevronRight } from 'lucide-react';
 import { Alert } from '@/components/Alert';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
+import { ROUTES } from '@/routes/routes';
 import { useTranslation } from '@/i18n/useTranslation';
 import {
   useChooseFreePlan,
@@ -20,6 +23,7 @@ import { FreePlanOption } from '../components/plan-choice/FreePlanOption';
 
 const PlanChoiceView: FC = () => {
   const { t } = useTranslation('billing');
+  const router = useRouter();
   const {
     plans,
     isLoading: isLoadingPlans,
@@ -42,8 +46,9 @@ const PlanChoiceView: FC = () => {
       {
         onError: error => {
           if (isAxiosError(error) && error.response?.status === 409) {
-            toast.info(t('checkoutAlreadySubscribedError'));
+            toast.info(t('planChoice.pro.alreadySubscribed'));
             void refreshSubscription();
+            router.replace(ROUTES.home);
             return;
           }
           toast.error(
@@ -56,6 +61,9 @@ const PlanChoiceView: FC = () => {
 
   const handleChooseFree = (): void => {
     chooseFreePlan(undefined, {
+      onSuccess: () => {
+        router.replace(ROUTES.home);
+      },
       onError: error => {
         toast.error(
           error instanceof Error ? error.message : t('planChoice.free.error')

@@ -16,7 +16,7 @@ Two layers decide who sees what:
 - Never try to read the session cookie from JavaScript — it is `httpOnly` on purpose
 - Never store the user or the session in `localStorage` — use the React Query cache via `useAuthData()`
 - Log out with `useLogout()`, which calls `POST /auth/sign-out` so the session dies on the server too
-- A public screen that signs the user in navigates on success by itself (`LoginView` → `returnPath(from)`); never rely on `PublicRoute` to move someone who just authenticated
+- A public screen that signs the user in navigates on success by itself (`LoginView` → `returnPath(from)`, `SignupView` → `ROUTES.choosePlan`); never rely on `PublicRoute` to move someone who just authenticated
 - `NEXT_PUBLIC_SESSION_COOKIE_NAME` must match the name the API emits — `__Secure-sogio_session` in production, `sogio_session` locally
 - A request that treats 401 as a normal answer (asking who the user is, checking a reset token) must pass `skipAuthRedirect: true`, or the global interceptor will bounce the browser to `/login`
 
