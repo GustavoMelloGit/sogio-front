@@ -41,18 +41,17 @@
     "trialBadge_one": "{{count}} day free",
     "trialBadge_other": "{{count}} days free",
     "currentPlanBadge": "Current plan",
-    "comingSoonBadge": "Coming soon",
-    "propertyLimit_one": "Up to {{count}} property",
-    "propertyLimit_other": "Up to {{count}} properties",
     "selectButton": "Subscribe to {{plan}}",
     "currentButton": "Current plan",
     "manageButton": "Manage subscription",
     "features": {
-      "reportExport": "Report export",
-      "bulkImportExport": "Bulk data import/export",
-      "aiChat": "Built-in AI chat",
-      "aiChatWhatsapp": "AI chat via WhatsApp",
-      "notifications": "Notifications"
+      "notIncluded": "Not included:",
+      "aiAssistant": "Sogio on WhatsApp: send a voice note or a photo of the receipt and it logs it for you",
+      "properties_one": "{{count}} property",
+      "properties_other": "Up to {{count}} properties",
+      "dashboard": "Bookings, revenue and expenses in the web dashboard",
+      "exportReports": "Report exports",
+      "bulkImport": "Import your spreadsheet history in one go"
     }
   },
   "history": {
@@ -73,6 +72,39 @@
       "payment_failed": "Payment failed",
       "canceled": "Subscription canceled",
       "renewed": "Subscription renewed"
+    }
+  },
+  "planChoice": {
+    "logout": "Log out",
+    "steps": {
+      "label": "Sign-up steps",
+      "done": "Completed:",
+      "account": "Account created",
+      "plan": "Choose a plan"
+    },
+    "title": "Choose how to start",
+    "subtitle": "Your account is ready. Just pick a plan — you can switch whenever you want.",
+    "loadError": "Could not load the plans.",
+    "retry": "Try again",
+    "recommendedBadge": "Recommended",
+    "monthlyPrice": "{{price}}/month",
+    "pro": {
+      "description": "Ditch the spreadsheet and handle everything by chatting.",
+      "trialHeadline_one": "{{count}} day free",
+      "trialHeadline_other": "{{count}} days free",
+      "priceAfterTrial": "Then {{price}}/month.",
+      "trialCta_one": "Start {{count}}-day free trial",
+      "trialCta_other": "Start {{count}}-day free trial",
+      "subscribeCta": "Subscribe to {{plan}}",
+      "trialReassurance": "You add your card in the next step and only pay after the trial. Cancel anytime from the dashboard.",
+      "reassurance": "Secure payment through Stripe. Cancel anytime from the dashboard.",
+      "alreadySubscribed": "You are already subscribed to Pro."
+    },
+    "free": {
+      "description": "Organize one property from the dashboard, logging everything by hand.",
+      "cta": "Continue on the free plan",
+      "note": "You can activate Pro later, under Billing.",
+      "error": "Could not continue on the free plan. Please try again."
     }
   }
 }

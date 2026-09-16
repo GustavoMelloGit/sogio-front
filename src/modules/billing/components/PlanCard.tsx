@@ -1,5 +1,4 @@
 import type { FC } from 'react';
-import { Check } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -13,7 +12,7 @@ import { Currency } from '@/lib/currency';
 import { useTranslation } from '@/i18n/useTranslation';
 import { INTL_LOCALES } from '@/i18n/locale-maps';
 import type { Plan } from '../types/BillingTypes';
-import { PLAN_UPCOMING_FEATURES } from '../constants/planFeatures';
+import { PlanFeatureList } from './PlanFeatureList';
 
 type Props = {
   plan: Plan;
@@ -34,7 +33,6 @@ export const PlanCard: FC<Props> = ({
 }) => {
   const { t, language } = useTranslation('billing');
   const isFree = plan.code === 'free';
-  const upcomingFeatures = PLAN_UPCOMING_FEATURES[plan.code];
 
   return (
     <Card className={cn('flex-1', !isFree && 'border-primary shadow-md')}>
@@ -69,27 +67,7 @@ export const PlanCard: FC<Props> = ({
       </CardHeader>
 
       <CardContent className='flex-1'>
-        <ul className='space-y-2 text-sm'>
-          <li className='flex items-center gap-2'>
-            <Check
-              className='size-4 shrink-0 text-primary'
-              aria-hidden='true'
-            />
-            {t('pricing.propertyLimit', { count: plan.max_properties })}
-          </li>
-          {upcomingFeatures.map(labelKey => (
-            <li
-              key={labelKey}
-              className='flex items-center gap-2 text-muted-foreground'
-            >
-              <Check className='size-4 shrink-0' aria-hidden='true' />
-              <span>{t(labelKey)}</span>
-              <Badge variant='outline' className='text-[10px]'>
-                {t('pricing.comingSoonBadge')}
-              </Badge>
-            </li>
-          ))}
-        </ul>
+        <PlanFeatureList capabilities={plan.capabilities} />
       </CardContent>
 
       {(!isFree || isCurrentPlan || canManageSubscription) && (

@@ -60,24 +60,6 @@ const BillingSettingsView: FC = () => {
   const { createPortalSession, isCreatingPortalSession } =
     useCreatePortalSession();
 
-  const hasHandledCheckoutResultRef = useRef(false);
-
-  useEffect(() => {
-    if (hasHandledCheckoutResultRef.current) return;
-    const checkoutResult = searchParams.get('checkout');
-    if (!checkoutResult) return;
-    hasHandledCheckoutResultRef.current = true;
-
-    if (checkoutResult === 'success') {
-      toast.success(t('checkout.successToast'));
-      void refreshSubscription();
-    } else {
-      toast.info(t('checkout.canceledToast'));
-    }
-
-    removeSearchParam('checkout');
-  }, [searchParams, removeSearchParam, refreshSubscription, t]);
-
   // The Customer Portal's return_url carries no signal about what changed
   // (plan swap, card update, cancellation) — just force a refetch so the
   // 5-minute query staleTime doesn't show pre-portal data.
@@ -95,17 +77,20 @@ const BillingSettingsView: FC = () => {
   }, [searchParams, removeSearchParam, refreshSubscription]);
 
   const handleSelectPlan = (planCode: PlanCode): void => {
-    createCheckoutSession(planCode, {
-      onError: error => {
-        if (isAxiosError(error) && error.response?.status === 409) {
-          toast.error(t('checkoutAlreadySubscribedError'));
-          return;
-        }
-        toast.error(
-          error instanceof Error ? error.message : t('checkoutErrorFallback')
-        );
-      },
-    });
+    createCheckoutSession(
+      { planCode, returnTo: 'billing' },
+      {
+        onError: error => {
+          if (isAxiosError(error) && error.response?.status === 409) {
+            toast.error(t('checkoutAlreadySubscribedError'));
+            return;
+          }
+          toast.error(
+            error instanceof Error ? error.message : t('checkoutErrorFallback')
+          );
+        },
+      }
+    );
   };
 
   const handleManageSubscription = (): void => {

@@ -23,6 +23,7 @@ const PUBLIC_ROUTES = {
 
 const PRIVATE_ROUTES = {
   home: APP,
+  choosePlan: `${APP}/choose-plan`,
   properties: `${APP}/properties`,
   property: (property_id: string) => `${APP}/property/${property_id}`,
   createProperty: `${APP}/property/new`,

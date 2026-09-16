@@ -8,6 +8,7 @@ import {
   subscriptionHistoryEntrySchema,
   checkoutSessionSchema,
   portalSessionSchema,
+  type CheckoutReturnTo,
   type Plan,
   type PlanCode,
   type Subscription,
@@ -52,12 +53,18 @@ export class BillingService {
   }
 
   static async createCheckoutSession(
-    planCode: PlanCode
+    planCode: PlanCode,
+    returnTo: CheckoutReturnTo
   ): Promise<CheckoutSession> {
     const response = await api.post('/billing/checkout-session', {
       plan_code: planCode,
+      return_to: returnTo,
     });
     return checkoutSessionSchema.parse(response.data);
+  }
+
+  static async chooseFreePlan(): Promise<void> {
+    await api.post('/billing/subscription/free-plan');
   }
 
   static async createPortalSession(): Promise<PortalSession> {

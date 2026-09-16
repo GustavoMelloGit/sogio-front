@@ -1,16 +1,30 @@
-import type { PlanCode } from '../types/BillingTypes';
+import type { PlanCapabilities } from '../types/BillingTypes';
 
-/**
- * Marketing copy for features not yet gated by the backend. Kept on the
- * frontend on purpose — it's presentation content, not a business rule.
- */
-export const PLAN_UPCOMING_FEATURES: Record<PlanCode, string[]> = {
-  free: [],
-  pro: [
-    'pricing.features.reportExport',
-    'pricing.features.bulkImportExport',
-    'pricing.features.aiChat',
-    'pricing.features.aiChatWhatsapp',
-    'pricing.features.notifications',
-  ],
+export type PlanFeature = {
+  labelKey: string;
+  isIncluded: boolean;
+  values?: Record<string, number>;
 };
+
+export const planFeaturesOf = (
+  capabilities: PlanCapabilities
+): PlanFeature[] => [
+  {
+    labelKey: 'pricing.features.aiAssistant',
+    isIncluded: capabilities.ai_assistant,
+  },
+  {
+    labelKey: 'pricing.features.properties',
+    isIncluded: true,
+    values: { count: capabilities.max_properties },
+  },
+  { labelKey: 'pricing.features.dashboard', isIncluded: true },
+  {
+    labelKey: 'pricing.features.exportReports',
+    isIncluded: capabilities.export_reports,
+  },
+  {
+    labelKey: 'pricing.features.bulkImport',
+    isIncluded: capabilities.bulk_import,
+  },
+];

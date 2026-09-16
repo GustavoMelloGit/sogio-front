@@ -3,13 +3,21 @@ import { z } from 'zod';
 export const planCodeSchema = z.enum(['free', 'pro']);
 export type PlanCode = z.infer<typeof planCodeSchema>;
 
+export const planCapabilitiesSchema = z.object({
+  max_properties: z.number(),
+  export_reports: z.boolean(),
+  bulk_import: z.boolean(),
+  ai_assistant: z.boolean(),
+});
+export type PlanCapabilities = z.infer<typeof planCapabilitiesSchema>;
+
 export const planSchema = z.object({
   id: z.string(),
   code: planCodeSchema,
   name: z.string(),
   price_amount: z.number(),
   billing_interval: z.literal('monthly'),
-  max_properties: z.number(),
+  capabilities: planCapabilitiesSchema,
   trial_days: z.number(),
 });
 export type Plan = z.infer<typeof planSchema>;
@@ -49,7 +57,7 @@ export type BlockedReason = z.infer<typeof blockedReasonSchema>;
 export const subscriptionSchema = z.object({
   has_platform_access: z.boolean(),
   status: accountStatusSchema,
-  max_properties: z.number(),
+  capabilities: planCapabilitiesSchema,
   // Only present in the payload when has_platform_access is false — omitted
   // entirely (not null) otherwise, so this must accept a missing key too.
   blocked_reason: blockedReasonSchema
@@ -83,6 +91,8 @@ export const subscriptionHistoryEntrySchema = z.object({
 export type SubscriptionHistoryEntry = z.infer<
   typeof subscriptionHistoryEntrySchema
 >;
+
+export type CheckoutReturnTo = 'billing' | 'onboarding';
 
 export const checkoutSessionSchema = z.object({ url: z.string() });
 export type CheckoutSession = z.infer<typeof checkoutSessionSchema>;

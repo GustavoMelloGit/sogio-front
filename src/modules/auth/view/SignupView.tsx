@@ -2,8 +2,8 @@
 
 import type React from 'react';
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { RETURN_PARAM, ROUTES, returnPath } from '@/routes/routes';
+import { useRouter } from 'next/navigation';
+import { ROUTES } from '@/routes/routes';
 import {
   Card,
   CardContent,
@@ -21,10 +21,9 @@ import { SignupForm } from '../components/SignupForm';
 const SignupView: React.FC = () => {
   const { t } = useTranslation('auth');
   const router = useRouter();
-  const searchParams = useSearchParams();
 
   const handleSuccess = (): void => {
-    router.replace(returnPath(searchParams.get(RETURN_PARAM)));
+    router.replace(ROUTES.choosePlan);
   };
 
   return (
