@@ -1,5 +1,6 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { Currency } from '@/lib/currency';
+import { median } from '@/lib/median';
 import type { Stay } from '@/modules/stay/types/Stay';
 import { type FC } from 'react';
 import { useTranslation } from '@/i18n/useTranslation';
@@ -13,7 +14,7 @@ export const PropertyNumbers: FC<Props> = ({ stays }) => {
   const { t, language } = useTranslation(['property']);
   const intlLocale = INTL_LOCALES[language];
   const totalPriceInCents = stays.reduce((acc, stay) => acc + stay.price, 0);
-  const medianPriceInCents = calculateMedianPrice(stays);
+  const medianPriceInCents = median(stays.map(stay => stay.price));
 
   return (
     <div className='flex flex-col justify-between gap-2'>
@@ -42,10 +43,3 @@ export const PropertyNumbers: FC<Props> = ({ stays }) => {
     </div>
   );
 };
-
-function calculateMedianPrice(stays: Stay[]): number {
-  const priceArray = stays.map(stay => stay.price);
-  priceArray.sort((a, b) => a - b);
-  const middleIndex = Math.floor(priceArray.length / 2);
-  return priceArray[middleIndex];
-}
