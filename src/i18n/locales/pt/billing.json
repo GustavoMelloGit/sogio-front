@@ -41,18 +41,17 @@
     "trialBadge_one": "{{count}} dia grátis",
     "trialBadge_other": "{{count}} dias grátis",
     "currentPlanBadge": "Plano atual",
-    "comingSoonBadge": "Em breve",
-    "propertyLimit_one": "Até {{count}} propriedade",
-    "propertyLimit_other": "Até {{count}} propriedades",
     "selectButton": "Assinar {{plan}}",
     "currentButton": "Plano atual",
     "manageButton": "Gerenciar assinatura",
     "features": {
-      "reportExport": "Exportação de relatórios",
-      "bulkImportExport": "Importação/exportação em massa",
-      "aiChat": "Chat com IA integrado",
-      "aiChatWhatsapp": "Chat com IA via WhatsApp",
-      "notifications": "Notificações"
+      "notIncluded": "Não incluso:",
+      "aiAssistant": "Sogio no WhatsApp: mande um áudio ou a foto da nota e ele lança por você",
+      "properties_one": "{{count}} imóvel",
+      "properties_other": "Até {{count}} imóveis",
+      "dashboard": "Reservas, receitas e despesas no painel web",
+      "exportReports": "Exportação de relatórios",
+      "bulkImport": "Importação do histórico da planilha, de uma vez"
     }
   },
   "history": {

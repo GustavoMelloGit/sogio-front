@@ -41,18 +41,17 @@
     "trialBadge_one": "{{count}} day free",
     "trialBadge_other": "{{count}} days free",
     "currentPlanBadge": "Current plan",
-    "comingSoonBadge": "Coming soon",
-    "propertyLimit_one": "Up to {{count}} property",
-    "propertyLimit_other": "Up to {{count}} properties",
     "selectButton": "Subscribe to {{plan}}",
     "currentButton": "Current plan",
     "manageButton": "Manage subscription",
     "features": {
-      "reportExport": "Report export",
-      "bulkImportExport": "Bulk data import/export",
-      "aiChat": "Built-in AI chat",
-      "aiChatWhatsapp": "AI chat via WhatsApp",
-      "notifications": "Notifications"
+      "notIncluded": "Not included:",
+      "aiAssistant": "Sogio on WhatsApp: send a voice note or a photo of the receipt and it logs it for you",
+      "properties_one": "{{count}} property",
+      "properties_other": "Up to {{count}} properties",
+      "dashboard": "Bookings, revenue and expenses in the web dashboard",
+      "exportReports": "Report exports",
+      "bulkImport": "Import your spreadsheet history in one go"
     }
   },
   "history": {
