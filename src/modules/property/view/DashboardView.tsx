@@ -74,7 +74,7 @@ const ListEmptyState: FC<ListEmptyStateProps> = ({
   message,
   action,
 }) => (
-  <div className='flex flex-col items-center gap-3 rounded-lg border border-dashed border-border/60 px-4 py-8 text-center'>
+  <div className='flex flex-1 flex-col items-center justify-center gap-3 rounded-lg border border-dashed border-border/60 px-4 py-8 text-center'>
     <Icon className='size-6 text-muted-foreground' aria-hidden='true' />
     <p className='max-w-xs text-balance text-sm text-muted-foreground'>
       {message}
@@ -309,18 +309,18 @@ const DashboardView: FC = () => {
         {/* Listas */}
         <div className='grid grid-cols-1 gap-4 lg:grid-cols-2'>
           <Card className='border-border/50 bg-card/60 backdrop-blur-sm'>
-            <CardHeader className='pb-3'>
+            <CardHeader className='flex min-h-8 flex-row items-center justify-between pb-3'>
               <CardTitle className='text-base font-semibold'>
                 {t('upcomingStays.title')}
               </CardTitle>
             </CardHeader>
-            <CardContent className='space-y-2'>
+            <CardContent className='flex flex-1 flex-col gap-2'>
               {renderUpcomingStays()}
             </CardContent>
           </Card>
 
           <Card className='border-border/50 bg-card/60 backdrop-blur-sm'>
-            <CardHeader className='flex flex-row items-center justify-between pb-3'>
+            <CardHeader className='flex min-h-8 flex-row items-center justify-between pb-3'>
               <CardTitle className='text-base font-semibold'>
                 {t('yourProperties.title')}
               </CardTitle>
@@ -333,7 +333,7 @@ const DashboardView: FC = () => {
                 </Link>
               )}
             </CardHeader>
-            <CardContent className='space-y-2'>
+            <CardContent className='flex flex-1 flex-col gap-2'>
               {propertiesLoading ? (
                 Array.from({ length: 3 }).map((_, i) => (
                   <div
