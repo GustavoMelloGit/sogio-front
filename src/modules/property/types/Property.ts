@@ -70,9 +70,7 @@ export const createPropertyRequestSchema = z.object({
   address: addressSchema.extend({
     country: z.string().min(1, 'País é obrigatório'),
   }),
-  images: z
-    .array(z.string().min(1))
-    .min(1, 'Pelo menos uma imagem é obrigatória'),
+  images: z.array(z.string().min(1)),
   capacity: z.coerce.number().int().min(1, 'Capacidade deve ser pelo menos 1'),
 });
 
