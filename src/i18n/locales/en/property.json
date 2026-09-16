@@ -8,9 +8,9 @@
     "propertyImageAlt": "Property image",
     "viewDetails": "View details",
     "emptyState": {
-      "title": "No properties found",
-      "description": "Start by adding your first property to manage your stays.",
-      "cta": "Add First Property"
+      "title": "Add your first property",
+      "description": "It's where Sogio keeps your bookings, income and expenses organized.",
+      "cta": "Add property"
     }
   },
   "propertyDetail": {

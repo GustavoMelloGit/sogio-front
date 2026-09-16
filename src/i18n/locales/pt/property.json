@@ -8,9 +8,9 @@
     "propertyImageAlt": "Imagem da propriedade",
     "viewDetails": "Ver detalhes",
     "emptyState": {
-      "title": "Nenhuma propriedade encontrada",
-      "description": "Comece adicionando sua primeira propriedade para gerenciar suas estadias.",
-      "cta": "Adicionar Primeira Propriedade"
+      "title": "Cadastre sua primeira propriedade",
+      "description": "É nela que o Sogio organiza as reservas, as receitas e as despesas.",
+      "cta": "Cadastrar propriedade"
     }
   },
   "propertyDetail": {
