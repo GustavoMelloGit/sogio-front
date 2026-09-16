@@ -49,13 +49,10 @@ export const AppUpdateToast = () => {
       id: TOAST_ID,
       description: t('appUpdate.description'),
       duration: Infinity,
+      dismissible: false,
       action: {
         label: t('appUpdate.action'),
         onClick: () => window.location.reload(),
-      },
-      cancel: {
-        label: t('appUpdate.dismiss'),
-        onClick: () => toast.dismiss(TOAST_ID),
       },
     });
   }, [hasNewVersion, t]);

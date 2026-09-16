@@ -21,8 +21,7 @@
   },
   "appUpdate": {
     "title": "Nova versão disponível",
-    "description": "Recarregue para receber as últimas atualizações.",
-    "action": "Recarregar",
-    "dismiss": "Depois"
+    "description": "Recarregue para continuar usando Sogio.",
+    "action": "Recarregar"
   }
 }

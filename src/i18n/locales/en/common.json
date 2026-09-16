@@ -21,8 +21,7 @@
   },
   "appUpdate": {
     "title": "New version available",
-    "description": "Reload to get the latest updates.",
-    "action": "Reload",
-    "dismiss": "Later"
+    "description": "Reload to keep using Sogio.",
+    "action": "Reload"
   }
 }
