@@ -100,7 +100,9 @@ const FormSection: FC<FormSectionProps> = ({ title, children }) => {
       <h2 id={titleId} className='text-base font-semibold text-card-foreground'>
         {title}
       </h2>
-      <div className='grid grid-cols-6 items-start gap-4'>{children}</div>
+      <div className='grid grid-cols-6 items-start gap-4 xl:grid-cols-12'>
+        {children}
+      </div>
     </section>
   );
 };
@@ -199,7 +201,7 @@ const CreatePropertyView: FC = () => {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(handleSubmit)}
-            className='max-w-2xl space-y-6'
+            className='space-y-6'
           >
             {error && (
               <Alert
@@ -214,7 +216,7 @@ const CreatePropertyView: FC = () => {
                 name='name'
                 label={t('createProperty.nameLabel')}
                 placeholder={t('createProperty.namePlaceholder')}
-                className='col-span-6 sm:col-span-4'
+                className='col-span-6 sm:col-span-4 xl:col-span-9'
               />
               <TextField
                 name='capacity'
@@ -224,7 +226,7 @@ const CreatePropertyView: FC = () => {
                 min={1}
                 step={1}
                 inputMode='numeric'
-                className='col-span-6 sm:col-span-2'
+                className='col-span-6 sm:col-span-2 xl:col-span-3'
               />
             </FormSection>
 
@@ -257,7 +259,7 @@ const CreatePropertyView: FC = () => {
                 name='address.street'
                 label={t('createProperty.streetLabel')}
                 placeholder={t('createProperty.streetPlaceholder')}
-                className='col-span-6 sm:col-span-4'
+                className='col-span-6 sm:col-span-4 xl:col-span-7'
               />
               <TextField
                 name='address.number'
@@ -269,19 +271,19 @@ const CreatePropertyView: FC = () => {
                 name='address.complement'
                 label={t('createProperty.complementLabel')}
                 placeholder={t('createProperty.complementPlaceholder')}
-                className='col-span-4 sm:col-span-3'
+                className='col-span-4 sm:col-span-3 xl:col-span-3'
               />
               <TextField
                 name='address.neighborhood'
                 label={t('createProperty.neighborhoodLabel')}
                 placeholder={t('createProperty.neighborhoodPlaceholder')}
-                className='col-span-6 sm:col-span-3'
+                className='col-span-6 sm:col-span-3 xl:col-span-4'
               />
               <TextField
                 name='address.city'
                 label={t('createProperty.cityLabel')}
                 placeholder={t('createProperty.cityPlaceholder')}
-                className='col-span-4'
+                className='col-span-4 xl:col-span-3'
               />
               <TextField
                 name='address.state'
