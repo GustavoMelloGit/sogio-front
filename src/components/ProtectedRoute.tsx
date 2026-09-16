@@ -3,6 +3,7 @@
 import React from 'react';
 import { redirect, usePathname, useSearchParams } from 'next/navigation';
 import { useAuthData } from '@/modules/auth/service/AuthService.hooks';
+import { ConnectionErrorView } from '@/modules/error/view/ConnectionErrorView';
 import { RETURN_PARAM, ROUTES } from '@/routes/routes';
 import { AuthLoadingSpinner } from './AuthLoadingSpinner';
 
@@ -15,13 +16,18 @@ interface ProtectedRouteProps {
  * Redireciona usuários não autenticados para a página de login
  */
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  const { isAuthenticated, isLoading } = useAuthData();
+  const { isAuthenticated, isLoading, isUnavailable, retry, isRetrying } =
+    useAuthData();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
   // Mostra loading enquanto verifica autenticação
   if (isLoading) {
     return <AuthLoadingSpinner />;
+  }
+
+  if (isUnavailable) {
+    return <ConnectionErrorView onRetry={retry} isRetrying={isRetrying} />;
   }
 
   // Se não estiver autenticado, redireciona para login levando o caminho atual

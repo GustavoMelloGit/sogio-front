@@ -39,15 +39,13 @@ export const ROUTES = { ...PUBLIC_ROUTES, ...PRIVATE_ROUTES } as const;
 
 /**
  * Públicas que deixam de fazer sentido com sessão ativa: quem já entrou não
- * precisa da landing nem do formulário de login. As demais públicas — guias,
- * instruções de estadia, redefinição de senha, consentimento — servem aos dois
- * casos e não redirecionam.
+ * precisa da landing. As demais públicas — guias, instruções de estadia,
+ * redefinição de senha, consentimento — servem aos dois casos e não
+ * redirecionam.
  */
 export const GUEST_ONLY_PATHS: string[] = [
   PUBLIC_ROUTES.landing,
   PUBLIC_ROUTES.landingEn,
-  PUBLIC_ROUTES.login,
-  PUBLIC_ROUTES.signup,
 ];
 
 /** Query param que leva ao login o caminho para onde voltar depois dele. */

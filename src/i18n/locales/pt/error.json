@@ -11,5 +11,10 @@
     "title": "Algo deu errado",
     "description": "Não foi possível carregar esta tela. Isso costuma acontecer logo após uma atualização — volte ao dashboard para carregar a versão mais recente.",
     "backToDashboard": "Voltar ao Dashboard"
+  },
+  "connectionError": {
+    "title": "Não foi possível conectar",
+    "description": "Verifique sua internet e tente de novo. Se continuar, o Sogio pode estar fora do ar por alguns instantes.",
+    "retry": "Tentar novamente"
   }
 }

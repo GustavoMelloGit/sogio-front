@@ -5,7 +5,9 @@ The session lives in an `httpOnly` cookie written by the API. The front never se
 Two layers decide who sees what:
 
 - **`src/proxy.ts`** runs on the server and only checks whether the cookie exists, redirecting before any HTML is sent — this is what keeps a logged-in visitor from seeing the landing page flash by. It never validates the session; the API does.
-- **`ProtectedRoute` / `PublicRoute`** run in the browser and rely on `useAuthData()`, which asks `/auth/me`. A 401 there means anonymous, not an error.
+- **`ProtectedRoute` / `PublicRoute`** run in the browser and rely on `useAuthData()`, which asks `/auth/me`. A 401 there means anonymous, not an error. Any other failure (API down, network, 5xx) sets `isUnavailable`, and `ProtectedRoute` shows `ConnectionErrorView` with a retry instead of sending the visitor to `/login`.
+
+The proxy gates only the landing (`/`, `/en`) and `/app/**`. `/login` and `/signup` stay out of it on purpose: a cookie can outlive the session it carries (revoked, expired, or the API simply unreachable), and `/login` is where `ProtectedRoute` sends that visitor. Bouncing it back to `/app` because the cookie exists turns into an endless `/auth/me` loop. `PublicRoute` already moves a visitor with a valid session away from those screens.
 
 `PublicRoute` only sends away a visitor who already had a session when the screen opened. When the screen itself authenticates (login, signup), the screen picks the destination and `PublicRoute` stays out of it: `setQueryData(['auth'])` reaches observers on a later tick, after the screen's `router.replace`, and a `redirect` from the guard at that point replaces the screen's navigation with its own.
 
@@ -14,6 +16,7 @@ Two layers decide who sees what:
 - Read the current user via `useAuth()` — it throws if the user is not logged in (safe inside `ProtectedRoute`)
 - Read user + loading state via `useAuthData()` — use this at the app boundary where the user may not yet be loaded
 - Never try to read the session cookie from JavaScript — it is `httpOnly` on purpose
+- Never add a screen to the proxy's cookie redirect if the client sends a rejected session there — cookie presence is not a valid session
 - Never store the user or the session in `localStorage` — use the React Query cache via `useAuthData()`
 - Log out with `useLogout()`, which calls `POST /auth/sign-out` so the session dies on the server too
 - A public screen that signs the user in navigates on success by itself (`LoginView` → `returnPath(from)`, `SignupView` → `ROUTES.choosePlan`); never rely on `PublicRoute` to move someone who just authenticated
