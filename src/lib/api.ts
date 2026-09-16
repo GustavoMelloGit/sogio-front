@@ -1,5 +1,6 @@
 import axios, { AxiosError } from 'axios';
 import { env } from './env';
+import { ROUTES } from '@/routes/routes';
 
 declare module 'axios' {
   export interface AxiosRequestConfig {
@@ -19,23 +20,13 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  /**
+   * A sessão viaja num cookie `httpOnly` gravado pela API, que o navegador
+   * envia sozinho. Não há token para anexar aqui — é justamente o ponto: o
+   * segredo não é legível por JavaScript, então um XSS não o leva embora.
+   */
+  withCredentials: true,
 });
-
-/**
- * Interceptor para requisições - adiciona token de autenticação se disponível
- */
-api.interceptors.request.use(
-  config => {
-    const token = localStorage.getItem('auth_token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  error => {
-    return Promise.reject(error);
-  }
-);
 
 /**
  * Interceptor para respostas - trata erros globais
@@ -46,9 +37,9 @@ api.interceptors.response.use(
   },
   (error: AxiosError) => {
     if (error.response?.status === 401 && !error.config?.skipAuthRedirect) {
-      // Token expirado ou inválido
-      localStorage.removeItem('auth_token');
-      window.location.href = '/login';
+      // Sessão expirada, encerrada ou ausente. Quem apaga o cookie é a API;
+      // aqui só resta sair da tela protegida.
+      window.location.href = ROUTES.login;
     }
     return Promise.reject(error);
   }

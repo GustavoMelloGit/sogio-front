@@ -27,12 +27,13 @@ npm test             # Vitest
 - `app/` — Next.js App Router. Thin `page.tsx`/`layout.tsx` files that render module views. Two root layouts, `(pt-br)` and `(en)`, so `<html lang>` matches the URL. Landing and guides are statically rendered Server Components with `generateMetadata`/JSON-LD from `seo/`. Everything under `(pt-br)/(spa)` (product, auth, guest links) renders client-only through `SpaShell`, since it depends on `localStorage`
 - `routes/` — Route constants in `routes.ts`
 - `seo/` — Metadata and JSON-LD builders for public pages
+- `proxy.ts` — Server-side gate (Next 16's renamed middleware): checks only whether the session cookie exists and redirects, so a logged-in visitor never sees the landing page and `/app/**` never renders for an anonymous one
 - `hooks/` — Shared custom hooks (`useAuth`, `useFilters`, `useDisclosure`)
 - `lib/` — Axios instance (`api.ts`), React Query config (`query-client.ts`), env validation (`env.ts`), utilities
 
 ## Environment
 
-Requires `NEXT_PUBLIC_API_URL` in `.env` (default: `http://localhost:3030`). Also `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_CLARITY_ID`, `NEXT_PUBLIC_GSC_VERIFICATION`. Validated via Zod in `lib/env.ts`; `NEXT_PUBLIC_*` values are inlined at build time.
+Requires `NEXT_PUBLIC_API_URL` in `.env` (default: `http://localhost:3030`). Also `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_CLARITY_ID`, `NEXT_PUBLIC_GSC_VERIFICATION` and `NEXT_PUBLIC_SESSION_COOKIE_NAME` (must match `SESSION_COOKIE_NAME` in the API). Validated via Zod in `lib/env.ts`; `NEXT_PUBLIC_*` values are inlined at build time.
 
 ## Personas
 

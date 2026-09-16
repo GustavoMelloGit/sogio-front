@@ -7,7 +7,6 @@ import { I18nPageProvider } from '@/i18n/I18nPageProvider';
 import type { Language } from '@/i18n/language';
 import { ROUTES } from '@/routes/routes';
 import { setupClarity } from '@/lib/clarity';
-import { LandingRoute } from '@/components/LandingRoute';
 import { useLandingTheme } from '../lib/useLandingTheme';
 import { LandingHeader } from '../components/LandingHeader';
 import { HeroSection } from '../components/HeroSection';
@@ -87,7 +86,6 @@ const LandingView = ({ pageLanguage }: LandingViewProps) => {
   return (
     <I18nPageProvider language={pageLanguage}>
       <div className='landing min-h-screen' data-lp-theme={theme}>
-        <LandingRoute />
         <LandingHeader
           theme={theme}
           onToggleTheme={toggleTheme}
