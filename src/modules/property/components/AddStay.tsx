@@ -65,7 +65,7 @@ export const AddStay: FC<Props> = ({ propertyId, isOpen, onClose }) => {
       guests: Number(data.guests),
       property: propertyId,
       price: Currency.toCents(Number(data.price)),
-      source: 'INTERNAL',
+      source: 'DIRECT',
     });
   };
 
