@@ -8,10 +8,12 @@
     "propertyImageAlt": "Property image",
     "viewDetails": "View details",
     "emptyState": {
-      "title": "No properties found",
-      "description": "Start by adding your first property to manage your stays.",
-      "cta": "Add First Property"
-    }
+      "title": "Add your first property",
+      "description": "It's where Sogio keeps your bookings, income and expenses organized.",
+      "cta": "Add property"
+    },
+    "actionsAriaLabel": "Actions for {{name}}",
+    "delete": "Delete property"
   },
   "propertyDetail": {
     "loadingBreadcrumb": "Loading...",
@@ -33,28 +35,27 @@
   "createProperty": {
     "breadcrumb": "New Property",
     "title": "New Property",
-    "description": "Fill in the information to register a new property",
+    "description": "Name, how many guests it hosts, photos and address.",
     "errorTitle": "Error",
-    "basicInfoTitle": "Basic Information",
-    "nameLabel": "Property Name",
-    "namePlaceholder": "E.g.: Downtown Apartment",
-    "capacityLabel": "Capacity (guests)",
+    "aboutTitle": "About the property",
+    "nameLabel": "Name",
+    "namePlaceholder": "E.g.: Beach apartment",
+    "capacityLabel": "Max. guests",
     "capacityPlaceholder": "E.g.: 4",
     "imagesTitle": "Images",
     "imageUrlLabel": "Image URL {{index}}",
     "imageUrlPlaceholder": "https://...",
-    "addImage": "Add Image",
+    "addImage": "Add image",
+    "removeImage": "Remove image {{index}}",
     "addressTitle": "Address",
-    "zipCodeLabel": "ZIP Code",
+    "zipCodeLabel": "ZIP code (CEP)",
     "zipCodePlaceholder": "00000-000",
-    "countryLabel": "Country",
-    "countryPlaceholder": "Brazil",
     "streetLabel": "Street",
     "streetPlaceholder": "E.g.: Flower Street",
     "numberLabel": "Number",
     "numberPlaceholder": "E.g.: 123",
-    "complementLabel": "Complement",
-    "complementPlaceholder": "E.g.: Apt 42 (optional)",
+    "complementLabel": "Complement (optional)",
+    "complementPlaceholder": "E.g.: Apt 42",
     "neighborhoodLabel": "Neighborhood",
     "neighborhoodPlaceholder": "E.g.: Downtown",
     "cityLabel": "City",
@@ -62,9 +63,9 @@
     "stateLabel": "State",
     "statePlaceholder": "E.g.: SP",
     "cancel": "Cancel",
-    "submit": "Register Property",
+    "submit": "Add property",
     "validation": {
-      "capacityMin": "Capacity must be at least 1",
+      "capacityMin": "Enter at least 1 guest",
       "imageUrlRequired": "URL is required",
       "imagesMinOne": "At least one image is required"
     }
@@ -239,5 +240,15 @@
       "totalAmountLabel": "Total stays value",
       "medianAmountLabel": "Average stay value (median)"
     }
+  },
+  "deleteProperty": {
+    "title": "Delete {{name}}?",
+    "description": "This property's future stays will be canceled and their revenue reversed. This can't be undone.",
+    "cancel": "Cancel",
+    "confirm": "Delete property",
+    "guestCheckedIn": "A guest is checked in right now. You can delete the property once that stay ends.",
+    "success": "{{name}} was deleted.",
+    "successWithCanceledStays_one": "{{name}} was deleted and {{count}} future stay was canceled.",
+    "successWithCanceledStays_other": "{{name}} was deleted and {{count}} future stays were canceled."
   }
 }

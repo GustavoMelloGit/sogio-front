@@ -9,10 +9,15 @@
   },
   "upcomingStays": {
     "title": "Próximas estadias",
-    "viewStayAriaLabel": "Ver estadia em {{property}} para {{tenant}}"
+    "viewStayAriaLabel": "Ver estadia em {{property}} para {{tenant}}",
+    "emptyWithoutProperty": "As estadias aparecem aqui depois que você cadastrar sua primeira propriedade.",
+    "empty": "Nenhuma estadia marcada pela frente.",
+    "newStay": "Nova estadia"
   },
   "yourProperties": {
     "title": "Suas propriedades",
-    "viewDetailsAriaLabel": "Ver detalhes de {{name}}"
+    "viewDetailsAriaLabel": "Ver detalhes de {{name}}",
+    "empty": "Você ainda não cadastrou nenhuma propriedade.",
+    "createProperty": "Cadastrar propriedade"
   }
 }

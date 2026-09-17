@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { isAxiosError } from 'axios';
 import { AuthService } from '../service/AuthService';
 import {
   type AuthResponse,
@@ -17,17 +18,28 @@ export const useAuthData = () => {
   // Sem checagem síncrona antes de perguntar: o cookie da sessão é
   // `httpOnly`, então o navegador não consegue dizer se existe. Quem
   // responde é a API, e um 401 aqui significa visitante anônimo.
-  const { data: authData, isLoading } = useQuery({
+  const {
+    data: authData,
+    isLoading,
+    error,
+    refetch,
+    isFetching,
+  } = useQuery({
     queryKey: ['auth'],
     queryFn: () => AuthService.getAuthData(),
     staleTime: 5 * 60 * 1000, // 5 minutos
     retry: false,
   });
 
+  const isAnonymous = isAxiosError(error) && error.response?.status === 401;
+
   return {
     user: authData || null,
     isAuthenticated: !!authData,
     isLoading,
+    isUnavailable: !!error && !isAnonymous,
+    retry: () => refetch(),
+    isRetrying: isFetching,
   };
 };
 

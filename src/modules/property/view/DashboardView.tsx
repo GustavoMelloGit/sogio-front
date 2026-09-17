@@ -17,6 +17,7 @@ import {
   ChevronRight,
   MapPin,
   CalendarIcon,
+  Plus,
 } from 'lucide-react';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -61,6 +62,34 @@ function getAvatarColor(name: string): string {
   const hash = name.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0);
   return AVATAR_COLORS[hash % AVATAR_COLORS.length];
 }
+
+type ListEmptyStateProps = {
+  icon: ElementType;
+  message: string;
+  action?: { label: string; href: string };
+};
+
+const ListEmptyState: FC<ListEmptyStateProps> = ({
+  icon: Icon,
+  message,
+  action,
+}) => (
+  <div className='flex flex-1 flex-col items-center justify-center gap-3 rounded-lg border border-dashed border-border/60 px-4 py-8 text-center'>
+    <Icon className='size-6 text-muted-foreground' aria-hidden='true' />
+    <p className='max-w-xs text-balance text-sm text-muted-foreground'>
+      {message}
+    </p>
+    {action && (
+      <Link
+        href={action.href}
+        className={buttonVariants({ size: 'sm', className: 'h-11 sm:h-8' })}
+      >
+        <Plus aria-hidden='true' />
+        {action.label}
+      </Link>
+    )}
+  </div>
+);
 
 type KpiCardProps = {
   title: string;
@@ -114,6 +143,84 @@ const DashboardView: FC = () => {
   const { properties, isLoading: propertiesLoading } = useUserProperties();
   const { overview, isLoading: overviewLoading } =
     useDashboardOverview(dateStr);
+
+  const upcomingStays = overview?.upcoming_stays ?? [];
+  const hasNoProperties = !propertiesLoading && properties.length === 0;
+  const newStayHref =
+    properties.length === 1
+      ? ROUTES.property(properties[0].id)
+      : ROUTES.properties;
+
+  const renderUpcomingStays = () => {
+    if (overviewLoading || (upcomingStays.length === 0 && propertiesLoading)) {
+      return Array.from({ length: 3 }).map((_, i) => (
+        <div
+          key={i}
+          className='flex items-center gap-3 rounded-lg border border-border/40 bg-muted/20 p-3'
+        >
+          <Skeleton className='h-9 w-9 shrink-0 rounded-full' />
+          <div className='flex-1 space-y-1.5'>
+            <Skeleton className='h-3.5 w-32 rounded' />
+            <Skeleton className='h-3 w-24 rounded' />
+          </div>
+          <Skeleton className='h-5 w-16 rounded-md' />
+        </div>
+      ));
+    }
+
+    if (upcomingStays.length === 0) {
+      return hasNoProperties ? (
+        <ListEmptyState
+          icon={CalendarCheck}
+          message={t('upcomingStays.emptyWithoutProperty')}
+        />
+      ) : (
+        <ListEmptyState
+          icon={CalendarCheck}
+          message={t('upcomingStays.empty')}
+          action={{ label: t('upcomingStays.newStay'), href: newStayHref }}
+        />
+      );
+    }
+
+    return upcomingStays.map(stay => (
+      <Link
+        key={stay.id}
+        href={ROUTES.property(stay.property_id)}
+        className='flex items-center gap-3 rounded-lg border border-border/40 bg-muted/20 p-3 text-sm transition-all duration-150 hover:border-border/70 hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
+        aria-label={t('upcomingStays.viewStayAriaLabel', {
+          property: stay.property_name,
+          tenant: stay.tenant.name,
+        })}
+      >
+        <div
+          className={cn(
+            'flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xs font-semibold',
+            getAvatarColor(stay.tenant.name)
+          )}
+        >
+          {getInitials(stay.tenant.name)}
+        </div>
+        <div className='min-w-0 flex-1'>
+          <p className='truncate font-medium text-foreground'>
+            {stay.tenant.name}
+          </p>
+          <p className='truncate text-xs text-muted-foreground'>
+            {stay.property_name}
+          </p>
+        </div>
+        <span className='shrink-0 rounded-md bg-primary/15 px-2 py-0.5 text-xs font-medium text-primary'>
+          {format(stay.check_in, shortDateFormat, {
+            locale: dateFnsLocale,
+          })}
+        </span>
+        <ChevronRight
+          className='h-4 w-4 shrink-0 text-muted-foreground/40'
+          aria-hidden='true'
+        />
+      </Link>
+    ));
+  };
 
   return (
     <Page.Container>
@@ -202,131 +309,94 @@ const DashboardView: FC = () => {
         {/* Listas */}
         <div className='grid grid-cols-1 gap-4 lg:grid-cols-2'>
           <Card className='border-border/50 bg-card/60 backdrop-blur-sm'>
-            <CardHeader className='pb-3'>
+            <CardHeader className='flex min-h-8 flex-row items-center justify-between pb-3'>
               <CardTitle className='text-base font-semibold'>
                 {t('upcomingStays.title')}
               </CardTitle>
             </CardHeader>
-            <CardContent className='space-y-2'>
-              {overviewLoading
-                ? Array.from({ length: 3 }).map((_, i) => (
-                    <div
-                      key={i}
-                      className='flex items-center gap-3 rounded-lg border border-border/40 bg-muted/20 p-3'
-                    >
-                      <Skeleton className='h-9 w-9 shrink-0 rounded-full' />
-                      <div className='flex-1 space-y-1.5'>
-                        <Skeleton className='h-3.5 w-32 rounded' />
-                        <Skeleton className='h-3 w-24 rounded' />
-                      </div>
-                      <Skeleton className='h-5 w-16 rounded-md' />
-                    </div>
-                  ))
-                : (overview?.upcoming_stays ?? []).map(stay => (
-                    <Link
-                      key={stay.id}
-                      href={ROUTES.property(stay.property_id)}
-                      className='flex items-center gap-3 rounded-lg border border-border/40 bg-muted/20 p-3 text-sm transition-all duration-150 hover:border-border/70 hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
-                      aria-label={t('upcomingStays.viewStayAriaLabel', {
-                        property: stay.property_name,
-                        tenant: stay.tenant.name,
-                      })}
-                    >
-                      <div
-                        className={cn(
-                          'flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xs font-semibold',
-                          getAvatarColor(stay.tenant.name)
-                        )}
-                      >
-                        {getInitials(stay.tenant.name)}
-                      </div>
-                      <div className='min-w-0 flex-1'>
-                        <p className='truncate font-medium text-foreground'>
-                          {stay.tenant.name}
-                        </p>
-                        <p className='truncate text-xs text-muted-foreground'>
-                          {stay.property_name}
-                        </p>
-                      </div>
-                      <span className='shrink-0 rounded-md bg-primary/15 px-2 py-0.5 text-xs font-medium text-primary'>
-                        {format(stay.check_in, shortDateFormat, {
-                          locale: dateFnsLocale,
-                        })}
-                      </span>
-                      <ChevronRight
-                        className='h-4 w-4 shrink-0 text-muted-foreground/40'
-                        aria-hidden='true'
-                      />
-                    </Link>
-                  ))}
+            <CardContent className='flex flex-1 flex-col gap-2'>
+              {renderUpcomingStays()}
             </CardContent>
           </Card>
 
           <Card className='border-border/50 bg-card/60 backdrop-blur-sm'>
-            <CardHeader className='flex flex-row items-center justify-between pb-3'>
+            <CardHeader className='flex min-h-8 flex-row items-center justify-between pb-3'>
               <CardTitle className='text-base font-semibold'>
                 {t('yourProperties.title')}
               </CardTitle>
-              <Link
-                href={ROUTES.properties}
-                className={buttonVariants({ variant: 'ghost', size: 'sm' })}
-              >
-                {t('common:actions.viewAll')}
-              </Link>
+              {!hasNoProperties && (
+                <Link
+                  href={ROUTES.properties}
+                  className={buttonVariants({ variant: 'ghost', size: 'sm' })}
+                >
+                  {t('common:actions.viewAll')}
+                </Link>
+              )}
             </CardHeader>
-            <CardContent className='space-y-2'>
-              {propertiesLoading
-                ? Array.from({ length: 3 }).map((_, i) => (
-                    <div
-                      key={i}
-                      className='flex items-center gap-3 rounded-lg border border-border/40 bg-muted/20 p-3'
-                    >
-                      <Skeleton className='h-9 w-9 shrink-0 rounded-lg' />
-                      <div className='flex-1 space-y-1.5'>
-                        <Skeleton className='h-3.5 w-36 rounded' />
-                        <Skeleton className='h-3 w-24 rounded' />
-                      </div>
+            <CardContent className='flex flex-1 flex-col gap-2'>
+              {propertiesLoading ? (
+                Array.from({ length: 3 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className='flex items-center gap-3 rounded-lg border border-border/40 bg-muted/20 p-3'
+                  >
+                    <Skeleton className='h-9 w-9 shrink-0 rounded-lg' />
+                    <div className='flex-1 space-y-1.5'>
+                      <Skeleton className='h-3.5 w-36 rounded' />
+                      <Skeleton className='h-3 w-24 rounded' />
                     </div>
-                  ))
-                : properties.map((p, i) => (
-                    <Link
-                      key={p.id}
-                      href={ROUTES.property(p.id)}
-                      className='flex items-center gap-3 rounded-lg border border-border/40 bg-muted/20 p-3 text-sm transition-all duration-150 hover:border-border/70 hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
-                      aria-label={t('yourProperties.viewDetailsAriaLabel', {
-                        name: p.name,
-                      })}
+                  </div>
+                ))
+              ) : hasNoProperties ? (
+                <ListEmptyState
+                  icon={Building2}
+                  message={t('yourProperties.empty')}
+                  action={{
+                    label: t('yourProperties.createProperty'),
+                    href: ROUTES.createProperty,
+                  }}
+                />
+              ) : (
+                properties.map((p, i) => (
+                  <Link
+                    key={p.id}
+                    href={ROUTES.property(p.id)}
+                    className='flex items-center gap-3 rounded-lg border border-border/40 bg-muted/20 p-3 text-sm transition-all duration-150 hover:border-border/70 hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
+                    aria-label={t('yourProperties.viewDetailsAriaLabel', {
+                      name: p.name,
+                    })}
+                  >
+                    <div
+                      className={cn(
+                        'flex h-9 w-9 shrink-0 items-center justify-center rounded-lg',
+                        PROPERTY_ICON_STYLES[i % PROPERTY_ICON_STYLES.length]
+                      )}
                     >
-                      <div
-                        className={cn(
-                          'flex h-9 w-9 shrink-0 items-center justify-center rounded-lg',
-                          PROPERTY_ICON_STYLES[i % PROPERTY_ICON_STYLES.length]
-                        )}
-                      >
-                        <Building2 className='h-4 w-4' aria-hidden='true' />
-                      </div>
-                      <div className='min-w-0 flex-1'>
-                        <p className='truncate font-medium text-foreground'>
-                          {p.name}
-                        </p>
-                        {p.address && (
-                          <div className='flex items-center gap-1 text-xs text-muted-foreground'>
-                            <MapPin
-                              className='h-3 w-3 shrink-0'
-                              aria-hidden='true'
-                            />
-                            <span className='truncate'>
-                              {p.address.city}, {p.address.state}
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                      <ChevronRight
-                        className='h-4 w-4 shrink-0 text-muted-foreground/40'
-                        aria-hidden='true'
-                      />
-                    </Link>
-                  ))}
+                      <Building2 className='h-4 w-4' aria-hidden='true' />
+                    </div>
+                    <div className='min-w-0 flex-1'>
+                      <p className='truncate font-medium text-foreground'>
+                        {p.name}
+                      </p>
+                      {p.address && (
+                        <div className='flex items-center gap-1 text-xs text-muted-foreground'>
+                          <MapPin
+                            className='h-3 w-3 shrink-0'
+                            aria-hidden='true'
+                          />
+                          <span className='truncate'>
+                            {p.address.city}, {p.address.state}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                    <ChevronRight
+                      className='h-4 w-4 shrink-0 text-muted-foreground/40'
+                      aria-hidden='true'
+                    />
+                  </Link>
+                ))
+              )}
             </CardContent>
           </Card>
         </div>

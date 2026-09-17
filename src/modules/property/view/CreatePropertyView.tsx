@@ -1,15 +1,28 @@
 'use client';
 
-import { type FC, useMemo } from 'react';
+import {
+  type ComponentProps,
+  type FC,
+  type PropsWithChildren,
+  useId,
+  useMemo,
+} from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useForm, useFieldArray } from 'react-hook-form';
+import {
+  type FieldPathByValue,
+  useFieldArray,
+  useForm,
+  useFormContext,
+} from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { withMask } from 'use-mask-input';
 import z from 'zod';
 import { Plus, Trash2 } from 'lucide-react';
 import { useTranslation } from '@/i18n/useTranslation';
 import type { TranslateFn } from '@/i18n/useTranslation';
 import { Page } from '@/components/layout/Page';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -19,11 +32,26 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { Spinner } from '@/components/ui/spinner';
 import { Alert } from '@/components/Alert';
 import { ROUTES } from '@/routes/routes';
+import { ZipCode } from '@/lib/zip-code';
+import { cn } from '@/lib/utils';
 import { createPropertyRequestSchema } from '../types/Property';
 import { useCreateProperty } from '../service/PropertyService.hooks';
+import { useZipCodeLookup } from '../service/AddressService.hooks';
+import type { ZipCodeAddress } from '../service/AddressService';
 import { queryClient } from '@/lib/query-client';
+
+const ADDRESS_COUNTRY = 'Brasil';
+const ZIP_CODE_FILLED_FIELDS = [
+  'street',
+  'neighborhood',
+  'city',
+  'state',
+] as const;
+
+type ZipCodeFilledField = (typeof ZIP_CODE_FILLED_FIELDS)[number];
 
 const createFormSchema = (t: TranslateFn) =>
   createPropertyRequestSchema.extend({
@@ -43,6 +71,74 @@ const createFormSchema = (t: TranslateFn) =>
 
 type FormData = z.infer<ReturnType<typeof createFormSchema>>;
 
+type TextFieldProps = Omit<ComponentProps<typeof Input>, 'name'> & {
+  name: FieldPathByValue<FormData, string | undefined>;
+  label: string;
+  isLoading?: boolean;
+};
+
+const TextField: FC<TextFieldProps> = ({
+  name,
+  label,
+  className,
+  isLoading = false,
+  ...inputProps
+}) => {
+  const { control } = useFormContext<FormData>();
+
+  return (
+    <FormField
+      control={control}
+      name={name}
+      render={({ field }) => (
+        <FormItem className={className}>
+          <FormLabel>{label}</FormLabel>
+          <div className='relative'>
+            <FormControl>
+              <Input
+                {...field}
+                {...inputProps}
+                readOnly={isLoading || inputProps.readOnly}
+                aria-busy={isLoading}
+                className={cn(isLoading && 'pr-9')}
+              />
+            </FormControl>
+            {isLoading && (
+              <span
+                aria-hidden='true'
+                className='absolute inset-y-0 right-3 flex items-center text-muted-foreground'
+              >
+                <Spinner size='sm' />
+              </span>
+            )}
+          </div>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  );
+};
+
+type FormSectionProps = PropsWithChildren<{ title: string }>;
+
+const FormSection: FC<FormSectionProps> = ({ title, children }) => {
+  const titleId = useId();
+
+  return (
+    <section
+      aria-labelledby={titleId}
+      className='space-y-4 rounded-xl border bg-card p-4 sm:p-6'
+    >
+      <h2 id={titleId} className='text-base font-semibold text-card-foreground'>
+        {title}
+      </h2>
+      <div className='grid grid-cols-6 items-start gap-4 xl:grid-cols-12'>
+        {children}
+      </div>
+    </section>
+  );
+};
+
 const CreatePropertyView: FC = () => {
   const { t } = useTranslation(['property']);
   const router = useRouter();
@@ -55,6 +151,14 @@ const CreatePropertyView: FC = () => {
       router.push(ROUTES.property(property.id));
     },
   });
+
+  const {
+    lookUpZipCode,
+    resetZipCodeLookup,
+    lookedUpZipCode,
+    zipCodeAddress,
+    isLookingUp,
+  } = useZipCodeLookup();
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -70,22 +174,58 @@ const CreatePropertyView: FC = () => {
         city: '',
         state: '',
         zip_code: '',
-        country: 'Brasil',
+        country: ADDRESS_COUNTRY,
       },
     },
   });
 
-  const { fields, append, remove } = useFieldArray({
+  const images = useFieldArray({
     control: form.control,
     name: 'images',
   });
 
+  const isFilledByZipCode = (key: ZipCodeFilledField): boolean =>
+    Boolean(zipCodeAddress?.[key]);
+
+  const clearZipCodeFilledFields = (): void => {
+    for (const key of ZIP_CODE_FILLED_FIELDS) {
+      if (isFilledByZipCode(key)) form.setValue(`address.${key}`, '');
+    }
+  };
+
+  const fillAddress = (address: ZipCodeAddress): void => {
+    for (const key of ZIP_CODE_FILLED_FIELDS) {
+      if (address[key]) {
+        form.setValue(`address.${key}`, address[key], { shouldValidate: true });
+      }
+    }
+    form.setFocus(address.street ? 'address.number' : 'address.street');
+  };
+
+  const handleZipCodeChange = (zipCode: string): void => {
+    const digits = ZipCode.digits(zipCode);
+    const isComplete = ZipCode.isComplete(zipCode);
+    if (isComplete && digits === lookedUpZipCode) return;
+
+    clearZipCodeFilledFields();
+
+    if (!isComplete) {
+      resetZipCodeLookup();
+      return;
+    }
+
+    lookUpZipCode(digits, {
+      onSuccess: address => {
+        if (address) fillAddress(address);
+      },
+    });
+  };
+
   const handleSubmit = (data: FormData): void => {
     mutate({
-      name: data.name,
+      ...data,
       capacity: Number(data.capacity),
-      images: data.images.map(i => i.url),
-      address: data.address,
+      images: data.images.map(image => image.url),
     });
   };
 
@@ -93,7 +233,7 @@ const CreatePropertyView: FC = () => {
     <Page.Container>
       <Page.Topbar
         nav={[
-          { label: t('propertyList.title'), to: ROUTES.home },
+          { label: t('propertyList.title'), to: ROUTES.properties },
           { label: t('createProperty.breadcrumb') },
         ]}
       />
@@ -102,295 +242,180 @@ const CreatePropertyView: FC = () => {
         description={t('createProperty.description')}
       />
       <Page.Content>
-        <div className='max-w-2xl'>
-          {error && (
-            <Alert
-              variant='destructive'
-              title={t('createProperty.errorTitle')}
-              message={error.message}
-              className='mb-4'
-            />
-          )}
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className='space-y-6'
+          >
+            {error && (
+              <Alert
+                variant='destructive'
+                title={t('createProperty.errorTitle')}
+                message={error.message}
+              />
+            )}
 
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(handleSubmit)}
-              className='space-y-6'
-            >
-              <div className='space-y-4'>
-                <h2 className='text-lg font-semibold'>
-                  {t('createProperty.basicInfoTitle')}
-                </h2>
+            <FormSection title={t('createProperty.aboutTitle')}>
+              <TextField
+                name='name'
+                label={t('createProperty.nameLabel')}
+                placeholder={t('createProperty.namePlaceholder')}
+                className='col-span-6 sm:col-span-4 xl:col-span-9'
+              />
+              <TextField
+                name='capacity'
+                label={t('createProperty.capacityLabel')}
+                placeholder={t('createProperty.capacityPlaceholder')}
+                type='number'
+                min={1}
+                step={1}
+                inputMode='numeric'
+                className='col-span-6 sm:col-span-2 xl:col-span-3'
+              />
+            </FormSection>
 
+            <FormSection title={t('createProperty.imagesTitle')}>
+              {images.fields.map((image, index) => (
                 <FormField
+                  key={image.id}
                   control={form.control}
-                  name='name'
+                  name={`images.${index}.url`}
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t('createProperty.nameLabel')}</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder={t('createProperty.namePlaceholder')}
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name='capacity'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t('createProperty.capacityLabel')}</FormLabel>
-                      <FormControl>
-                        <Input
-                          type='number'
-                          min={1}
-                          step={1}
-                          inputMode='numeric'
-                          placeholder={t('createProperty.capacityPlaceholder')}
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-
-              <div className='space-y-4'>
-                <h2 className='text-lg font-semibold'>
-                  {t('createProperty.imagesTitle')}
-                </h2>
-
-                {fields.map((field, index) => (
-                  <FormField
-                    key={field.id}
-                    control={form.control}
-                    name={`images.${index}.url`}
-                    render={({ field: inputField }) => (
-                      <FormItem>
-                        <FormLabel>
-                          {t('createProperty.imageUrlLabel', {
-                            index: index + 1,
-                          })}
-                        </FormLabel>
-                        <div className='flex gap-2'>
-                          <FormControl>
-                            <Input
-                              placeholder={t(
-                                'createProperty.imageUrlPlaceholder'
-                              )}
-                              {...inputField}
-                            />
-                          </FormControl>
-                          {fields.length > 1 && (
-                            <Button
-                              type='button'
-                              variant='outline'
-                              size='icon'
-                              onClick={() => remove(index)}
-                            >
-                              <Trash2 className='h-4 w-4' />
-                            </Button>
-                          )}
-                        </div>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                ))}
-
-                <Button
-                  type='button'
-                  variant='outline'
-                  size='sm'
-                  onClick={() => append({ url: '' })}
-                >
-                  <Plus className='h-4 w-4 mr-1' />
-                  {t('createProperty.addImage')}
-                </Button>
-              </div>
-
-              <div className='space-y-4'>
-                <h2 className='text-lg font-semibold'>
-                  {t('createProperty.addressTitle')}
-                </h2>
-
-                <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
-                  <FormField
-                    control={form.control}
-                    name='address.zip_code'
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>
-                          {t('createProperty.zipCodeLabel')}
-                        </FormLabel>
+                    <FormItem className='col-span-6 xl:col-span-12'>
+                      <FormLabel>
+                        {t('createProperty.imageUrlLabel', {
+                          index: index + 1,
+                        })}
+                      </FormLabel>
+                      <div className='flex gap-2'>
                         <FormControl>
                           <Input
-                            placeholder={t('createProperty.zipCodePlaceholder')}
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name='address.country'
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>
-                          {t('createProperty.countryLabel')}
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder={t('createProperty.countryPlaceholder')}
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-
-                <FormField
-                  control={form.control}
-                  name='address.street'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t('createProperty.streetLabel')}</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder={t('createProperty.streetPlaceholder')}
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
-                  <FormField
-                    control={form.control}
-                    name='address.number'
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>{t('createProperty.numberLabel')}</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder={t('createProperty.numberPlaceholder')}
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name='address.complement'
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>
-                          {t('createProperty.complementLabel')}
-                        </FormLabel>
-                        <FormControl>
-                          <Input
+                            inputMode='url'
                             placeholder={t(
-                              'createProperty.complementPlaceholder'
+                              'createProperty.imageUrlPlaceholder'
                             )}
                             {...field}
                           />
                         </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-
-                <FormField
-                  control={form.control}
-                  name='address.neighborhood'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>
-                        {t('createProperty.neighborhoodLabel')}
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder={t(
-                            'createProperty.neighborhoodPlaceholder'
-                          )}
-                          {...field}
-                        />
-                      </FormControl>
+                        {images.fields.length > 1 && (
+                          <Button
+                            type='button'
+                            variant='outline'
+                            size='icon'
+                            aria-label={t('createProperty.removeImage', {
+                              index: index + 1,
+                            })}
+                            onClick={() => images.remove(index)}
+                          >
+                            <Trash2 aria-hidden='true' />
+                          </Button>
+                        )}
+                      </div>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
+              ))}
+              <Button
+                type='button'
+                variant='outline'
+                size='sm'
+                className='col-span-6 justify-self-start xl:col-span-12'
+                onClick={() => images.append({ url: '' })}
+              >
+                <Plus aria-hidden='true' />
+                {t('createProperty.addImage')}
+              </Button>
+            </FormSection>
 
-                <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
-                  <FormField
-                    control={form.control}
-                    name='address.city'
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>{t('createProperty.cityLabel')}</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder={t('createProperty.cityPlaceholder')}
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+            <FormSection title={t('createProperty.addressTitle')}>
+              <FormField
+                control={form.control}
+                name='address.zip_code'
+                render={({ field }) => (
+                  <FormItem className='col-span-6 sm:col-span-3'>
+                    <FormLabel>{t('createProperty.zipCodeLabel')}</FormLabel>
+                    <FormControl ref={withMask(ZipCode.MASK)}>
+                      <Input
+                        placeholder={t('createProperty.zipCodePlaceholder')}
+                        inputMode='numeric'
+                        {...field}
+                        onChange={event => {
+                          field.onChange(event);
+                          handleZipCodeChange(event.target.value);
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <TextField
+                name='address.street'
+                isLoading={isLookingUp}
+                disabled={isFilledByZipCode('street')}
+                label={t('createProperty.streetLabel')}
+                placeholder={t('createProperty.streetPlaceholder')}
+                className='col-span-6 sm:col-span-4 xl:col-span-7'
+              />
+              <TextField
+                name='address.number'
+                label={t('createProperty.numberLabel')}
+                placeholder={t('createProperty.numberPlaceholder')}
+                className='col-span-2'
+              />
+              <TextField
+                name='address.complement'
+                label={t('createProperty.complementLabel')}
+                placeholder={t('createProperty.complementPlaceholder')}
+                className='col-span-4 sm:col-span-3 xl:col-span-3'
+              />
+              <TextField
+                name='address.neighborhood'
+                isLoading={isLookingUp}
+                disabled={isFilledByZipCode('neighborhood')}
+                label={t('createProperty.neighborhoodLabel')}
+                placeholder={t('createProperty.neighborhoodPlaceholder')}
+                className='col-span-6 sm:col-span-3 xl:col-span-4'
+              />
+              <TextField
+                name='address.city'
+                isLoading={isLookingUp}
+                disabled={isFilledByZipCode('city')}
+                label={t('createProperty.cityLabel')}
+                placeholder={t('createProperty.cityPlaceholder')}
+                className='col-span-4 xl:col-span-3'
+              />
+              <TextField
+                name='address.state'
+                isLoading={isLookingUp}
+                disabled={isFilledByZipCode('state')}
+                label={t('createProperty.stateLabel')}
+                placeholder={t('createProperty.statePlaceholder')}
+                className='col-span-2'
+              />
+            </FormSection>
 
-                  <FormField
-                    control={form.control}
-                    name='address.state'
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>{t('createProperty.stateLabel')}</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder={t('createProperty.statePlaceholder')}
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              </div>
-
-              <div className='flex gap-2 pt-2'>
-                <Button
-                  type='button'
-                  variant='outline'
-                  onClick={() => router.push(ROUTES.home)}
-                  className='flex-1'
-                >
-                  {t('createProperty.cancel')}
-                </Button>
-                <Button type='submit' className='flex-1' isLoading={isLoading}>
-                  {t('createProperty.submit')}
-                </Button>
-              </div>
-            </form>
-          </Form>
-        </div>
+            <div className='flex flex-col-reverse gap-2 sm:flex-row sm:justify-end'>
+              <Link
+                href={ROUTES.properties}
+                className={buttonVariants({
+                  variant: 'outline',
+                  className: 'h-11 sm:h-9',
+                })}
+              >
+                {t('createProperty.cancel')}
+              </Link>
+              <Button
+                type='submit'
+                className='h-11 sm:h-9'
+                isLoading={isLoading}
+              >
+                {t('createProperty.submit')}
+              </Button>
+            </div>
+          </form>
+        </Form>
       </Page.Content>
     </Page.Container>
   );

@@ -39,5 +39,5 @@ export function proxy(request: NextRequest) {
  * divergirem.
  */
 export const config = {
-  matcher: ['/', '/en', '/login', '/signup', '/app/:path*'],
+  matcher: ['/', '/en', '/app/:path*'],
 };

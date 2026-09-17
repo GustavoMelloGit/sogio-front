@@ -11,5 +11,10 @@
     "title": "Something went wrong",
     "description": "The app could not load this screen. This usually happens right after an update — go back to the dashboard to load the latest version.",
     "backToDashboard": "Back to Dashboard"
+  },
+  "connectionError": {
+    "title": "Couldn't connect",
+    "description": "Check your internet connection and try again. If it keeps happening, Sogio may be briefly unavailable.",
+    "retry": "Try again"
   }
 }
