@@ -53,9 +53,25 @@ export const GUEST_ONLY_PATHS: string[] = [
 /** Query param que leva ao login o caminho para onde voltar depois dele. */
 export const RETURN_PARAM = 'from';
 
+const MAX_RETURN_PATH_LENGTH = 512;
+
+const isUnsafeCharacter = (char: string): boolean => {
+  const code = char.charCodeAt(0);
+  return char === '\\' || code <= 0x1f || code === 0x7f;
+};
+
 /**
  * Destino depois do login. Só aceita caminho relativo ao próprio site: um
  * `?from=//outro.site` ou `?from=https://...` viraria redirecionamento aberto.
+ *
+ * Caractere de controle e `\` são recusados em qualquer posição porque o
+ * navegador os remove ou normaliza ao montar a URL: `/<TAB>/outro.site` vira
+ * `//outro.site`. É a mesma regra que a API aplica ao `return_to`.
  */
 export const returnPath = (from: string | null | undefined): string =>
-  from && /^\/(?![/\\])/.test(from) ? from : ROUTES.home;
+  from &&
+  from.length <= MAX_RETURN_PATH_LENGTH &&
+  /^\/(?!\/)/.test(from) &&
+  !Array.from(from).some(isUnsafeCharacter)
+    ? from
+    : ROUTES.home;
