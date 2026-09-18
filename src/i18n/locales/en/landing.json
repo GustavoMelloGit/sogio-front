@@ -155,6 +155,8 @@
     "login": "Open the dashboard",
     "themeToLight": "Switch to the light theme",
     "themeToDark": "Switch to the dark theme",
-    "guides": "Guides"
+    "guides": "Guides",
+    "privacy": "Privacy",
+    "terms": "Terms of use"
   }
 }

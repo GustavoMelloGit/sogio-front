@@ -37,6 +37,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'weekly',
       priority: 0.7,
     },
+    ...[ROUTES.privacyPolicy, ROUTES.termsOfUse].map(path => ({
+      url: `${SITE_URL}${path}`,
+      lastModified,
+      changeFrequency: 'yearly' as const,
+      priority: 0.2,
+    })),
     ...GUIDES.map(guide => ({
       url: `${SITE_URL}${ROUTES.guide(guide.slug)}`,
       lastModified,

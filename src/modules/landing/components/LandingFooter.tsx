@@ -36,6 +36,18 @@ export const LandingFooter = ({
           >
             {t('footer.login')}
           </Link>
+          <Link
+            href={ROUTES.privacyPolicy}
+            className='text-lp-muted hover:text-lp-text inline-flex min-h-11 items-center text-base transition-colors'
+          >
+            {t('footer.privacy')}
+          </Link>
+          <Link
+            href={ROUTES.termsOfUse}
+            className='text-lp-muted hover:text-lp-text inline-flex min-h-11 items-center text-base transition-colors'
+          >
+            {t('footer.terms')}
+          </Link>
           <LanguageToggle language={language} onSelect={onSelectLanguage} />
         </div>
       </div>

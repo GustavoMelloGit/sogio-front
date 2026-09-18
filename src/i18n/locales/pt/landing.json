@@ -155,6 +155,8 @@
     "login": "Entrar no painel",
     "themeToLight": "Mudar para o tema claro",
     "themeToDark": "Mudar para o tema escuro",
-    "guides": "Guias"
+    "guides": "Guias",
+    "privacy": "Privacidade",
+    "terms": "Termos de uso"
   }
 }

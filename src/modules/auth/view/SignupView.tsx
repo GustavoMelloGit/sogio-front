@@ -55,11 +55,17 @@ const SignupView: React.FC = () => {
 
           <div className='text-xs text-muted-foreground'>
             {t('signup.termsText')}{' '}
-            <Link href='/terms' className='text-blue-600 hover:text-blue-500'>
+            <Link
+              href={ROUTES.termsOfUse}
+              className='text-blue-600 hover:text-blue-500'
+            >
               {t('signup.termsLink')}
             </Link>{' '}
             {t('signup.andConnector')}{' '}
-            <Link href='/privacy' className='text-blue-600 hover:text-blue-500'>
+            <Link
+              href={ROUTES.privacyPolicy}
+              className='text-blue-600 hover:text-blue-500'
+            >
               {t('signup.privacyLink')}
             </Link>
             .
