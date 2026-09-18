@@ -4,6 +4,7 @@ import React, { useMemo } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
+import { isAxiosError } from 'axios';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
@@ -27,6 +28,10 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { useTranslation } from '@/i18n/useTranslation';
+import {
+  AuthMethodSeparator,
+  GoogleSignInButton,
+} from '../components/GoogleSignInButton';
 
 type LoginFormData = {
   email: string;
@@ -83,7 +88,9 @@ const LoginView: React.FC = () => {
           <CardTitle>{t('login.title')}</CardTitle>
           <CardDescription>{t('login.subtitle')}</CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className='space-y-6'>
+          <GoogleSignInButton from={searchParams.get(RETURN_PARAM)} />
+          <AuthMethodSeparator />
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
               <div className='space-y-4'>
@@ -125,14 +132,22 @@ const LoginView: React.FC = () => {
               </div>
 
               {signinError && (
-                <Alert
-                  variant='destructive'
-                  message={
-                    signinError instanceof Error
-                      ? signinError.message
-                      : t('login.genericError')
-                  }
-                />
+                <div className='space-y-2'>
+                  <Alert
+                    variant='destructive'
+                    message={
+                      signinError instanceof Error
+                        ? signinError.message
+                        : t('login.genericError')
+                    }
+                  />
+                  {isAxiosError(signinError) &&
+                    signinError.response?.status === 401 && (
+                      <p className='text-sm text-muted-foreground'>
+                        {t('login.googleAccountHint')}
+                      </p>
+                    )}
+                </div>
               )}
 
               <div>

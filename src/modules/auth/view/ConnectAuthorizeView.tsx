@@ -34,6 +34,10 @@ import {
   isRequestNotFoundError,
 } from '../service/oauthError';
 import { InlineSigninForm } from '../components/InlineSigninForm';
+import {
+  AuthMethodSeparator,
+  GoogleSignInButton,
+} from '../components/GoogleSignInButton';
 import { SignupForm } from '../components/SignupForm';
 import type { AuthorizationDecision } from '../types/OAuthTypes';
 
@@ -287,6 +291,11 @@ const ConnectAuthorizeView: FC = () => {
           </CardDescription>
         </CardHeader>
         <CardContent className='space-y-4'>
+          <GoogleSignInButton
+            from={`${ROUTES.connectAuthorize}?${new URLSearchParams({ request_id: requestId })}`}
+            label='continue'
+          />
+          <AuthMethodSeparator />
           {isSignup ? (
             <SignupForm onSuccess={handleSigninSuccess} />
           ) : (
