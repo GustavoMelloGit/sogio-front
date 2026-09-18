@@ -6,6 +6,8 @@ export interface User {
   id: string;
   email: string;
   name: string;
+  /** Falso em conta criada pelo Google que ainda não definiu senha. */
+  has_password: boolean;
   created_at: string;
   updated_at: string;
 }
