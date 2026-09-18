@@ -99,6 +99,18 @@ export const GuideShell = ({ children }: { children: ReactNode }) => {
             >
               Página inicial
             </Link>
+            <Link
+              href={ROUTES.privacyPolicy}
+              className='text-lp-muted hover:text-lp-text inline-flex min-h-11 items-center text-base transition-colors'
+            >
+              Privacidade
+            </Link>
+            <Link
+              href={ROUTES.termsOfUse}
+              className='text-lp-muted hover:text-lp-text inline-flex min-h-11 items-center text-base transition-colors'
+            >
+              Termos de uso
+            </Link>
           </div>
         </div>
       </footer>

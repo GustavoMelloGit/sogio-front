@@ -10,6 +10,8 @@ const PUBLIC_ROUTES = {
   landingEn: '/en',
   guides: '/guias',
   guide: (slug: string) => `/guias/${slug}`,
+  privacyPolicy: '/privacidade',
+  termsOfUse: '/termos',
 
   // Fora do app de propósito: links enviados a hóspedes e fluxos de autenticação
   // que precisam continuar funcionando nas URLs já divulgadas.
