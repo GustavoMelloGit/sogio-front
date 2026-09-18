@@ -18,7 +18,7 @@ describe('proxy com cookie de sessão', () => {
     expect(redirectTarget(proxy(withSessionCookie('/')))).toBe('/app');
   });
 
-  it.each(['/login', '/signup'])(
+  it.each(['/login', '/signup', '/login/google'])(
     'deixa %s abrir, já que o cookie pode ser de uma sessão recusada pela API',
     path => {
       expect(redirectTarget(proxy(withSessionCookie(path)))).toBeNull();

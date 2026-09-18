@@ -2,8 +2,8 @@
 
 import type React from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { ROUTES } from '@/routes/routes';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { RETURN_PARAM, ROUTES } from '@/routes/routes';
 import {
   Card,
   CardContent,
@@ -13,6 +13,10 @@ import {
 } from '@/components/ui/card';
 import { useTranslation } from '@/i18n/useTranslation';
 import { SignupForm } from '../components/SignupForm';
+import {
+  AuthMethodSeparator,
+  GoogleSignInButton,
+} from '../components/GoogleSignInButton';
 
 /**
  * Página de cadastro de usuário
@@ -21,6 +25,7 @@ import { SignupForm } from '../components/SignupForm';
 const SignupView: React.FC = () => {
   const { t } = useTranslation('auth');
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const handleSuccess = (): void => {
     router.replace(ROUTES.choosePlan);
@@ -34,6 +39,11 @@ const SignupView: React.FC = () => {
           <CardDescription>{t('signup.subtitle')}</CardDescription>
         </CardHeader>
         <CardContent className='space-y-6'>
+          <GoogleSignInButton
+            from={searchParams.get(RETURN_PARAM)}
+            label='continue'
+          />
+          <AuthMethodSeparator />
           <SignupForm
             onSuccess={handleSuccess}
             onError={error => {

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { config } from '../proxy';
-import { GUEST_ONLY_PATHS, ROUTES } from './routes';
+import { GUEST_ONLY_PATHS, ROUTES, returnPath } from './routes';
 
 describe('proxy matcher', () => {
   it('cobre todas as rotas que só fazem sentido sem sessão', () => {
@@ -11,5 +11,34 @@ describe('proxy matcher', () => {
 
   it('cobre o produto autenticado', () => {
     expect(config.matcher).toContain(`${ROUTES.home}/:path*`);
+  });
+});
+
+describe('returnPath', () => {
+  it.each([
+    '/app',
+    '/app/properties?year=2026',
+    '/connect/authorize?request_id=abc',
+  ])('aceita o caminho relativo %s', path => {
+    expect(returnPath(path)).toBe(path);
+  });
+
+  it.each([
+    null,
+    undefined,
+    '',
+    'app',
+    '//outro.site',
+    '/\\outro.site',
+    'https://outro.site',
+    '/app\\..\\x',
+    '/\t/outro.site',
+    '/\n/outro.site',
+    '/\r/outro.site',
+    '/\u0000/outro.site',
+    '/\u007f',
+    `/${'a'.repeat(512)}`,
+  ])('recusa %j e cai no painel', path => {
+    expect(returnPath(path)).toBe(ROUTES.home);
   });
 });
