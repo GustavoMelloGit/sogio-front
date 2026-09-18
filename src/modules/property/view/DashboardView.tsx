@@ -186,7 +186,7 @@ const DashboardView: FC = () => {
     return upcomingStays.map(stay => (
       <Link
         key={stay.id}
-        href={ROUTES.property(stay.property_id)}
+        href={ROUTES.stayDetail(stay.property_id, stay.id)}
         className='flex items-center gap-3 rounded-lg border border-border/40 bg-muted/20 p-3 text-sm transition-all duration-150 hover:border-border/70 hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
         aria-label={t('upcomingStays.viewStayAriaLabel', {
           property: stay.property_name,
